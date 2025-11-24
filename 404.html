@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8">
+    <title>Redirecting to /jincat</title>
+    <script>
+      sessionStorage.redirect = location.pathname;
+      location.replace('/jincat' + location.search);
+    </script>
+  </head>
+  <body>
+    <p>正在重定向到首页...</p>
+  </body>
+</html>
