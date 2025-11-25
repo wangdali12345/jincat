@@ -93,6 +93,25 @@ const initialCats = [
     vaccinated: true,
     neutered: true,
     addedDate: '2024-06-20'
+  },
+  {
+    id: 6,
+    name: '小橘子',
+    age: '8个月',
+    breed: '英国金渐层',
+    personality: '调皮捣蛋，好奇心强',
+    description: '小橘子是家里最活泼的小家伙，整天上蹿下跳探索家里的每一个角落。特别喜欢玩逗猫棒和激光笔，会给家里带来很多欢乐。毛色金黄发亮，眼睛像绿宝石一样清澈。虽然年纪小但已经很有主见，是个独立的小猫咪。',
+    images: [
+      'https://images.unsplash.com/photo-1596854407944-bf87f6fdd49e?w=800&h=600&fit=crop',
+      'https://images.unsplash.com/photo-1518791841217-8f162f1e1131?w=800&h=600&fit=crop',
+      'https://images.unsplash.com/photo-1551717743-49959800b1f6?w=800&h=600&fit=crop'
+    ],
+    gender: '公猫',
+    weight: '3.8kg',
+    color: '12色金渐层',
+    vaccinated: true,
+    neutered: false,
+    addedDate: '2024-07-25'
   }
 ];
 
