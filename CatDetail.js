@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { ArrowLeft, Heart, Edit, MapPin, Weight, Syringe, Scissors, Share2, Calendar } from 'lucide-react';
+import { ArrowLeft, Heart, MapPin, Weight, Syringe, Scissors, Share2, Calendar } from 'lucide-react';
 import { catManager } from '../data/catData';
 
 const CatDetail = () => {
@@ -102,13 +102,6 @@ const CatDetail = () => {
                 className={isLiked ? 'text-red-500 fill-red-500' : 'text-gray-600'} 
               />
             </button>
-            
-            <Link 
-              to={`/edit/${cat.id}`}
-              className="p-3 rounded-full hover:bg-gray-100 transition-colors"
-            >
-              <Edit size={20} className="text-gray-600" />
-            </Link>
           </div>
         </div>
       </div>

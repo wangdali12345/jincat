@@ -75,9 +75,6 @@ const Home = () => {
             <a href="#cats" className="apple-btn apple-btn-primary">
               浏览猫咪
             </a>
-            <a href="/add" className="apple-btn apple-btn-secondary">
-              添加新猫咪
-            </a>
           </div>
         </div>
       </section>
@@ -185,14 +182,8 @@ const Home = () => {
                 没有找到匹配的猫咪
               </h3>
               <p className="apple-body mb-8 max-w-md mx-auto">
-                试试调整搜索条件，或者添加第一只猫咪开始您的收藏之旅。
+                试试调整搜索条件来找到您心仪的猫咪。
               </p>
-              <a 
-                href="/add"
-                className="apple-btn apple-btn-primary"
-              >
-                添加第一只猫咪
-              </a>
             </div>
           )}
         </div>
@@ -208,9 +199,6 @@ const Home = () => {
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <a href="#cats" className="apple-btn apple-btn-primary">
               立即浏览
-            </a>
-            <a href="/add" className="apple-btn apple-btn-secondary">
-              添加猫咪
             </a>
           </div>
         </div>

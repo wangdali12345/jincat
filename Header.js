@@ -1,6 +1,5 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Plus } from 'lucide-react';
 
 const Header = () => {
   return (
@@ -24,13 +23,6 @@ const Header = () => {
               className="apple-nav-item"
             >
               概览
-            </Link>
-            <Link 
-              to="/add" 
-              className="apple-btn apple-btn-primary text-sm"
-            >
-              <Plus size={16} className="mr-1" />
-              添加猫咪
             </Link>
           </div>
         </div>
