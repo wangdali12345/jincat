@@ -11,9 +11,14 @@ const Home = () => {
   const [sortBy, setSortBy] = useState('newest');
 
   useEffect(() => {
-    const allCats = catManager.getAllCats();
-    setCats(allCats);
-    setFilteredCats(allCats);
+    try {
+      const allCats = catManager.getAllCats();
+      console.log('加载的猫咪数据:', allCats);
+      setCats(allCats);
+      setFilteredCats(allCats);
+    } catch (error) {
+      console.error('数据加载错误:', error);
+    }
   }, []);
 
   useEffect(() => {

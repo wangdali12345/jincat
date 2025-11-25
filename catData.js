@@ -100,18 +100,11 @@ const initialCats = [
 class CatDataManager {
   constructor() {
     this.storageKey = 'golden_cats_data';
-    this.initializeData();
-  }
-
-  initializeData() {
-    if (!localStorage.getItem(this.storageKey)) {
-      localStorage.setItem(this.storageKey, JSON.stringify(initialCats));
-    }
+    this.cats = initialCats; // 直接使用内存数据
   }
 
   getAllCats() {
-    const data = localStorage.getItem(this.storageKey);
-    return data ? JSON.parse(data) : [];
+    return this.cats;
   }
 
   getCatById(id) {
@@ -120,33 +113,28 @@ class CatDataManager {
   }
 
   addCat(cat) {
-    const cats = this.getAllCats();
     const newCat = {
       ...cat,
       id: Date.now(), // 简单的ID生成
       addedDate: new Date().toISOString().split('T')[0]
     };
-    cats.push(newCat);
-    localStorage.setItem(this.storageKey, JSON.stringify(cats));
+    this.cats.push(newCat);
     return newCat;
   }
 
   updateCat(id, updatedCat) {
-    const cats = this.getAllCats();
-    const index = cats.findIndex(cat => cat.id === parseInt(id));
+    const index = this.cats.findIndex(cat => cat.id === parseInt(id));
     if (index !== -1) {
-      cats[index] = { ...cats[index], ...updatedCat };
-      localStorage.setItem(this.storageKey, JSON.stringify(cats));
-      return cats[index];
+      this.cats[index] = { ...this.cats[index], ...updatedCat };
+      return this.cats[index];
     }
     return null;
   }
 
   deleteCat(id) {
-    const cats = this.getAllCats();
-    const filteredCats = cats.filter(cat => cat.id !== parseInt(id));
-    localStorage.setItem(this.storageKey, JSON.stringify(filteredCats));
-    return filteredCats.length < cats.length;
+    const originalLength = this.cats.length;
+    this.cats = this.cats.filter(cat => cat.id !== parseInt(id));
+    return this.cats.length < originalLength;
   }
 }
 
