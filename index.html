@@ -54,10 +54,27 @@
             font-weight: 500;
             transition: color 0.3s ease;
             cursor: pointer;
+            padding: 8px 12px;
+            border-radius: 8px;
         }
 
         .nav-link:hover {
             color: #0071e3;
+            background: rgba(0, 113, 227, 0.1);
+        }
+
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            padding: 8px;
+            border-radius: 8px;
+        }
+
+        .mobile-menu-btn:hover {
+            background: rgba(0, 0, 0, 0.1);
         }
 
         .logo {
@@ -1028,7 +1045,24 @@
         /* 响应式设计 */
         @media (max-width: 768px) {
             .nav-menu {
+                flex-direction: column;
+                gap: 10px;
+                position: absolute;
+                top: 60px;
+                right: 20px;
+                background: white;
+                padding: 15px;
+                border-radius: 12px;
+                box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
                 display: none;
+            }
+            
+            .nav-menu.show {
+                display: flex;
+            }
+            
+            .mobile-menu-btn {
+                display: block;
             }
             
             .shop-categories {
@@ -1107,7 +1141,8 @@
                 <span>🐱</span>
                 <span>杭州自家小猫咪-李先生</span>
             </a>
-            <div class="nav-menu">
+            <button class="mobile-menu-btn" onclick="toggleMobileMenu()">☰</button>
+            <div class="nav-menu" id="navMenu">
                 <a href="#cats" class="nav-link">🏠 精选猫咪</a>
                 <a href="#" class="nav-link" onclick="showShop()">🛒 宠物商城</a>
                 <a href="#" class="nav-link" onclick="showHospitals()">🏥 宠物医院</a>
@@ -1686,11 +1721,24 @@
             dropdown.classList.toggle('show');
         }
 
+        // 移动端菜单切换
+        function toggleMobileMenu() {
+            const menu = document.getElementById('navMenu');
+            menu.classList.toggle('show');
+        }
+
         // 点击外部关闭下拉菜单
         document.addEventListener('click', function(e) {
             const userSection = document.querySelector('.user-section');
             if (!userSection.contains(e.target)) {
                 document.getElementById('userDropdown').classList.remove('show');
+            }
+            
+            // 关闭移动端菜单
+            const navMenu = document.getElementById('navMenu');
+            const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
+            if (!navMenu.contains(e.target) && !mobileMenuBtn.contains(e.target)) {
+                navMenu.classList.remove('show');
             }
         });
 
