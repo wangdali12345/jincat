@@ -1189,6 +1189,236 @@
             color: #86868b;
         }
 
+        /* 个人帖子管理样式 */
+        .my-posts-tabs {
+            display: flex;
+            border-bottom: 1px solid #e5e5e7;
+            margin-bottom: 20px;
+        }
+
+        .tab-btn {
+            background: none;
+            border: none;
+            padding: 12px 24px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            color: #86868b;
+            border-bottom: 2px solid transparent;
+            transition: all 0.3s ease;
+        }
+
+        .tab-btn.active {
+            color: #0071e3;
+            border-bottom-color: #0071e3;
+        }
+
+        .my-posts-content {
+            padding: 20px 0;
+        }
+
+        .my-post-item {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 15px;
+            transition: all 0.3s ease;
+        }
+
+        .my-post-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+        }
+
+        .my-post-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .my-post-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #1d1d1f;
+            cursor: pointer;
+            flex: 1;
+        }
+
+        .my-post-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .my-post-btn {
+            background: #0071e3;
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 12px;
+            transition: all 0.3s ease;
+        }
+
+        .my-post-btn.delete {
+            background: #ff3b30;
+        }
+
+        .my-post-btn:hover {
+            opacity: 0.8;
+        }
+
+        .my-post-meta {
+            font-size: 13px;
+            color: #86868b;
+            margin-bottom: 10px;
+        }
+
+        .my-post-stats {
+            display: flex;
+            gap: 20px;
+            font-size: 13px;
+            color: #86868b;
+        }
+
+        /* 帖子详情样式 */
+        .post-detail-header {
+            text-align: center;
+            margin-bottom: 20px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #e5e5e7;
+        }
+
+        .post-detail-author {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        .post-detail-content {
+            line-height: 1.8;
+            margin-bottom: 30px;
+        }
+
+        .post-detail-images {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .post-detail-image {
+            width: 100%;
+            height: 150px;
+            object-fit: cover;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .post-detail-image:hover {
+            transform: scale(1.05);
+        }
+
+        .post-detail-stats {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 12px;
+            margin-bottom: 20px;
+        }
+
+        .post-detail-comments {
+            margin-top: 30px;
+        }
+
+        .comment-form {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .comment-input {
+            width: 100%;
+            height: 100px;
+            padding: 12px;
+            border: 1px solid #e5e5e7;
+            border-radius: 8px;
+            resize: vertical;
+            margin-bottom: 10px;
+        }
+
+        .comment-item {
+            background: white;
+            border: 1px solid #e5e5e7;
+            border-radius: 12px;
+            padding: 15px;
+            margin-bottom: 10px;
+        }
+
+        .comment-author {
+            font-weight: 600;
+            color: #0071e3;
+            margin-bottom: 5px;
+        }
+
+        .comment-time {
+            font-size: 12px;
+            color: #86868b;
+            margin-bottom: 8px;
+        }
+
+        .comment-content {
+            line-height: 1.6;
+        }
+
+        /* 猫咪评论样式 */
+        .cat-info {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 20px;
+        }
+
+        .cat-info-img {
+            width: 120px;
+            height: 120px;
+            object-fit: cover;
+            border-radius: 50%;
+            margin-bottom: 10px;
+        }
+
+        .comments-list {
+            margin-bottom: 20px;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .empty-comments {
+            text-align: center;
+            color: #86868b;
+            padding: 40px;
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #0071e3, #5856d6);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+            font-size: 14px;
+            margin-right: 10px;
+        }
+
         /* 地图样式 */
         .map-section {
             padding: 20px;
@@ -1794,6 +2024,7 @@
                 <a href="#" class="nav-link" onclick="showShop()">🛒 宠物商城</a>
                 <a href="#" class="nav-link" onclick="showHospitals()">🏥 宠物医院</a>
                 <a href="#" class="nav-link" onclick="showForum()">💬 本地论坛</a>
+                <a href="#" class="nav-link" onclick="showMyPosts()">📝 我的帖子</a>
             </div>
             <div class="user-section">
                 <button class="user-btn" onclick="toggleUserDropdown()">
@@ -2015,7 +2246,8 @@
                 <div class="modal-actions">
                     <button class="btn like-btn" id="likeBtn" onclick="toggleLike()">❤️ 喜欢</button>
                     <button class="btn order-btn" onclick="openOrderModal()">🛒 立即购买</button>
-                    <button class="btn message-btn" onclick="openMessageModal()">💬 私信咨询</button>
+                    <button class="btn comment-btn" onclick="openCatCommentModal()">💬 评论留言</button>
+                    <button class="btn message-btn" onclick="sendCatPrivateMessage()">📨 私信管理员</button>
                     <button class="btn btn-primary" onclick="shareCat()">🔗 分享</button>
                 </div>
             </div>
@@ -2195,8 +2427,100 @@
         </div>
     </div>
 
-    <script>
-        // 猫咪数据
+        <!-- 个人帖子管理模态框 -->
+        <div class="modal" id="myPostsModal">
+            <div class="modal-content" style="max-width: 800px;">
+                <div class="modal-header">
+                    <h2>📝 我的帖子管理</h2>
+                    <button class="modal-close" onclick="closeMyPostsModal()">×</button>
+                </div>
+                <div class="modal-body" style="max-height: 600px; overflow-y: auto;">
+                    <div class="my-posts-tabs">
+                        <button class="tab-btn active" onclick="showMyPostsTab('published')">已发布</button>
+                        <button class="tab-btn" onclick="showMyPostsTab('drafts')">草稿箱</button>
+                        <button class="tab-btn" onclick="showMyPostsTab('liked')">我的点赞</button>
+                    </div>
+                    <div id="myPostsContent" class="my-posts-content">
+                        <!-- 动态内容 -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 帖子详情模态框 -->
+        <div class="modal" id="postDetailModal">
+            <div class="modal-content" style="max-width: 800px;">
+                <div class="modal-header">
+                    <h2 id="detailPostTitle">帖子详情</h2>
+                    <button class="modal-close" onclick="closePostDetailModal()">×</button>
+                </div>
+                <div class="modal-body" style="max-height: 600px; overflow-y: auto;">
+                    <div id="postDetailContent">
+                        <!-- 动态内容 -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 宠物评论模态框 -->
+        <div class="modal" id="catCommentModal">
+            <div class="modal-content" style="max-width: 600px;">
+                <div class="modal-header">
+                    <h2>💬 留言评论</h2>
+                    <button class="modal-close" onclick="closeCatCommentModal()">×</button>
+                </div>
+                <div class="modal-body" style="max-height: 500px; overflow-y: auto;">
+                    <div class="cat-info" id="commentCatInfo" style="text-align: center; margin-bottom: 20px;">
+                        <!-- 猫咪信息 -->
+                    </div>
+                    
+                    <div class="comments-section">
+                        <h3>💬 评论区</h3>
+                        <div id="catCommentsList" class="comments-list">
+                            <!-- 评论列表 -->
+                        </div>
+                        
+                        <div class="add-comment">
+                            <textarea id="newComment" placeholder="写下您的评论..." style="width: 100%; height: 80px; padding: 10px; border: 1px solid #ddd; border-radius: 8px; resize: vertical;"></textarea>
+                            <button class="btn btn-primary" style="margin-top: 10px; width: 100%;" onclick="addCatComment()">发表评论</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <script>
+        // 全局数据存储
+        let currentUser = {
+            id: 'user_' + Date.now(),
+            name: '访客用户',
+            avatar: '访',
+            level: '见习铲屎官'
+        };
+
+        // 初始化用户数据
+        function initUserData() {
+            const savedUser = localStorage.getItem('currentUser');
+            if (savedUser) {
+                currentUser = JSON.parse(savedUser);
+            }
+        }
+
+        // 保存用户数据
+        function saveUserData() {
+            localStorage.setItem('currentUser', JSON.stringify(currentUser));
+        }
+
+        // 用户发帖数据
+        let userPosts = JSON.parse(localStorage.getItem('userPosts') || '[]');
+
+        // 猫咪评论数据
+        let catComments = JSON.parse(localStorage.getItem('catComments') || '{}');
+
+        // 私信数据
+        let privateMessages = JSON.parse(localStorage.getItem('privateMessages') || '[]');
+
+        // 论坛数据 - 更丰富的贴吧风格数据
         const catsData = [
             {
                 id: 1,
@@ -2272,8 +2596,375 @@
         let forumPosts = [];
         let currentSection = 'cats';
 
+        // ========== 个人帖子管理功能 ==========
+        
+        // 显示我的帖子管理
+        function showMyPosts() {
+            document.getElementById('myPostsModal').style.display = 'block';
+            document.body.style.overflow = 'hidden';
+            showMyPostsTab('published');
+        }
+
+        // 关闭我的帖子管理
+        function closeMyPostsModal() {
+            document.getElementById('myPostsModal').style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
+
+        // 显示我的帖子标签页
+        function showMyPostsTab(tab) {
+            // 更新标签按钮状态
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            const content = document.getElementById('myPostsContent');
+            let html = '';
+            
+            switch(tab) {
+                case 'published':
+                    html = renderPublishedPosts();
+                    break;
+                case 'drafts':
+                    html = renderDraftPosts();
+                    break;
+                case 'liked':
+                    html = renderLikedPosts();
+                    break;
+            }
+            
+            content.innerHTML = html;
+        }
+
+        // 渲染已发布的帖子
+        function renderPublishedPosts() {
+            const myPublishedPosts = userPosts.filter(post => post.status === 'published');
+            
+            if (myPublishedPosts.length === 0) {
+                return '<div class="empty-comments">您还没有发布过帖子</div>';
+            }
+            
+            return myPublishedPosts.map(post => `
+                <div class="my-post-item">
+                    <div class="my-post-header">
+                        <div class="my-post-title" onclick="viewPostDetail(${post.id})">${post.title}</div>
+                        <div class="my-post-actions">
+                            <button class="my-post-btn" onclick="editPost(${post.id})">编辑</button>
+                            <button class="my-post-btn delete" onclick="deletePost(${post.id})">删除</button>
+                        </div>
+                    </div>
+                    <div class="my-post-meta">
+                        发布时间：${new Date(post.createTime).toLocaleString()} | 
+                        类型：${post.typeName} | 
+                        浏览：${post.views || 0} 次
+                    </div>
+                    <div class="my-post-stats">
+                        <span>👍 ${post.likes || 0} 点赞</span>
+                        <span>💬 ${post.comments?.length || 0} 评论</span>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // 渲染草稿
+        function renderDraftPosts() {
+            const myDrafts = userPosts.filter(post => post.status === 'draft');
+            
+            if (myDrafts.length === 0) {
+                return '<div class="empty-comments">您没有草稿</div>';
+            }
+            
+            return myDrafts.map(post => `
+                <div class="my-post-item">
+                    <div class="my-post-header">
+                        <div class="my-post-title" onclick="editPost(${post.id})">${post.title || '无标题'}</div>
+                        <div class="my-post-actions">
+                            <button class="my-post-btn" onclick="publishDraft(${post.id})">发布</button>
+                            <button class="my-post-btn delete" onclick="deletePost(${post.id})">删除</button>
+                        </div>
+                    </div>
+                    <div class="my-post-meta">
+                        创建时间：${new Date(post.createTime).toLocaleString()}
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // 渲染点赞的帖子
+        function renderLikedPosts() {
+            const likedPostIds = JSON.parse(localStorage.getItem('likedPosts') || '[]');
+            const likedPosts = forumPostsData.filter(post => likedPostIds.includes(post.id));
+            
+            if (likedPosts.length === 0) {
+                return '<div class="empty-comments">您还没有点赞过任何帖子</div>';
+            }
+            
+            return likedPosts.map(post => `
+                <div class="my-post-item">
+                    <div class="my-post-title" onclick="viewPostDetail(${post.id})">${post.title}</div>
+                    <div class="my-post-meta">
+                        作者：${post.author} | 发布时间：${post.time}
+                    </div>
+                    <div class="my-post-stats">
+                        <span>👍 ${post.likes} 点赞</span>
+                        <span>💬 ${post.comments} 评论</span>
+                        <span>👁 ${post.views} 浏览</span>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // 查看帖子详情
+        function viewPostDetail(postId) {
+            const post = forumPostsData.find(p => p.id === postId);
+            if (!post) return;
+            
+            document.getElementById('detailPostTitle').textContent = post.title;
+            const content = document.getElementById('postDetailContent');
+            
+            // 获取帖子的评论
+            const postComments = JSON.parse(localStorage.getItem(`postComments_${postId}`) || '[]');
+            
+            content.innerHTML = `
+                <div class="post-detail-header">
+                    <div class="post-detail-author">
+                        <div class="user-avatar">${post.avatar}</div>
+                        <div>
+                            <div>${post.author}</div>
+                            <div class="author-level">${post.level}</div>
+                        </div>
+                    </div>
+                    <div class="post-type">${post.typeName}</div>
+                </div>
+                
+                <div class="post-detail-content">${post.content.replace(/\n/g, '<br>')}</div>
+                
+                <div class="post-detail-stats">
+                    <span>👍 ${post.likes} 点赞</span>
+                    <span>💬 ${post.comments} 评论</span>
+                    <span>👁 ${post.views} 浏览</span>
+                    <span>📅 ${post.time}</span>
+                </div>
+                
+                <div class="post-detail-comments">
+                    <h3>💬 评论 (${postComments.length})</h3>
+                    
+                    <div class="comment-form">
+                        <textarea id="detailCommentInput" class="comment-input" placeholder="写下您的评论..."></textarea>
+                        <button class="btn btn-primary" onclick="addPostComment(${postId})">发表评论</button>
+                    </div>
+                    
+                    <div id="postCommentsList">
+                        ${postComments.map(comment => `
+                            <div class="comment-item">
+                                <div class="comment-author">${comment.author}</div>
+                                <div class="comment-time">${new Date(comment.time).toLocaleString()}</div>
+                                <div class="comment-content">${comment.content}</div>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            `;
+            
+            document.getElementById('postDetailModal').style.display = 'block';
+            document.body.style.overflow = 'hidden';
+        }
+
+        // 关闭帖子详情
+        function closePostDetailModal() {
+            document.getElementById('postDetailModal').style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
+
+        // 添加帖子评论
+        function addPostComment(postId) {
+            const content = document.getElementById('detailCommentInput').value.trim();
+            if (!content) {
+                alert('请输入评论内容');
+                return;
+            }
+            
+            const comments = JSON.parse(localStorage.getItem(`postComments_${postId}`) || '[]');
+            const newComment = {
+                id: Date.now(),
+                postId: postId,
+                author: currentUser.name,
+                avatar: currentUser.avatar,
+                content: content,
+                time: new Date().toISOString()
+            };
+            
+            comments.push(newComment);
+            localStorage.setItem(`postComments_${postId}`, JSON.stringify(comments));
+            
+            // 更新帖子评论数
+            const post = forumPostsData.find(p => p.id === postId);
+            if (post) {
+                post.comments = comments.length;
+            }
+            
+            document.getElementById('detailCommentInput').value = '';
+            viewPostDetail(postId); // 刷新评论列表
+        }
+
+        // 编辑帖子
+        function editPost(postId) {
+            const post = userPosts.find(p => p.id === postId);
+            if (!post) return;
+            
+            // 这里可以打开编辑模态框或导航到编辑页面
+            alert('编辑功能开发中，敬请期待！');
+        }
+
+        // 发布草稿
+        function publishDraft(postId) {
+            const postIndex = userPosts.findIndex(p => p.id === postId);
+            if (postIndex === -1) return;
+            
+            userPosts[postIndex].status = 'published';
+            userPosts[postIndex].publishTime = new Date().toISOString();
+            
+            // 添加到论坛数据
+            const forumPost = {
+                ...userPosts[postIndex],
+                time: '刚刚',
+                isNew: true
+            };
+            forumPostsData.unshift(forumPost);
+            
+            localStorage.setItem('userPosts', JSON.stringify(userPosts));
+            
+            alert('帖子发布成功！');
+            showMyPostsTab('published');
+        }
+
+        // 删除帖子
+        function deletePost(postId) {
+            if (!confirm('确定要删除这个帖子吗？')) return;
+            
+            // 从用户帖子中删除
+            const postIndex = userPosts.findIndex(p => p.id === postId);
+            if (postIndex !== -1) {
+                userPosts.splice(postIndex, 1);
+                localStorage.setItem('userPosts', JSON.stringify(userPosts));
+            }
+            
+            // 从论坛数据中删除
+            const forumIndex = forumPostsData.findIndex(p => p.id === postId);
+            if (forumIndex !== -1) {
+                forumPostsData.splice(forumIndex, 1);
+            }
+            
+            alert('帖子已删除');
+            showMyPostsTab('published');
+        }
+
+        // ========== 猫咪评论和私信功能 ==========
+        
+        // 打开猫咪评论模态框
+        function openCatCommentModal() {
+            if (!currentCat) return;
+            
+            const catInfo = document.getElementById('commentCatInfo');
+            catInfo.innerHTML = `
+                <img src="${currentCat.image}" class="cat-info-img" alt="${currentCat.name}">
+                <h3>${currentCat.name}</h3>
+                <p>${currentCat.breed} | ${currentCat.age} | ${currentCat.gender}</p>
+            `;
+            
+            renderCatComments();
+            document.getElementById('catCommentModal').style.display = 'block';
+            document.body.style.overflow = 'hidden';
+            closeModal(); // 关闭猫咪详情模态框
+        }
+
+        // 关闭猫咪评论模态框
+        function closeCatCommentModal() {
+            document.getElementById('catCommentModal').style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
+
+        // 渲染猫咪评论
+        function renderCatComments() {
+            const comments = catComments[currentCat.id] || [];
+            const commentsList = document.getElementById('catCommentsList');
+            
+            if (comments.length === 0) {
+                commentsList.innerHTML = '<div class="empty-comments">暂无评论，快来抢沙发吧！</div>';
+                return;
+            }
+            
+            commentsList.innerHTML = comments.map(comment => `
+                <div class="comment-item">
+                    <div style="display: flex; align-items: center; margin-bottom: 8px;">
+                        <div class="user-avatar">${comment.avatar}</div>
+                        <div>
+                            <div class="comment-author">${comment.author}</div>
+                            <div class="comment-time">${new Date(comment.time).toLocaleString()}</div>
+                        </div>
+                    </div>
+                    <div class="comment-content">${comment.content}</div>
+                </div>
+            `).join('');
+        }
+
+        // 添加猫咪评论
+        function addCatComment() {
+            const content = document.getElementById('newComment').value.trim();
+            if (!content) {
+                alert('请输入评论内容');
+                return;
+            }
+            
+            if (!catComments[currentCat.id]) {
+                catComments[currentCat.id] = [];
+            }
+            
+            const newComment = {
+                id: Date.now(),
+                author: currentUser.name,
+                avatar: currentUser.avatar,
+                content: content,
+                time: new Date().toISOString()
+            };
+            
+            catComments[currentCat.id].push(newComment);
+            localStorage.setItem('catComments', JSON.stringify(catComments));
+            
+            document.getElementById('newComment').value = '';
+            renderCatComments();
+            
+            alert('评论发表成功！');
+        }
+
+        // 发送猫咪私信给管理员
+        function sendCatPrivateMessage() {
+            if (!currentCat) return;
+            
+            const content = prompt(`请输入您想对李先生咨询的关于${currentCat.name}的问题：`);
+            if (!content) return;
+            
+            const message = {
+                id: Date.now(),
+                type: 'cat_inquiry',
+                catId: currentCat.id,
+                catName: currentCat.name,
+                sender: currentUser.name,
+                senderPhone: '', // 可以在后续版本中添加
+                content: content,
+                createTime: new Date().toISOString(),
+                status: 'unread',
+                reply: ''
+            };
+            
+            privateMessages.push(message);
+            localStorage.setItem('privateMessages', JSON.stringify(privateMessages));
+            
+            alert(`私信发送成功！李先生会尽快回复您关于${currentCat.name}的问题。`);
+        }
+
         // 初始化
         function init() {
+            initUserData();
             renderCats();
             updateCounts();
             setupEventListeners();
@@ -2958,6 +3649,48 @@
                     lng: 120.168386
                 },
                 realAddress: '浙江省杭州市拱墅区体育场路99号'
+            },
+            {
+                id: 4,
+                name: '杭州协和宠物医院',
+                rating: 4.7,
+                address: '杭州市滨江区江南大道588号',
+                phone: '0571-55555555',
+                services: ['24小时急诊', '宠物手术', '专科诊疗', '美容护理'],
+                distance: null,
+                coordinates: {
+                    lat: 30.208458,
+                    lng: 120.212316
+                },
+                realAddress: '浙江省杭州市滨江区江南大道588号'
+            },
+            {
+                id: 5,
+                name: '爱宠动物诊所',
+                rating: 4.5,
+                address: '杭州市江干区钱江路168号',
+                phone: '0571-44444444',
+                services: ['疫苗接种', '体检服务', '寄养服务', '营养咨询'],
+                distance: null,
+                coordinates: {
+                    lat: 30.274128,
+                    lng: 120.215634
+                },
+                realAddress: '浙江省杭州市江干区钱江路168号'
+            },
+            {
+                id: 6,
+                name: '宠物康健中心',
+                rating: 4.8,
+                address: '杭州市余杭区文一西路888号',
+                phone: '0571-33333333',
+                services: ['24小时急诊', '宠物手术', '中医理疗', '康复护理'],
+                distance: null,
+                coordinates: {
+                    lat: 30.284527,
+                    lng: 120.031278
+                },
+                realAddress: '浙江省杭州市余杭区文一西路888号'
             }
         ];
 
@@ -3129,22 +3862,32 @@
             hideAllSections();
             document.getElementById('hospitalSection').style.display = 'block';
             currentSection = 'hospitals';
-            renderHospitals();
+            
+            // 先获取用户位置，再渲染医院
+            getUserLocation(() => {
+                calculateDistances();
+                renderHospitals();
+            });
+            
             window.scrollTo(0, 0);
         }
 
         // 渲染医院
         function renderHospitals() {
             const grid = document.getElementById('hospitalGrid');
-            grid.innerHTML = hospitalsData.map(hospital => `
-                <div class="hospital-card">
+            grid.innerHTML = hospitalsData.map((hospital, index) => `
+                <div class="hospital-card ${index === 0 ? 'nearest' : ''}">
+                    ${index === 0 ? '<div style="background: #34c759; color: white; padding: 6px 12px; border-radius: 12px; font-size: 12px; font-weight: 600; margin-bottom: 10px; display: inline-block;">📍 最近</div>' : ''}
                     <div class="hospital-header">
                         <h3 class="hospital-name">${hospital.name}</h3>
                         <div class="hospital-rating">
                             ⭐ ${hospital.rating}
                         </div>
                     </div>
-                    <div class="hospital-address">📍 ${hospital.address} (${hospital.distance})</div>
+                    <div class="hospital-address">
+                        📍 ${hospital.address}
+                        ${hospital.distance !== null ? `<span style="color: #0071e3; font-weight: 600; margin-left: 8px;">(${hospital.distance.toFixed(1)}km)</span>` : '<span style="color: #86868b; margin-left: 8px;">(获取距离中...)</span>'}
+                    </div>
                     <div class="hospital-phone">📞 ${hospital.phone}</div>
                     <div class="hospital-services">
                         ${hospital.services.map(service => `<span class="service-tag">${service}</span>`).join('')}
@@ -3152,7 +3895,22 @@
                     <div class="hospital-actions">
                         <button class="hospital-btn book-btn" onclick="bookHospital(${hospital.id})">预约挂号</button>
                         <button class="hospital-btn review-btn" onclick="reviewHospital(${hospital.id})">查看评价</button>
-                        <button class="hospital-btn" onclick="showHospitalMap(${hospital.id})">📍 查看地图</button>
+                        <button class="hospital-btn" style="background: #0071e3; color: white;" onclick="showHospitalOnMap(${hospital.id})">🗺️ 地图</button>
+                    </div>
+                    <div class="map-section" id="hospitalMap${hospital.id}" style="display: none;">
+                        <div class="route-title">🗺️ ${hospital.name} 位置</div>
+                        <div class="map-container">
+                            <iframe 
+                                id="map${hospital.id}"
+                                class="map-iframe" 
+                                src="https://www.openstreetmap.org/export/embed.html?bbox=${hospital.coordinates.lng-0.01},${hospital.coordinates.lat-0.01},${hospital.coordinates.lng+0.01},${hospital.coordinates.lat+0.01}&layer=mapnik&marker=${hospital.coordinates.lat},${hospital.coordinates.lng}"
+                                allowfullscreen>
+                            </iframe>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
                     </div>
                     <div class="map-section" id="hospitalMap${hospital.id}">
                         <div class="map-container" id="map${hospital.id}"></div>
@@ -3518,19 +4276,33 @@
                 typeName: typeNames[selectedPostType],
                 title: title + (selectedImages.length > 0 ? ' <span class="new-tag">图</span>' : ''),
                 content: content,
-                author: '我',
-                avatar: '我',
-                level: '新用户',
+                author: currentUser.name,
+                avatar: currentUser.avatar,
+                level: currentUser.level,
                 time: '刚刚',
                 likes: 0,
                 comments: 0,
                 views: 0,
                 isNew: true,
-                latestComments: []
+                latestComments: [],
+                images: selectedImages.length > 0 ? selectedImages : null
             };
             
+            // 保存到用户帖子列表
+            const userPost = {
+                ...newPost,
+                status: 'published',
+                createTime: new Date().toISOString()
+            };
+            userPosts.push(userPost);
+            localStorage.setItem('userPosts', JSON.stringify(userPosts));
+            
+            // 保存到论坛帖子列表
             forumPosts.unshift(newPost);
             localStorage.setItem('forumPosts', JSON.stringify(forumPosts));
+            
+            // 添加到论坛数据用于显示
+            forumPostsData.unshift(newPost);
             
             closePostModal();
             alert('🎉 帖子发布成功！大家可以看到你的帖子了');
@@ -3619,7 +4391,7 @@
         }
 
         // 获取用户位置
-        function getUserLocation() {
+        function getUserLocation(callback) {
             if (navigator.geolocation) {
                 navigator.geolocation.getCurrentPosition(
                     (position) => {
@@ -3628,6 +4400,7 @@
                             lng: position.coords.longitude
                         };
                         console.log('用户位置获取成功：', userLocation);
+                        if (callback) callback();
                     },
                     (error) => {
                         console.log('位置获取失败：', error.message);
@@ -3636,13 +4409,51 @@
                             lat: 30.274084,
                             lng: 120.155069
                         };
+                        if (callback) callback();
                     }
                 );
+            } else {
+                // 浏览器不支持定位，使用默认位置
+                userLocation = {
+                    lat: 30.274084,
+                    lng: 120.155069
+                };
+                if (callback) callback();
             }
         }
 
+        // 计算距离
+        function calculateDistances() {
+            if (!userLocation) return;
+            
+            hospitalsData.forEach(hospital => {
+                const distance = getDistance(
+                    userLocation.lat, 
+                    userLocation.lng, 
+                    hospital.coordinates.lat, 
+                    hospital.coordinates.lng
+                );
+                hospital.distance = distance;
+            });
+            
+            // 按距离排序
+            hospitalsData.sort((a, b) => a.distance - b.distance);
+        }
+
+        // 计算两点之间距离（千米）
+        function getDistance(lat1, lon1, lat2, lon2) {
+            const R = 6371; // 地球半径（千米）
+            const dLat = (lat2 - lat1) * Math.PI / 180;
+            const dLon = (lon2 - lon1) * Math.PI / 180;
+            const a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+                      Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+                      Math.sin(dLon/2) * Math.sin(dLon/2);
+            const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+            return R * c;
+        }
+
         // 显示医院地图
-        function showHospitalMap(hospitalId) {
+        function showHospitalOnMap(hospitalId) {
             const hospital = hospitalsData.find(h => h.id === hospitalId);
             const mapSection = document.getElementById(`hospitalMap${hospitalId}`);
             
@@ -3659,9 +4470,9 @@
             
             mapSection.style.display = 'block';
             
-            // 初始化地图
+            // 滚动到地图位置
             setTimeout(() => {
-                initMap(`map${hospitalId}`, hospital.coordinates, hospital.name);
+                mapSection.scrollIntoView({ behavior: 'smooth', block: 'center' });
             }, 100);
         }
 
@@ -3771,6 +4582,9 @@
             const savedShopOrders = localStorage.getItem('shopOrders');
             const savedAppointments = localStorage.getItem('appointments');
             const savedForumPosts = localStorage.getItem('forumPosts');
+            const savedUserPosts = localStorage.getItem('userPosts');
+            const savedCatComments = localStorage.getItem('catComments');
+            const savedPrivateMessages = localStorage.getItem('privateMessages');
             
             if (savedOrders) orders = JSON.parse(savedOrders);
             if (savedMessages) messages = JSON.parse(savedMessages);
@@ -3786,6 +4600,9 @@
                     }
                 });
             }
+            if (savedUserPosts) userPosts = JSON.parse(savedUserPosts);
+            if (savedCatComments) catComments = JSON.parse(savedCatComments);
+            if (savedPrivateMessages) privateMessages = JSON.parse(savedPrivateMessages);
             
             updateNotificationBadge();
         }
@@ -3794,7 +4611,7 @@
         document.addEventListener('DOMContentLoaded', function() {
             init();
             loadFromStorage();
-            getUserLocation(); // 获取用户位置
+            getUserLocation(); // 获取用户位置（后台静默获取）
             
             // 设置默认显示猫咪区域
             document.getElementById('catsSection').style.display = 'block';
