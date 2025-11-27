@@ -690,7 +690,6 @@
         .shop-section {
             padding: 80px 0;
             background: white;
-            display: none;
         }
 
         .shop-categories {
@@ -791,7 +790,6 @@
         .hospital-section {
             padding: 80px 0;
             background: #f5f5f7;
-            display: none;
         }
 
         .hospital-grid {
@@ -900,7 +898,6 @@
         .forum-section {
             padding: 0;
             background: #f5f5f7;
-            display: none;
             min-height: 100vh;
         }
 
@@ -2020,7 +2017,7 @@
             </a>
             <button class="mobile-menu-btn" onclick="toggleMobileMenu()">☰</button>
             <div class="nav-menu" id="navMenu">
-                <a href="#cats" class="nav-link">🏠 精选猫咪</a>
+                <a href="#" class="nav-link" onclick="showHome()">🏠 精选猫咪</a>
                 <a href="#" class="nav-link" onclick="showShop()">🛒 宠物商城</a>
                 <a href="#" class="nav-link" onclick="showHospitals()">🏥 宠物医院</a>
                 <a href="#" class="nav-link" onclick="showForum()">💬 本地论坛</a>
@@ -4621,7 +4618,8 @@
             loadFromStorage();
             getUserLocation(); // 获取用户位置（后台静默获取）
             
-            // 设置默认显示猫咪区域
+            // 初始化时隐藏所有区域，然后显示猫咪区域
+            hideAllSections();
             document.getElementById('catsSection').style.display = 'block';
         });
     </script>
