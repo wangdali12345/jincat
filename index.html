@@ -350,6 +350,7 @@
             display: flex;
             gap: 16px;
             margin-top: 40px;
+            flex-wrap: wrap;
         }
 
         .like-btn {
@@ -359,6 +360,289 @@
 
         .like-btn.liked {
             background: #86868b;
+        }
+
+        .order-btn {
+            background: #34c759;
+            color: white;
+        }
+
+        .message-btn {
+            background: #0071e3;
+            color: white;
+        }
+
+        /* 订单模态框 */
+        .order-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 2000;
+            backdrop-filter: blur(10px);
+        }
+
+        .order-content {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            border-radius: 18px;
+            max-width: 500px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .order-header {
+            padding: 30px 30px 20px;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .order-body {
+            padding: 30px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #1d1d1f;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 12px 16px;
+            border: 1px solid #d2d2d7;
+            border-radius: 12px;
+            font-size: 17px;
+            transition: all 0.3s ease;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: #0071e3;
+            box-shadow: 0 0 0 4px rgba(0, 113, 227, 0.1);
+        }
+
+        .form-textarea {
+            width: 100%;
+            padding: 12px 16px;
+            border: 1px solid #d2d2d7;
+            border-radius: 12px;
+            font-size: 17px;
+            min-height: 100px;
+            resize: vertical;
+            transition: all 0.3s ease;
+        }
+
+        .form-textarea:focus {
+            outline: none;
+            border-color: #0071e3;
+            box-shadow: 0 0 0 4px rgba(0, 113, 227, 0.1);
+        }
+
+        .order-summary {
+            background: #f5f5f7;
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .summary-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+
+        .summary-total {
+            display: flex;
+            justify-content: space-between;
+            font-size: 18px;
+            font-weight: 600;
+            border-top: 1px solid #d2d2d7;
+            padding-top: 10px;
+            margin-top: 10px;
+        }
+
+        /* 私信模态框 */
+        .message-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 2000;
+            backdrop-filter: blur(10px);
+        }
+
+        .message-content {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            border-radius: 18px;
+            max-width: 500px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        /* 物流追踪 */
+        .logistics-section {
+            background: white;
+            border-radius: 18px;
+            padding: 30px;
+            margin: 20px 0;
+            display: none;
+        }
+
+        .logistics-title {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 20px;
+            color: #1d1d1f;
+        }
+
+        .logistics-timeline {
+            position: relative;
+            padding-left: 30px;
+        }
+
+        .logistics-item {
+            position: relative;
+            padding-bottom: 20px;
+            padding-left: 20px;
+        }
+
+        .logistics-item:before {
+            content: '';
+            position: absolute;
+            left: -8px;
+            top: 6px;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #0071e3;
+        }
+
+        .logistics-item:after {
+            content: '';
+            position: absolute;
+            left: -2px;
+            top: 18px;
+            width: 2px;
+            height: calc(100% - 18px);
+            background: #d2d2d7;
+        }
+
+        .logistics-item:last-child:after {
+            display: none;
+        }
+
+        .logistics-time {
+            font-size: 14px;
+            color: #86868b;
+            margin-bottom: 4px;
+        }
+
+        .logistics-text {
+            font-size: 16px;
+            color: #1d1d1f;
+        }
+
+        .logistics-item.completed:before {
+            background: #34c759;
+        }
+
+        .logistics-item.current:before {
+            background: #0071e3;
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                box-shadow: 0 0 0 0 rgba(0, 113, 227, 0.7);
+            }
+            50% {
+                box-shadow: 0 0 0 8px rgba(0, 113, 227, 0);
+            }
+        }
+
+        /* 用户中心 */
+        .user-section {
+            position: relative;
+        }
+
+        .user-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 8px;
+            border-radius: 50%;
+            transition: background 0.3s ease;
+        }
+
+        .user-btn:hover {
+            background: rgba(0, 0, 0, 0.1);
+        }
+
+        .user-dropdown {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+            min-width: 200px;
+            display: none;
+            z-index: 1000;
+        }
+
+        .user-dropdown.show {
+            display: block;
+        }
+
+        .dropdown-item {
+            padding: 12px 16px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .dropdown-item:last-child {
+            border-bottom: none;
+        }
+
+        .dropdown-item:hover {
+            background: #f5f5f7;
+        }
+
+        .notification-badge {
+            position: absolute;
+            top: -2px;
+            right: -2px;
+            background: #ff3b30;
+            color: white;
+            border-radius: 50%;
+            width: 18px;
+            height: 18px;
+            font-size: 11px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
         }
 
         /* 响应式设计 */
@@ -417,12 +701,24 @@
     <!-- 导航栏 -->
     <nav>
         <div class="container">
-            <div class="nav-content">
-                <a href="#" class="logo">
-                    <span>🐱</span>
-                    <span>杭州自家小猫咪-李先生</span>
-                </a>
+        <div class="nav-content">
+            <a href="#" class="logo">
+                <span>🐱</span>
+                <span>杭州自家小猫咪-李先生</span>
+            </a>
+            <div class="user-section">
+                <button class="user-btn" onclick="toggleUserDropdown()">
+                    <span>👤</span>
+                    <span class="notification-badge" id="notificationBadge" style="display: none;">0</span>
+                </button>
+                <div class="user-dropdown" id="userDropdown">
+                    <div class="dropdown-item" onclick="showOrders()">📦 我的订单</div>
+                    <div class="dropdown-item" onclick="showMessages()">💬 私信消息</div>
+                    <div class="dropdown-item" onclick="showLogistics()">🚚 物流追踪</div>
+                    <div class="dropdown-item" onclick="showFavorites()">❤️ 我的收藏</div>
+                </div>
             </div>
+        </div>
         </div>
     </nav>
 
@@ -519,7 +815,132 @@
                 <div class="modal-description" id="modalDescription"></div>
                 <div class="modal-actions">
                     <button class="btn like-btn" id="likeBtn" onclick="toggleLike()">❤️ 喜欢</button>
+                    <button class="btn order-btn" onclick="openOrderModal()">🛒 立即购买</button>
+                    <button class="btn message-btn" onclick="openMessageModal()">💬 私信咨询</button>
                     <button class="btn btn-primary" onclick="shareCat()">🔗 分享</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 订单模态框 -->
+    <div class="order-modal" id="orderModal">
+        <div class="order-content">
+            <div class="order-header">
+                <h2>确认订单</h2>
+                <button class="modal-close" onclick="closeOrderModal()">×</button>
+            </div>
+            <div class="order-body">
+                <div class="form-group">
+                    <label class="form-label">收货人姓名</label>
+                    <input type="text" class="form-input" id="customerName" placeholder="请输入您的姓名">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">联系电话</label>
+                    <input type="tel" class="form-input" id="customerPhone" placeholder="请输入您的手机号">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">收货地址</label>
+                    <textarea class="form-textarea" id="customerAddress" placeholder="请输入详细收货地址"></textarea>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">备注信息</label>
+                    <textarea class="form-textarea" id="orderNote" placeholder="有什么特殊要求可以在这里说明"></textarea>
+                </div>
+                <div class="order-summary">
+                    <div class="summary-item">
+                        <span>猫咪名称：</span>
+                        <span id="orderCatName">-</span>
+                    </div>
+                    <div class="summary-item">
+                        <span>品种：</span>
+                        <span id="orderCatBreed">-</span>
+                    </div>
+                    <div class="summary-item">
+                        <span>运费：</span>
+                        <span>¥200</span>
+                    </div>
+                    <div class="summary-total">
+                        <span>总计：</span>
+                        <span>¥12,800</span>
+                    </div>
+                </div>
+                <button class="btn btn-primary" style="width: 100%;" onclick="submitOrder()">确认下单</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 私信模态框 -->
+    <div class="message-modal" id="messageModal">
+        <div class="message-content">
+            <div class="order-header">
+                <h2>私信咨询</h2>
+                <button class="modal-close" onclick="closeMessageModal()">×</button>
+            </div>
+            <div class="order-body">
+                <div class="form-group">
+                    <label class="form-label">您的称呼</label>
+                    <input type="text" class="form-input" id="senderName" placeholder="请输入您的称呼">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">联系电话</label>
+                    <input type="tel" class="form-input" id="senderPhone" placeholder="请输入您的联系方式">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">咨询内容</label>
+                    <textarea class="form-textarea" id="messageContent" placeholder="请输入您想咨询的问题，我们会尽快回复您"></textarea>
+                </div>
+                <button class="btn btn-primary" style="width: 100%;" onclick="sendMessage()">发送消息</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 物流信息模态框 -->
+    <div class="order-modal" id="logisticsModal">
+        <div class="order-content">
+            <div class="order-header">
+                <h2>物流追踪</h2>
+                <button class="modal-close" onclick="closeLogisticsModal()">×</button>
+            </div>
+            <div class="order-body">
+                <div class="order-summary">
+                    <div class="summary-item">
+                        <span>订单号：</span>
+                        <span>HK20240801001</span>
+                    </div>
+                    <div class="summary-item">
+                        <span>物流公司：</span>
+                        <span>顺丰速运</span>
+                    </div>
+                    <div class="summary-item">
+                        <span>运单号：</span>
+                        <span>SF1234567890</span>
+                    </div>
+                </div>
+                <div class="logistics-section" style="display: block;">
+                    <div class="logistics-title">物流信息</div>
+                    <div class="logistics-timeline">
+                        <div class="logistics-item completed">
+                            <div class="logistics-time">2024-08-01 14:30</div>
+                            <div class="logistics-text">您的订单已发货</div>
+                        </div>
+                        <div class="logistics-item completed">
+                            <div class="logistics-time">2024-08-01 16:45</div>
+                            <div class="logistics-text">快递已揽收</div>
+                        </div>
+                        <div class="logistics-item completed">
+                            <div class="logistics-time">2024-08-02 08:20</div>
+                            <div class="logistics-text">运输中 - 已到达杭州分拣中心</div>
+                        </div>
+                        <div class="logistics-item current">
+                            <div class="logistics-time">2024-08-02 14:15</div>
+                            <div class="logistics-text">派送中 - 快递员正在派送</div>
+                        </div>
+                        <div class="logistics-item">
+                            <div class="logistics-time">预计送达</div>
+                            <div class="logistics-text">今日 18:00 前</div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -530,12 +951,12 @@
         const catsData = [
             {
                 id: 1,
-                name: '矮脚',
+                name: '金宝',
                 age: '2岁',
                 breed: '英国金渐层',
                 personality: '沉稳大气，王者风范',
                 description: '金宝是李先生家的镇宅之宝，拥有纯正的12色金渐层血统。体型健硕，毛色金黄发亮，在阳光下闪烁着迷人的光芒。性格沉稳温和，不喜欢吵闹，喜欢安静地趴在主人身边看书。已经完成绝育手术，身体健康，定期体检。特别喜欢在阳台上晒太阳，享受悠闲的午后时光。',
-                image: 'https://ftp.mioz.cn/test/2025/11/27/1764213444.JPG',
+                image: 'https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?w=800&h=600&fit=crop&auto=format',
                 gender: '公猫',
                 weight: '5.8kg',
                 color: '12色金渐层',
@@ -545,12 +966,12 @@
             },
             {
                 id: 2,
-                name: '朵朵',
+                name: '蜜桃',
                 age: '1岁4个月',
                 breed: '英国金渐层',
                 personality: '甜美可人，撒娇专家',
-                description: '蜜桃像她的名字一样甜美，已经被嘎蛋了。拥有圆润的脸庞和大大的绿色眼睛，毛色呈现出蜜桃般的暖色调。特别喜欢黏着主人，会用软软的身体蹭人的腿，发出满足的呼噜声。已经学会使用猫砂盆，吃饭习惯很好，不挑食。最适合有小孩的家庭，对小朋友特别有耐心。',
-                image: 'https://ftp.mioz.cn/test/2025/11/27/1764213991.JPG',
+                description: '蜜桃像她的名字一样甜美，是家里的温柔小公主。拥有圆润的脸庞和大大的绿色眼睛，毛色呈现出蜜桃般的暖色调。特别喜欢黏着主人，会用软软的身体蹭人的腿，发出满足的呼噜声。已经学会使用猫砂盆，吃饭习惯很好，不挑食。最适合有小孩的家庭，对小朋友特别有耐心。',
+                image: 'https://images.unsplash.com/photo-1513245543132-31f507417b26?w=800&h=600&fit=crop&auto=format',
                 gender: '母猫',
                 weight: '4.2kg',
                 color: '11色金渐层',
@@ -593,6 +1014,9 @@
         let filteredCats = [...catsData];
         let currentCat = null;
         let likedCats = new Set();
+        let orders = [];
+        let messages = [];
+        let notifications = 0;
 
         // 初始化
         function init() {
@@ -788,9 +1212,248 @@
             });
         });
 
+        // 用户下拉菜单
+        function toggleUserDropdown() {
+            const dropdown = document.getElementById('userDropdown');
+            dropdown.classList.toggle('show');
+        }
+
+        // 点击外部关闭下拉菜单
+        document.addEventListener('click', function(e) {
+            const userSection = document.querySelector('.user-section');
+            if (!userSection.contains(e.target)) {
+                document.getElementById('userDropdown').classList.remove('show');
+            }
+        });
+
+        // 打开订单模态框
+        function openOrderModal() {
+            if (!currentCat) return;
+            
+            document.getElementById('orderCatName').textContent = currentCat.name;
+            document.getElementById('orderCatBreed').textContent = currentCat.breed;
+            document.getElementById('orderModal').style.display = 'block';
+            document.body.style.overflow = 'hidden';
+            closeModal(); // 关闭猫咪详情模态框
+        }
+
+        // 关闭订单模态框
+        function closeOrderModal() {
+            document.getElementById('orderModal').style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
+
+        // 提交订单
+        function submitOrder() {
+            const name = document.getElementById('customerName').value.trim();
+            const phone = document.getElementById('customerPhone').value.trim();
+            const address = document.getElementById('customerAddress').value.trim();
+            const note = document.getElementById('orderNote').value.trim();
+
+            if (!name || !phone || !address) {
+                alert('请填写完整的收货信息');
+                return;
+            }
+
+            const order = {
+                id: Date.now(),
+                catId: currentCat.id,
+                catName: currentCat.name,
+                customerName: name,
+                customerPhone: phone,
+                customerAddress: address,
+                note: note,
+                totalAmount: 12800,
+                status: 'pending',
+                createTime: new Date().toISOString(),
+                logistics: {
+                    company: '顺丰速运',
+                    trackingNumber: 'SF' + Date.now(),
+                    status: 'preparing'
+                }
+            };
+
+            orders.push(order);
+            localStorage.setItem('orders', JSON.stringify(orders));
+            
+            alert('订单提交成功！我们会尽快与您联系确认。');
+            closeOrderModal();
+            
+            // 清空表单
+            document.getElementById('customerName').value = '';
+            document.getElementById('customerPhone').value = '';
+            document.getElementById('customerAddress').value = '';
+            document.getElementById('orderNote').value = '';
+        }
+
+        // 打开私信模态框
+        function openMessageModal() {
+            if (!currentCat) return;
+            
+            document.getElementById('messageModal').style.display = 'block';
+            document.body.style.overflow = 'hidden';
+            closeModal(); // 关闭猫咪详情模态框
+        }
+
+        // 关闭私信模态框
+        function closeMessageModal() {
+            document.getElementById('messageModal').style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
+
+        // 发送私信
+        function sendMessage() {
+            const name = document.getElementById('senderName').value.trim();
+            const phone = document.getElementById('senderPhone').value.trim();
+            const content = document.getElementById('messageContent').value.trim();
+
+            if (!name || !phone || !content) {
+                alert('请填写完整的私信信息');
+                return;
+            }
+
+            const message = {
+                id: Date.now(),
+                catId: currentCat.id,
+                catName: currentCat.name,
+                senderName: name,
+                senderPhone: phone,
+                content: content,
+                createTime: new Date().toISOString(),
+                status: 'unread',
+                reply: ''
+            };
+
+            messages.push(message);
+            localStorage.setItem('messages', JSON.stringify(messages));
+            
+            alert('私信发送成功！李先生会尽快回复您。');
+            closeMessageModal();
+            
+            // 清空表单
+            document.getElementById('senderName').value = '';
+            document.getElementById('senderPhone').value = '';
+            document.getElementById('messageContent').value = '';
+        }
+
+        // 显示订单列表
+        function showOrders() {
+            const ordersList = JSON.parse(localStorage.getItem('orders') || '[]');
+            
+            if (ordersList.length === 0) {
+                alert('您还没有订单');
+                return;
+            }
+
+            let ordersHtml = '📦 我的订单\n\n';
+            ordersList.forEach((order, index) => {
+                ordersHtml += `${index + 1}. ${order.catName} - ${order.totalAmount}元\n`;
+                ordersHtml += `   状态: ${getOrderStatus(order.status)}\n`;
+                ordersHtml += `   时间: ${new Date(order.createTime).toLocaleString()}\n\n`;
+            });
+
+            alert(ordersHtml);
+        }
+
+        // 显示私信列表
+        function showMessages() {
+            const messagesList = JSON.parse(localStorage.getItem('messages') || '[]');
+            
+            if (messagesList.length === 0) {
+                alert('您还没有私信记录');
+                return;
+            }
+
+            let messagesHtml = '💬 私信消息\n\n';
+            messagesList.forEach((message, index) => {
+                messagesHtml += `${index + 1}. 咨询${message.catName}\n`;
+                messagesHtml += `   内容: ${message.content}\n`;
+                messagesHtml += `   时间: ${new Date(message.createTime).toLocaleString()}\n`;
+                if (message.reply) {
+                    messagesHtml += `   回复: ${message.reply}\n`;
+                }
+                messagesHtml += '\n';
+            });
+
+            alert(messagesHtml);
+            updateNotificationBadge();
+        }
+
+        // 显示物流追踪
+        function showLogistics() {
+            document.getElementById('logisticsModal').style.display = 'block';
+            document.body.style.overflow = 'hidden';
+        }
+
+        // 关闭物流模态框
+        function closeLogisticsModal() {
+            document.getElementById('logisticsModal').style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
+
+        // 显示收藏
+        function showFavorites() {
+            if (likedCats.size === 0) {
+                alert('您还没有收藏的猫咪');
+                return;
+            }
+
+            const favoriteCats = catsData.filter(cat => likedCats.has(cat.id));
+            let favoritesHtml = '❤️ 我的收藏\n\n';
+            favoriteCats.forEach((cat, index) => {
+                favoritesHtml += `${index + 1}. ${cat.name} - ${cat.age} - ${cat.personality}\n`;
+            });
+
+            alert(favoritesHtml);
+        }
+
+        // 获取订单状态文本
+        function getOrderStatus(status) {
+            const statusMap = {
+                'pending': '待确认',
+                'confirmed': '已确认',
+                'preparing': '准备中',
+                'shipped': '已发货',
+                'delivered': '已送达',
+                'cancelled': '已取消'
+            };
+            return statusMap[status] || '未知状态';
+        }
+
+        // 更新通知角标
+        function updateNotificationBadge() {
+            const messagesList = JSON.parse(localStorage.getItem('messages') || '[]');
+            const unreadCount = messagesList.filter(msg => msg.status === 'unread').length;
+            
+            const badge = document.getElementById('notificationBadge');
+            if (unreadCount > 0) {
+                badge.textContent = unreadCount;
+                badge.style.display = 'flex';
+            } else {
+                badge.style.display = 'none';
+            }
+        }
+
+        // 页面加载时从localStorage恢复数据
+        function loadFromStorage() {
+            const savedOrders = localStorage.getItem('orders');
+            const savedMessages = localStorage.getItem('messages');
+            
+            if (savedOrders) {
+                orders = JSON.parse(savedOrders);
+            }
+            if (savedMessages) {
+                messages = JSON.parse(savedMessages);
+            }
+            
+            updateNotificationBadge();
+        }
+
         // 页面加载完成后初始化
-        document.addEventListener('DOMContentLoaded', init);
+        document.addEventListener('DOMContentLoaded', function() {
+            init();
+            loadFromStorage();
+        });
     </script>
 </body>
-
 </html>
