@@ -4321,6 +4321,14 @@
             document.getElementById('forumSection').style.display = 'none';
         }
 
+        // 显示首页/猫咪区域
+        function showHome() {
+            hideAllSections();
+            document.getElementById('catsSection').style.display = 'block';
+            currentSection = 'cats';
+            window.scrollTo(0, 0);
+        }
+
         // 显示商城订单
         function showShopOrders() {
             const cart = JSON.parse(localStorage.getItem('cart') || '[]');
