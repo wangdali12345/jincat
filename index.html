@@ -4,6 +4,12 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>杭州自家小猫咪-李先生</title>
+    
+    <!-- 高德地图API -->
+    <script type="text/javascript" src="https://webapi.amap.com/maps?v=1.4.15&key=您的高德地图KEY&plugin=AMap.Geolocation,AMap.PlaceSearch,AMap.Geocoder"></script>
+    
+    <!-- 腾讯地图API（备用） -->
+    <script charset="utf-8" src="https://map.qq.com/api/gljs?v=1.exp&key=您的腾讯地图KEY"></script>
     <style>
         * {
             margin: 0;
@@ -1183,6 +1189,506 @@
             color: #86868b;
         }
 
+        /* 地图样式 */
+        .map-section {
+            padding: 20px;
+            margin: 20px 0;
+            background: #f8f9fa;
+            border-radius: 12px;
+        }
+
+        .map-container {
+            width: 100%;
+            height: 300px;
+            border-radius: 12px;
+            overflow: hidden;
+            background: #e9ecef;
+            position: relative;
+        }
+
+        .map-iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        .map-loading {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            color: #86868b;
+        }
+
+        .real-time-tracking {
+            background: linear-gradient(135deg, #0071e3, #5856d6);
+            color: white;
+            padding: 20px;
+            border-radius: 12px;
+            margin: 20px 0;
+        }
+
+        .tracking-header {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+
+        .tracking-info {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+        }
+
+        .tracking-item {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 15px;
+            border-radius: 8px;
+            backdrop-filter: blur(10px);
+        }
+
+        .tracking-label {
+            font-size: 12px;
+            opacity: 0.8;
+            margin-bottom: 5px;
+        }
+
+        .tracking-value {
+            font-size: 16px;
+            font-weight: 600;
+        }
+
+        .location-badge {
+            background: #34c759;
+            color: white;
+            padding: 4px 12px;
+            border-radius: 15px;
+            font-size: 12px;
+            font-weight: 600;
+            display: inline-block;
+            margin-left: 10px;
+        }
+
+        .delivery-estimation {
+            background: #ff9500;
+            color: white;
+            padding: 15px;
+            border-radius: 12px;
+            margin: 15px 0;
+            text-align: center;
+            font-weight: 600;
+        }
+
+        .route-map {
+            background: white;
+            border: 1px solid #e5e5e7;
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .route-title {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: #1d1d1f;
+        }
+
+        .route-steps {
+            position: relative;
+            padding-left: 30px;
+        }
+
+        .route-step {
+            position: relative;
+            padding-bottom: 20px;
+            padding-left: 20px;
+        }
+
+        .route-step:before {
+            content: '';
+            position: absolute;
+            left: -8px;
+            top: 6px;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #0071e3;
+            border: 2px solid white;
+            box-shadow: 0 2px 8px rgba(0, 113, 227, 0.3);
+        }
+
+        .route-step:after {
+            content: '';
+            position: absolute;
+            left: -2px;
+            top: 18px;
+            width: 2px;
+            height: calc(100% - 18px);
+            background: #d2d2d7;
+        }
+
+        .route-step:last-child:after {
+            display: none;
+        }
+
+        .route-location {
+            font-weight: 600;
+            color: #1d1d1f;
+            margin-bottom: 4px;
+        }
+
+        .route-time {
+            font-size: 13px;
+            color: #86868b;
+        }
+
+        /* 发帖模态框 - 小红书风格 */
+        .post-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 3000;
+            backdrop-filter: blur(10px);
+        }
+
+        .post-content {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            border-radius: 20px;
+            width: 90%;
+            max-width: 600px;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+
+        .post-header {
+            padding: 25px 25px 20px;
+            border-bottom: 1px solid #f0f0f0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .post-title-text {
+            font-size: 20px;
+            font-weight: 700;
+            color: #1d1d1f;
+        }
+
+        .post-body {
+            padding: 25px;
+        }
+
+        .post-type-selector {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+        }
+
+        .post-type-btn {
+            padding: 12px 20px;
+            border: 2px solid #f0f0f0;
+            background: white;
+            border-radius: 25px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 14px;
+        }
+
+        .post-type-btn.active {
+            background: #0071e3;
+            border-color: #0071e3;
+            color: white;
+        }
+
+        .post-form-group {
+            margin-bottom: 25px;
+        }
+
+        .post-input {
+            width: 100%;
+            padding: 15px 20px;
+            border: 2px solid #f0f0f0;
+            border-radius: 15px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', sans-serif;
+        }
+
+        .post-input:focus {
+            outline: none;
+            border-color: #0071e3;
+            box-shadow: 0 0 0 4px rgba(0, 113, 227, 0.1);
+        }
+
+        .post-textarea {
+            width: 100%;
+            padding: 15px 20px;
+            border: 2px solid #f0f0f0;
+            border-radius: 15px;
+            font-size: 16px;
+            min-height: 200px;
+            resize: vertical;
+            transition: all 0.3s ease;
+            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', sans-serif;
+            line-height: 1.6;
+        }
+
+        .post-textarea:focus {
+            outline: none;
+            border-color: #0071e3;
+            box-shadow: 0 0 0 4px rgba(0, 113, 227, 0.1);
+        }
+
+        .post-image-upload {
+            border: 2px dashed #d2d2d7;
+            border-radius: 15px;
+            padding: 30px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: #fafafa;
+        }
+
+        .post-image-upload:hover {
+            border-color: #0071e3;
+            background: #f8faff;
+        }
+
+        .post-image-upload-icon {
+            font-size: 40px;
+            margin-bottom: 10px;
+            color: #86868b;
+        }
+
+        .post-image-upload-text {
+            color: #86868b;
+            font-size: 14px;
+            margin-bottom: 5px;
+        }
+
+        .post-image-upload-hint {
+            color: #d2d2d7;
+            font-size: 12px;
+        }
+
+        .post-actions-footer {
+            display: flex;
+            gap: 15px;
+            padding: 20px 25px;
+            border-top: 1px solid #f0f0f0;
+            background: #fafafa;
+        }
+
+        .post-btn {
+            flex: 1;
+            padding: 15px 20px;
+            border: none;
+            border-radius: 15px;
+            font-weight: 600;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .post-cancel {
+            background: #f0f0f0;
+            color: #86868b;
+        }
+
+        .post-cancel:hover {
+            background: #e8e8ed;
+        }
+
+        .post-submit {
+            background: linear-gradient(135deg, #0071e3, #5856d6);
+            color: white;
+        }
+
+        .post-submit:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0, 113, 227, 0.3);
+        }
+
+        .post-submit:disabled {
+            background: #d2d2d7;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        /* 手机端优化 */
+        @media (max-width: 768px) {
+            .post-content {
+                width: 95%;
+                max-height: 95vh;
+                border-radius: 20px 20px 0 0;
+                top: auto;
+                bottom: 0;
+                left: 0;
+                right: 0;
+                transform: none;
+            }
+
+            .post-header {
+                border-radius: 20px 20px 0 0;
+                padding: 20px 20px 15px;
+            }
+
+            .post-title-text {
+                font-size: 18px;
+            }
+
+            .post-body {
+                padding: 20px;
+            }
+
+            .post-type-selector {
+                gap: 10px;
+            }
+
+            .post-type-btn {
+                padding: 10px 16px;
+                font-size: 13px;
+            }
+
+            .post-input,
+            .post-textarea {
+                font-size: 16px; /* 防止iOS缩放 */
+            }
+
+            .post-textarea {
+                min-height: 150px;
+            }
+
+            .post-actions-footer {
+                padding: 15px 20px;
+            }
+
+            .forum-toolbar {
+                padding: 10px 0;
+            }
+
+            .toolbar-content {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .forum-tabs {
+                overflow-x: auto;
+                justify-content: flex-start;
+                padding-bottom: 5px;
+            }
+
+            .forum-tab {
+                flex-shrink: 0;
+            }
+
+            .post-new-btn {
+                align-self: stretch;
+            }
+
+            .forum-content {
+                padding: 15px 15px 30px;
+            }
+        }
+
+        /* 地图样式 */
+        .map-section {
+            padding: 20px;
+            background: white;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            display: none;
+        }
+
+        .map-container {
+            width: 100%;
+            height: 300px;
+            border-radius: 8px;
+            overflow: hidden;
+            margin-bottom: 15px;
+        }
+
+        .map-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .map-btn {
+            padding: 8px 16px;
+            border: 1px solid #d2d2d7;
+            border-radius: 8px;
+            background: white;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+
+        .map-btn:hover {
+            background: #f5f5f7;
+            border-color: #0071e3;
+        }
+
+        .location-info {
+            padding: 10px;
+            background: #f5f5f7;
+            border-radius: 8px;
+            font-size: 14px;
+            color: #1d1d1f;
+            margin-top: 10px;
+        }
+
+        /* 实时物流追踪 */
+        .real-time-logistics {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            margin-top: 20px;
+        }
+
+        .logistics-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .refresh-btn {
+            padding: 8px 16px;
+            background: #0071e3;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background 0.3s ease;
+        }
+
+        .refresh-btn:hover {
+            background: #0077ed;
+        }
+
+        .logistics-map {
+            width: 100%;
+            height: 250px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
         /* 响应式设计 */
         @media (max-width: 768px) {
             .nav-menu {
@@ -1431,7 +1937,52 @@
     </section>
 
     <!-- 发布帖子按钮 -->
-    <button class="new-post-btn" onclick="showNewPostModal()">+</button>
+    <button class="new-post-btn" onclick="showNewPostModal()">✏️</button>
+
+    <!-- 发帖模态框 - 小红书风格 -->
+    <div class="post-modal" id="postModal">
+        <div class="post-content">
+            <div class="post-header">
+                <h2 class="post-title-text">✨ 发布新帖子</h2>
+                <button class="modal-close" onclick="closePostModal()" style="font-size: 24px; background: none; border: none; cursor: pointer;">×</button>
+            </div>
+            <div class="post-body">
+                <div class="post-type-selector">
+                    <button class="post-type-btn active" data-type="experience" onclick="selectPostType(this)">养宠经验</button>
+                    <button class="post-type-btn" data-type="dating" onclick="selectPostType(this)">宠物相亲</button>
+                    <button class="post-type-btn" data-type="help" onclick="selectPostType(this)">求助问答</button>
+                    <button class="post-type-btn" data-type="share" onclick="selectPostType(this)">日常分享</button>
+                </div>
+
+                <div class="post-form-group">
+                    <input type="text" class="post-input" id="postTitle" placeholder="✍️ 输入一个吸引人的标题..." maxlength="50">
+                    <div style="text-align: right; font-size: 12px; color: #86868b; margin-top: 5px;">
+                        <span id="titleCount">0</span>/50
+                    </div>
+                </div>
+
+                <div class="post-form-group">
+                    <textarea class="post-textarea" id="postContent" placeholder="💝 分享你的精彩内容...&#10;&#10;📝 小贴士：&#10;• 养宠经验：分享护理心得、饲养技巧&#10;• 宠物相亲：详细介绍年龄、品种、性格、要求&#10;• 求助问答：描述问题、已有措施、需要帮助&#10;• 日常分享：记录有趣瞬间、可爱照片" maxlength="1000"></textarea>
+                    <div style="text-align: right; font-size: 12px; color: #86868b; margin-top: 5px;">
+                        <span id="contentCount">0</span>/1000
+                    </div>
+                </div>
+
+                <div class="post-form-group">
+                    <div class="post-image-upload" onclick="selectPostImages()">
+                        <div class="post-image-upload-icon">📷</div>
+                        <div class="post-image-upload-text">点击上传图片</div>
+                        <div class="post-image-upload-hint">支持JPG、PNG格式，最多9张</div>
+                    </div>
+                    <div id="imagePreview" style="display: none; margin-top: 15px;"></div>
+                </div>
+            </div>
+            <div class="post-actions-footer">
+                <button class="post-btn post-cancel" onclick="closePostModal()">取消</button>
+                <button class="post-btn post-submit" id="submitPostBtn" onclick="submitNewPost()">立即发布</button>
+            </div>
+        </div>
+    </div>
 
     <!-- 猫咪详情模态框 -->
     <div class="modal" id="catModal">
@@ -1565,28 +2116,78 @@
                         <span>SF1234567890</span>
                     </div>
                 </div>
+                <!-- 实时追踪信息 -->
+                <div class="real-time-tracking">
+                    <div class="tracking-header">📍 实时位置</div>
+                    <div class="tracking-info">
+                        <div class="tracking-item">
+                            <div class="tracking-label">当前位置</div>
+                            <div class="tracking-value" id="currentLocation">杭州市上城区</div>
+                        </div>
+                        <div class="tracking-item">
+                            <div class="tracking-label">快递员</div>
+                            <div class="tracking-value" id="courierName">张师傅</div>
+                        </div>
+                        <div class="tracking-item">
+                            <div class="tracking-label">联系电话</div>
+                            <div class="tracking-value" id="courierPhone">138****5678</div>
+                        </div>
+                        <div class="tracking-item">
+                            <div class="tracking-label">预计送达</div>
+                            <div class="tracking-value" id="estimatedDelivery">今日 18:00</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 地图显示 -->
+                <div class="map-section">
+                    <div class="route-title">🗺️ 配送路线地图</div>
+                    <div class="map-container">
+                        <div class="map-loading" id="mapLoading">
+                            <div>🗺️</div>
+                            <div>地图加载中...</div>
+                        </div>
+                        <iframe 
+                            id="deliveryMap"
+                            class="map-iframe" 
+                            style="display: none;"
+                            src=""
+                            allowfullscreen>
+                        </iframe>
+                    </div>
+                </div>
+
+                <!-- 配送路线 -->
+                <div class="route-map">
+                    <div class="route-title">📍 配送路线</div>
+                    <div class="route-steps" id="routeSteps">
+                        <!-- 路线步骤将动态生成 -->
+                    </div>
+                </div>
+
                 <div class="logistics-section" style="display: block;">
-                    <div class="logistics-title">物流信息</div>
-                    <div class="logistics-timeline">
-                        <div class="logistics-item completed">
-                            <div class="logistics-time">2024-08-01 14:30</div>
-                            <div class="logistics-text">您的订单已发货</div>
-                        </div>
-                        <div class="logistics-item completed">
-                            <div class="logistics-time">2024-08-01 16:45</div>
-                            <div class="logistics-text">快递已揽收</div>
-                        </div>
-                        <div class="logistics-item completed">
-                            <div class="logistics-time">2024-08-02 08:20</div>
-                            <div class="logistics-text">运输中 - 已到达杭州分拣中心</div>
-                        </div>
-                        <div class="logistics-item current">
-                            <div class="logistics-time">2024-08-02 14:15</div>
-                            <div class="logistics-text">派送中 - 快递员正在派送</div>
-                        </div>
-                        <div class="logistics-item">
-                            <div class="logistics-time">预计送达</div>
-                            <div class="logistics-text">今日 18:00 前</div>
+                    <div class="logistics-title">📦 物流详情</div>
+                    <div class="logistics-timeline" id="logisticsTimeline">
+                            <div class="logistics-item completed">
+                                <div class="logistics-time">2024-08-01 14:30</div>
+                                <div class="logistics-text">您的订单已发货</div>
+                            </div>
+                            <div class="logistics-item completed">
+                                <div class="logistics-time">2024-08-01 16:45</div>
+                                <div class="logistics-text">快递已揽收</div>
+                            </div>
+                            <div class="logistics-item completed">
+                                <div class="logistics-time">2024-08-02 08:20</div>
+                                <div class="logistics-text">运输中 - 已到达杭州分拣中心</div>
+                            </div>
+                            <div class="logistics-item current">
+                                <div class="logistics-time">2024-08-02 14:15</div>
+                                <div class="logistics-text">派送中 - 快递员正在派送</div>
+                            </div>
+                            <div class="logistics-item">
+                                <div class="logistics-time">预计送达</div>
+                                <div class="logistics-text">今日 18:00 前</div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -2045,16 +2646,178 @@
             updateNotificationBadge();
         }
 
+        // 物流追踪数据
+        const logisticsData = {
+            orderNumber: 'HK20240801001',
+            company: '顺丰速运',
+            trackingNumber: 'SF1234567890',
+            currentLocation: '杭州市上城区解放路88号',
+            courierName: '张师傅',
+            courierPhone: '13812345678',
+            estimatedDelivery: '今日 18:00',
+            route: [
+                {
+                    location: '杭州分拣中心',
+                    address: '杭州市江干区',
+                    time: '08:20',
+                    status: 'completed',
+                    lat: 30.2741,
+                    lng: 120.1551
+                },
+                {
+                    location: '杭州配送站',
+                    address: '杭州市上城区',
+                    time: '12:30',
+                    status: 'completed',
+                    lat: 30.2594,
+                    lng: 120.1697
+                },
+                {
+                    location: '您的地址',
+                    address: '杭州市上城区解放路88号',
+                    time: '14:15',
+                    status: 'current',
+                    lat: 30.2628,
+                    lng: 120.1752
+                }
+            ],
+            timeline: [
+                {
+                    time: '2024-08-01 14:30',
+                    status: 'completed',
+                    text: '您的订单已发货'
+                },
+                {
+                    time: '2024-08-01 16:45',
+                    status: 'completed',
+                    text: '快递已揽收'
+                },
+                {
+                    time: '2024-08-02 08:20',
+                    status: 'completed',
+                    text: '运输中 - 已到达杭州分拣中心'
+                },
+                {
+                    time: '2024-08-02 12:30',
+                    status: 'completed',
+                    text: '已到达杭州配送站'
+                },
+                {
+                    time: '2024-08-02 14:15',
+                    status: 'current',
+                    text: '派送中 - 快递员正在派送'
+                },
+                {
+                    time: '预计送达',
+                    status: 'pending',
+                    text: '今日 18:00 前'
+                }
+            ]
+        };
+
         // 显示物流追踪
         function showLogistics() {
             document.getElementById('logisticsModal').style.display = 'block';
             document.body.style.overflow = 'hidden';
+            initLogisticsMap();
+            updateLogisticsInfo();
         }
 
         // 关闭物流模态框
         function closeLogisticsModal() {
             document.getElementById('logisticsModal').style.display = 'none';
             document.body.style.overflow = 'auto';
+        }
+
+        // 初始化物流地图
+        function initLogisticsMap() {
+            // 更新基本信息
+            document.getElementById('trackingOrderNumber').textContent = logisticsData.orderNumber;
+            document.getElementById('trackingCompany').textContent = logisticsData.company;
+            document.getElementById('trackingNumber').textContent = logisticsData.trackingNumber;
+
+            // 更新实时信息
+            document.getElementById('currentLocation').textContent = logisticsData.currentLocation;
+            document.getElementById('courierName').textContent = logisticsData.courierName;
+            document.getElementById('courierPhone').textContent = logisticsData.courierPhone.replace(/(\d{3})\d{4}(\d{4})/, '$1****$2');
+            document.getElementById('estimatedDelivery').textContent = logisticsData.estimatedDelivery;
+            document.getElementById('finalEstimate').textContent = logisticsData.estimatedDelivery;
+
+            // 渲染路线步骤
+            renderDeliveryRoute();
+
+            // 渲染物流时间线
+            renderLogisticsTimeline();
+
+            // 初始化地图
+            setTimeout(() => {
+                loadDeliveryMap();
+            }, 1000);
+        }
+
+        // 渲染配送路线
+        function renderDeliveryRoute() {
+            const routeSteps = document.getElementById('routeSteps');
+            routeSteps.innerHTML = logisticsData.route.map((step, index) => `
+                <div class="route-step">
+                    <div class="route-location">${step.location}</div>
+                    <div class="route-time">${step.time} - ${step.address}</div>
+                </div>
+            `).join('');
+        }
+
+        // 渲染物流时间线
+        function renderLogisticsTimeline() {
+            const timeline = document.getElementById('logisticsTimeline');
+            timeline.innerHTML = logisticsData.timeline.map((item, index) => `
+                <div class="logistics-item ${item.status}">
+                    <div class="logistics-time">${item.time}</div>
+                    <div class="logistics-text">${item.text}</div>
+                </div>
+            `).join('');
+        }
+
+        // 加载配送地图
+        function loadDeliveryMap() {
+            const mapLoading = document.getElementById('mapLoading');
+            const deliveryMap = document.getElementById('deliveryMap');
+
+            // 构建地图URL - 使用OpenStreetMap
+            const currentStep = logisticsData.route.find(step => step.status === 'current');
+            if (currentStep) {
+                const mapUrl = `https://www.openstreetmap.org/export/embed.html?bbox=${currentStep.lng-0.01},${currentStep.lat-0.01},${currentStep.lng+0.01},${currentStep.lat+0.01}&layer=mapnik&marker=${currentStep.lat},${currentStep.lng}`;
+                
+                deliveryMap.src = mapUrl;
+                deliveryMap.style.display = 'block';
+                mapLoading.style.display = 'none';
+            }
+        }
+
+        // 刷新物流信息
+        function refreshTracking() {
+            // 模拟刷新效果
+            const refreshBtn = event.target;
+            refreshBtn.textContent = '🔄 刷新中...';
+            refreshBtn.disabled = true;
+
+            setTimeout(() => {
+                // 模拟更新位置
+                const locations = [
+                    '杭州市上城区解放路88号附近',
+                    '杭州市上城区解放路88号',
+                    '已到达目的地，正在联系收件人'
+                ];
+                const randomLocation = locations[Math.floor(Math.random() * locations.length)];
+                
+                document.getElementById('currentLocation').textContent = randomLocation;
+                document.getElementById('estimatedDelivery').textContent = '15分钟内';
+                document.getElementById('finalEstimate').textContent = '15分钟内';
+
+                refreshBtn.textContent = '🔄 刷新';
+                refreshBtn.disabled = false;
+
+                alert('物流信息已更新！');
+            }, 2000);
         }
 
         // 显示收藏
@@ -2152,7 +2915,7 @@
             }
         ];
 
-        // 医院数据
+        // 医院数据（包含真实坐标）
         const hospitalsData = [
             {
                 id: 1,
@@ -2161,7 +2924,12 @@
                 address: '杭州市上城区解放路88号',
                 phone: '0571-88888888',
                 services: ['24小时急诊', '宠物手术', '疫苗接种', '体检服务'],
-                distance: '1.2km'
+                distance: '1.2km',
+                coordinates: {
+                    lat: 30.274084,
+                    lng: 120.155069
+                },
+                realAddress: '浙江省杭州市上城区解放路88号'
             },
             {
                 id: 2,
@@ -2170,7 +2938,12 @@
                 address: '杭州市西湖区文三路66号',
                 phone: '0571-66666666',
                 services: ['日常诊疗', '美容护理', '寄养服务'],
-                distance: '2.5km'
+                distance: '2.5km',
+                coordinates: {
+                    lat: 30.262834,
+                    lng: 120.127629
+                },
+                realAddress: '浙江省杭州市西湖区文三路66号'
             },
             {
                 id: 3,
@@ -2179,9 +2952,17 @@
                 address: '杭州市拱墅区体育场路99号',
                 phone: '0571-77777777',
                 services: ['专科诊疗', '中医理疗', '康复护理', '营养咨询'],
-                distance: '3.1km'
+                distance: '3.1km',
+                coordinates: {
+                    lat: 30.314539,
+                    lng: 120.168386
+                },
+                realAddress: '浙江省杭州市拱墅区体育场路99号'
             }
         ];
+
+        // 用户位置
+        let userLocation = null;
 
         // 论坛数据 - 更丰富的贴吧风格数据
         const forumPostsData = [
@@ -2371,6 +3152,17 @@
                     <div class="hospital-actions">
                         <button class="hospital-btn book-btn" onclick="bookHospital(${hospital.id})">预约挂号</button>
                         <button class="hospital-btn review-btn" onclick="reviewHospital(${hospital.id})">查看评价</button>
+                        <button class="hospital-btn" onclick="showHospitalMap(${hospital.id})">📍 查看地图</button>
+                    </div>
+                    <div class="map-section" id="hospitalMap${hospital.id}">
+                        <div class="map-container" id="map${hospital.id}"></div>
+                        <div class="map-actions">
+                            <button class="map-btn" onclick="navigateToHospital(${hospital.id})">🧭 导航前往</button>
+                            <button class="map-btn" onclick="callHospital(${hospital.phone})">📞 拨打电话</button>
+                        </div>
+                        <div class="location-info" id="locationInfo${hospital.id}">
+                            <strong>详细地址：</strong>${hospital.realAddress}
+                        </div>
                     </div>
                 </div>
             `).join('');
@@ -2542,32 +3334,211 @@
             return 'all';
         }
 
+        // 全局变量
+        let selectedPostType = 'experience';
+        let selectedImages = [];
+
         // 显示发布帖子模态框
         function showNewPostModal() {
-            const title = prompt('请输入帖子标题：');
-            if (!title) return;
+            document.getElementById('postModal').style.display = 'block';
+            document.body.style.overflow = 'hidden';
             
-            const content = prompt('请输入帖子内容：');
-            if (!content) return;
+            // 重置表单
+            document.getElementById('postTitle').value = '';
+            document.getElementById('postContent').value = '';
+            document.getElementById('titleCount').textContent = '0';
+            document.getElementById('contentCount').textContent = '0';
+            document.getElementById('imagePreview').innerHTML = '';
+            document.getElementById('imagePreview').style.display = 'none';
+            selectedImages = [];
+            
+            // 设置默认类型
+            selectPostType(document.querySelector('.post-type-btn.active'));
+            
+            // 监听输入
+            setupPostInputListeners();
+        }
+
+        // 关闭发帖模态框
+        function closePostModal() {
+            document.getElementById('postModal').style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
+
+        // 选择帖子类型
+        function selectPostType(element) {
+            document.querySelectorAll('.post-type-btn').forEach(btn => btn.classList.remove('active'));
+            element.classList.add('active');
+            selectedPostType = element.dataset.type;
+            
+            // 根据类型更新输入提示
+            const titleInput = document.getElementById('postTitle');
+            const contentInput = document.getElementById('postContent');
+            
+            const placeholders = {
+                experience: {
+                    title: '✍️ 分享你的养宠心得...',
+                    content: '💝 分享你的精彩内容...&#10;&#10;📝 小贴士：&#10;• 分享猫咪护理经验&#10;• 介绍饲养技巧和心得&#10;• 推荐好用产品和方法'
+                },
+                dating: {
+                    title: '💕 为你的爱猫寻找对象...',
+                    content: '💝 分享你的精彩内容...&#10;&#10;📝 小贴士：&#10;• 介绍猫咪年龄、品种、性格&#10;• 说明对另一半的要求&#10;• 附上猫咪萌照效果更佳'
+                },
+                help: {
+                    title: '❓ 寻求大家的帮助...',
+                    content: '💝 分享你的精彩内容...&#10;&#10;📝 小贴士：&#10;• 详细描述遇到的问题&#10;• 说明已经尝试的解决方法&#10;• 提供必要的背景信息'
+                },
+                share: {
+                    title: '📸 记录美好的养宠瞬间...',
+                    content: '💝 分享你的精彩内容...&#10;&#10;📝 小贴士：&#10;• 分享猫咪的可爱日常&#10;• 记录有趣的互动瞬间&#10;• 晒出萌照和视频'
+                }
+            };
+            
+            const placeholder = placeholders[selectedPostType];
+            titleInput.placeholder = placeholder.title;
+            contentInput.placeholder = placeholder.content;
+        }
+
+        // 设置输入监听器
+        function setupPostInputListeners() {
+            const titleInput = document.getElementById('postTitle');
+            const contentInput = document.getElementById('postContent');
+            
+            titleInput.addEventListener('input', function() {
+                document.getElementById('titleCount').textContent = this.value.length;
+            });
+            
+            contentInput.addEventListener('input', function() {
+                document.getElementById('contentCount').textContent = this.value.length;
+            });
+        }
+
+        // 选择图片
+        function selectPostImages() {
+            const input = document.createElement('input');
+            input.type = 'file';
+            input.accept = 'image/*';
+            input.multiple = true;
+            input.max = '9';
+            
+            input.addEventListener('change', function(e) {
+                handleImageSelection(e.target.files);
+            });
+            
+            input.click();
+        }
+
+        // 处理图片选择
+        function handleImageSelection(files) {
+            const maxImages = 9;
+            let newImages = Array.from(files).slice(0, maxImages - selectedImages.length);
+            
+            newImages.forEach(file => {
+                if (file.type.startsWith('image/')) {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        selectedImages.push({
+                            name: file.name,
+                            url: e.target.result,
+                            size: file.size
+                        });
+                        updateImagePreview();
+                    };
+                    reader.readAsDataURL(file);
+                }
+            });
+        }
+
+        // 更新图片预览
+        function updateImagePreview() {
+            const preview = document.getElementById('imagePreview');
+            
+            if (selectedImages.length === 0) {
+                preview.style.display = 'none';
+                return;
+            }
+            
+            preview.style.display = 'block';
+            preview.innerHTML = `
+                <div style="font-size: 14px; color: #1d1d1f; margin-bottom: 10px; font-weight: 600;">
+                    📷 已选择 ${selectedImages.length} 张图片
+                </div>
+                <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(80px, 1fr)); gap: 10px;">
+                    ${selectedImages.map((img, index) => `
+                        <div style="position: relative; aspect-ratio: 1; border-radius: 8px; overflow: hidden; border: 2px solid #f0f0f0;">
+                            <img src="${img.url}" style="width: 100%; height: 100%; object-fit: cover;">
+                            <button onclick="removeImage(${index})" style="position: absolute; top: -5px; right: -5px; width: 20px; height: 20px; border-radius: 50%; background: #ff3b30; color: white; border: none; cursor: pointer; font-size: 12px;">×</button>
+                        </div>
+                    `).join('')}
+                </div>
+            `;
+        }
+
+        // 移除图片
+        function removeImage(index) {
+            selectedImages.splice(index, 1);
+            updateImagePreview();
+        }
+
+        // 提交新帖子
+        function submitNewPost() {
+            const title = document.getElementById('postTitle').value.trim();
+            const content = document.getElementById('postContent').value.trim();
+            
+            if (!title) {
+                alert('请输入帖子标题');
+                return;
+            }
+            
+            if (!content) {
+                alert('请输入帖子内容');
+                return;
+            }
+            
+            if (title.length < 5) {
+                alert('标题至少需要5个字');
+                return;
+            }
+            
+            if (content.length < 10) {
+                alert('内容至少需要10个字');
+                return;
+            }
+            
+            const typeNames = {
+                experience: '养宠经验',
+                dating: '宠物相亲',
+                help: '求助问答',
+                share: '日常分享'
+            };
             
             const newPost = {
                 id: Date.now(),
-                type: 'experience',
-                typeName: '养宠经验',
-                title: title,
+                type: selectedPostType,
+                typeName: typeNames[selectedPostType],
+                title: title + (selectedImages.length > 0 ? ' <span class="new-tag">图</span>' : ''),
                 content: content,
-                author: '用户',
-                avatar: 'U',
+                author: '我',
+                avatar: '我',
+                level: '新用户',
                 time: '刚刚',
                 likes: 0,
-                comments: 0
+                comments: 0,
+                views: 0,
+                isNew: true,
+                latestComments: []
             };
             
             forumPosts.unshift(newPost);
+            localStorage.setItem('forumPosts', JSON.stringify(forumPosts));
+            
+            closePostModal();
+            alert('🎉 帖子发布成功！大家可以看到你的帖子了');
+            
+            // 刷新论坛显示
             if (currentSection === 'forum') {
-                renderForumPosts('all');
+                renderForum(getCurrentForumType());
             }
-            alert('帖子发布成功！');
         }
 
         // 隐藏所有区域
@@ -2616,6 +3587,182 @@
             alert(aptHtml);
         }
 
+        // 地图初始化
+        function initMap(containerId, coordinates, title) {
+            try {
+                // 尝试使用高德地图
+                if (typeof AMap !== 'undefined') {
+                    const map = new AMap.Map(containerId, {
+                        zoom: 15,
+                        center: [coordinates.lng, coordinates.lat]
+                    });
+                    
+                    const marker = new AMap.Marker({
+                        position: [coordinates.lng, coordinates.lat],
+                        title: title,
+                        map: map
+                    });
+                    
+                    const infoWindow = new AMap.InfoWindow({
+                        content: `<div style="padding: 10px;"><strong>${title}</strong></div>`
+                    });
+                    
+                    marker.on('click', function() {
+                        infoWindow.open(map, marker.getPosition());
+                    });
+                    
+                    return map;
+                }
+            } catch (error) {
+                console.log('地图初始化失败，使用备用方案');
+            }
+        }
+
+        // 获取用户位置
+        function getUserLocation() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(
+                    (position) => {
+                        userLocation = {
+                            lat: position.coords.latitude,
+                            lng: position.coords.longitude
+                        };
+                        console.log('用户位置获取成功：', userLocation);
+                    },
+                    (error) => {
+                        console.log('位置获取失败：', error.message);
+                        // 使用默认位置（杭州市中心）
+                        userLocation = {
+                            lat: 30.274084,
+                            lng: 120.155069
+                        };
+                    }
+                );
+            }
+        }
+
+        // 显示医院地图
+        function showHospitalMap(hospitalId) {
+            const hospital = hospitalsData.find(h => h.id === hospitalId);
+            const mapSection = document.getElementById(`hospitalMap${hospitalId}`);
+            
+            // 切换地图显示
+            if (mapSection.style.display === 'block') {
+                mapSection.style.display = 'none';
+                return;
+            }
+            
+            // 隐藏其他地图
+            document.querySelectorAll('.map-section').forEach(section => {
+                section.style.display = 'none';
+            });
+            
+            mapSection.style.display = 'block';
+            
+            // 初始化地图
+            setTimeout(() => {
+                initMap(`map${hospitalId}`, hospital.coordinates, hospital.name);
+            }, 100);
+        }
+
+        // 导航到医院
+        function navigateToHospital(hospitalId) {
+            const hospital = hospitalsData.find(h => h.id === hospitalId);
+            
+            if (userLocation) {
+                // 高德地图导航
+                const navUrl = `https://uri.amap.com/navigation?to=${hospital.coordinates.lng},${hospital.coordinates.lat},${hospital.name}&mode=car`;
+                window.open(navUrl, '_blank');
+            } else {
+                // 备用方案：打开地图应用
+                const mapUrl = `https://amap.com/search?query=${encodeURIComponent(hospital.realAddress)}`;
+                window.open(mapUrl, '_blank');
+            }
+        }
+
+        // 拨打医院电话
+        function callHospital(phone) {
+            if (confirm(`确定要拨打 ${phone} 吗？`)) {
+                window.location.href = `tel:${phone}`;
+            }
+        }
+
+        // 实时物流追踪
+        function initLogisticsMap() {
+            try {
+                // 模拟物流路径点
+                const logisticsPoints = [
+                    { lng: 120.155069, lat: 30.274084, status: '发货点' },
+                    { lng: 120.170843, lat: 30.276080, status: '中转站' },
+                    { lng: 120.127629, lat: 30.262834, status: '配送中' },
+                    { lng: 120.145777, lat: 30.289459, status: '目的地' }
+                ];
+                
+                if (typeof AMap !== 'undefined') {
+                    const map = new AMap.Map('logisticsMap', {
+                        zoom: 12,
+                        center: [120.155069, 30.274084]
+                    });
+                    
+                    // 绘制路径
+                    const path = logisticsPoints.map(point => [point.lng, point.lat]);
+                    const polyline = new AMap.Polyline({
+                        path: path,
+                        strokeColor: '#0071e3',
+                        strokeWeight: 4,
+                        strokeStyle: 'solid'
+                    });
+                    map.add(polyline);
+                    
+                    // 添加标记点
+                    logisticsPoints.forEach((point, index) => {
+                        const marker = new AMap.Marker({
+                            position: [point.lng, point.lat],
+                            title: point.status,
+                            map: map
+                        });
+                        
+                        const infoWindow = new AMap.InfoWindow({
+                            content: `<div style="padding: 10px;"><strong>${point.status}</strong></div>`
+                        });
+                        
+                        marker.on('click', function() {
+                            infoWindow.open(map, marker.getPosition());
+                        });
+                    });
+                }
+            } catch (error) {
+                console.log('物流地图初始化失败');
+            }
+        }
+
+        // 刷新物流信息
+        function refreshLogistics() {
+            const btn = event.target;
+            const originalText = btn.textContent;
+            btn.textContent = '🔄 刷新中...';
+            btn.disabled = true;
+            
+            // 模拟实时更新
+            setTimeout(() => {
+                const timeline = document.getElementById('logisticsTimeline');
+                const newStatus = document.createElement('div');
+                newStatus.className = 'logistics-item completed';
+                newStatus.innerHTML = `
+                    <div class="logistics-time">${new Date().toLocaleString()}</div>
+                    <div class="logistics-text">物流信息已更新 - 实时位置：杭州市西湖区</div>
+                `;
+                
+                timeline.insertBefore(newStatus, timeline.firstChild);
+                
+                btn.textContent = originalText;
+                btn.disabled = false;
+                
+                // 重新初始化地图
+                initLogisticsMap();
+            }, 2000);
+        }
+
         // 页面加载时从localStorage恢复数据
         function loadFromStorage() {
             const savedOrders = localStorage.getItem('orders');
@@ -2623,12 +3770,22 @@
             const savedCart = localStorage.getItem('cart');
             const savedShopOrders = localStorage.getItem('shopOrders');
             const savedAppointments = localStorage.getItem('appointments');
+            const savedForumPosts = localStorage.getItem('forumPosts');
             
             if (savedOrders) orders = JSON.parse(savedOrders);
             if (savedMessages) messages = JSON.parse(savedMessages);
             if (savedCart) cart = JSON.parse(savedCart);
             if (savedShopOrders) shopOrders = JSON.parse(savedShopOrders);
             if (savedAppointments) appointments = JSON.parse(savedAppointments);
+            if (savedForumPosts) {
+                forumPosts = JSON.parse(savedForumPosts);
+                // 合并默认数据和用户发布的数据
+                forumPosts.forEach(userPost => {
+                    if (!forumPostsData.find(p => p.id === userPost.id)) {
+                        forumPostsData.push(userPost);
+                    }
+                });
+            }
             
             updateNotificationBadge();
         }
@@ -2637,6 +3794,7 @@
         document.addEventListener('DOMContentLoaded', function() {
             init();
             loadFromStorage();
+            getUserLocation(); // 获取用户位置
             
             // 设置默认显示猫咪区域
             document.getElementById('catsSection').style.display = 'block';
