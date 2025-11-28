@@ -6,7 +6,7 @@
     <title>杭州自家小猫咪-李先生 - 宠物社区平台</title>
     
     <!-- 地图API -->
-    <script type="text/javascript" src="https://webapi.amap.com/maps?v=1.4.15&key=0d3b3b8f6e6e4f7b9a6e6e6e6e6e6e6&plugin=AMap.Geolocation,AMap.PlaceSearch,AMap.Geocoder,AMap.ToolBar"></script>
+    <script type="text/javascript" src="https://webapi.amap.com/maps?v=1.4.15&key=0d3b3b8f6e6e4f7b9a6e6e6e6e6e6e6&plugin=AMap.Geolocation,AMap.PlaceSearch,AMap.Geocoder,AMap.ToolBar,AMap.Autocomplete"></script>
     
     <style>
         /* 苹果风格全局样式 */
@@ -119,6 +119,75 @@
             display: flex;
             align-items: center;
             gap: 8px;
+        }
+
+        /* 用户菜单 */
+        .user-menu {
+            position: relative;
+        }
+
+        .user-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: var(--apple-blue);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+
+        .user-avatar:hover {
+            background: var(--apple-blue-hover);
+        }
+
+        .user-dropdown {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            background: white;
+            border-radius: var(--border-radius-lg);
+            box-shadow: var(--shadow-heavy);
+            min-width: 200px;
+            display: none;
+            z-index: 1000;
+            margin-top: 8px;
+        }
+
+        .user-dropdown.active {
+            display: block;
+            animation: slideUp 0.3s ease;
+        }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .dropdown-item {
+            padding: 12px 16px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+            border-bottom: 1px solid var(--apple-gray-light);
+        }
+
+        .dropdown-item:last-child {
+            border-bottom: none;
+        }
+
+        .dropdown-item:hover {
+            background: var(--apple-gray-light);
+        }
+
+        .dropdown-item:first-child {
+            border-radius: var(--border-radius-lg) var(--border-radius-lg) 0 0;
+        }
+
+        .dropdown-item:last-child {
+            border-radius: 0 0 var(--border-radius-lg) var(--border-radius-lg);
         }
 
         /* 页面切换 */
@@ -445,29 +514,6 @@
             color: var(--apple-black);
         }
 
-        /* 私信按钮 */
-        .message-btn {
-            position: fixed;
-            bottom: var(--spacing-md);
-            right: var(--spacing-md);
-            width: 60px;
-            height: 60px;
-            border-radius: 50%;
-            background: var(--apple-blue);
-            color: white;
-            border: none;
-            font-size: 24px;
-            cursor: pointer;
-            box-shadow: var(--shadow-medium);
-            transition: all 0.3s ease;
-            z-index: 90;
-        }
-
-        .message-btn:hover {
-            background: var(--apple-blue-hover);
-            transform: scale(1.1);
-        }
-
         /* 地图样式 */
         .map-container {
             background: white;
@@ -493,25 +539,43 @@
             border-radius: var(--border-radius-md);
             box-shadow: var(--shadow-medium);
             z-index: 10;
+            width: 300px;
+        }
+
+        .map-input-group {
+            margin-bottom: var(--spacing-sm);
         }
 
         .map-input {
-            padding: 8px 12px;
+            width: 100%;
+            padding: 12px;
             border: 1px solid var(--apple-border);
             border-radius: var(--border-radius-sm);
-            margin-bottom: var(--spacing-sm);
-            width: 200px;
+            margin-bottom: var(--spacing-xs);
+            font-family: var(--font-family);
         }
 
         .map-btn {
-            padding: 8px 16px;
+            width: 100%;
+            padding: 10px 16px;
             background: var(--apple-blue);
             color: white;
             border: none;
             border-radius: var(--border-radius-sm);
             cursor: pointer;
             font-size: 14px;
-            width: 100%;
+            font-family: var(--font-family);
+            margin-bottom: var(--spacing-xs);
+            transition: all 0.3s ease;
+        }
+
+        .map-btn:hover {
+            background: var(--apple-blue-hover);
+        }
+
+        .map-btn:disabled {
+            background: var(--apple-gray-medium);
+            cursor: not-allowed;
         }
 
         /* 物流信息 */
@@ -822,6 +886,224 @@
             margin-bottom: var(--spacing-sm);
         }
 
+        /* 购物车页面 */
+        .cart-container {
+            background: white;
+            border-radius: var(--border-radius-lg);
+            padding: var(--spacing-md);
+            box-shadow: var(--shadow-light);
+            margin: var(--spacing-md) 0;
+        }
+
+        .cart-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: var(--spacing-md);
+        }
+
+        .cart-title {
+            font-size: 24px;
+            font-weight: 600;
+        }
+
+        .cart-empty {
+            text-align: center;
+            padding: var(--spacing-xxl);
+            color: var(--apple-gray-medium);
+        }
+
+        .cart-item {
+            display: flex;
+            gap: var(--spacing-md);
+            padding: var(--spacing-md);
+            border-bottom: 1px solid var(--apple-border);
+            align-items: center;
+        }
+
+        .cart-item-image {
+            width: 80px;
+            height: 80px;
+            object-fit: cover;
+            border-radius: var(--border-radius-sm);
+        }
+
+        .cart-item-info {
+            flex: 1;
+        }
+
+        .cart-item-name {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: var(--spacing-xs);
+        }
+
+        .cart-item-price {
+            font-size: 16px;
+            color: var(--apple-red);
+            font-weight: 600;
+        }
+
+        .cart-item-quantity {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-xs);
+        }
+
+        .quantity-btn {
+            width: 24px;
+            height: 24px;
+            border: 1px solid var(--apple-border);
+            background: white;
+            border-radius: var(--border-radius-sm);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .quantity-btn:hover {
+            background: var(--apple-gray-light);
+        }
+
+        .quantity-input {
+            width: 40px;
+            text-align: center;
+            border: 1px solid var(--apple-border);
+            border-radius: var(--border-radius-sm);
+            padding: 4px;
+        }
+
+        .cart-total {
+            text-align: right;
+            padding: var(--spacing-md);
+            border-top: 2px solid var(--apple-border);
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        .checkout-btn {
+            width: 100%;
+            padding: 16px;
+            background: var(--apple-green);
+            color: white;
+            border: none;
+            border-radius: var(--border-radius-md);
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: var(--spacing-md);
+            transition: all 0.3s ease;
+        }
+
+        .checkout-btn:hover {
+            background: #28a745;
+        }
+
+        /* 个人中心页面 */
+        .profile-container {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: var(--spacing-md);
+        }
+
+        @media (max-width: 768px) {
+            .profile-container {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .profile-sidebar {
+            background: white;
+            border-radius: var(--border-radius-lg);
+            padding: var(--spacing-md);
+            box-shadow: var(--shadow-light);
+            text-align: center;
+        }
+
+        .profile-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: var(--apple-blue);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+            margin: 0 auto var(--spacing-md);
+        }
+
+        .profile-name {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: var(--spacing-sm);
+        }
+
+        .profile-stats {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: var(--spacing-sm);
+            margin-top: var(--spacing-md);
+        }
+
+        .stat-item {
+            text-align: center;
+            padding: var(--spacing-sm);
+            background: var(--apple-gray-light);
+            border-radius: var(--border-radius-md);
+        }
+
+        .stat-number {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--apple-blue);
+        }
+
+        .stat-label {
+            font-size: 12px;
+            color: var(--apple-gray-medium);
+        }
+
+        .profile-content {
+            background: white;
+            border-radius: var(--border-radius-lg);
+            padding: var(--spacing-md);
+            box-shadow: var(--shadow-light);
+        }
+
+        .profile-tabs {
+            display: flex;
+            gap: var(--spacing-sm);
+            border-bottom: 1px solid var(--apple-border);
+            margin-bottom: var(--spacing-md);
+        }
+
+        .profile-tab {
+            padding: var(--spacing-sm) var(--spacing-md);
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 500;
+            color: var(--apple-gray-medium);
+            transition: all 0.3s ease;
+        }
+
+        .profile-tab.active {
+            color: var(--apple-blue);
+            border-bottom: 2px solid var(--apple-blue);
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
         /* 按钮样式 */
         .btn {
             display: inline-flex;
@@ -1007,6 +1289,10 @@
             .shop-container {
                 grid-template-columns: 1fr;
             }
+
+            .map-controls {
+                width: 250px;
+            }
         }
 
         /* 加载动画 */
@@ -1105,6 +1391,17 @@
         .tab-content.active {
             display: block;
         }
+
+        /* 权限提示 */
+        .permission-denied {
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            color: #856404;
+            padding: var(--spacing-md);
+            border-radius: var(--border-radius-md);
+            margin: var(--spacing-md) 0;
+            text-align: center;
+        }
     </style>
 </head>
 <body>
@@ -1124,6 +1421,18 @@
                     <a href="#" class="nav-link" onclick="showPage('forum')">论坛</a>
                     <a href="#" class="nav-link" onclick="showPage('shop')">商城</a>
                     <a href="#" class="nav-link" onclick="showPage('admin')" id="adminLink" style="display: none;">管理</a>
+                </div>
+                
+                <!-- 用户菜单 -->
+                <div class="user-menu">
+                    <div class="user-avatar" onclick="toggleUserMenu()">👤</div>
+                    <div class="user-dropdown" id="userDropdown">
+                        <div class="dropdown-item" onclick="showPage('profile')">个人中心</div>
+                        <div class="dropdown-item" onclick="showPage('cart')">购物车 (<span id="cartCount">0</span>)</div>
+                        <div class="dropdown-item" onclick="showPage('orders')">我的订单</div>
+                        <div class="dropdown-item" onclick="showMessageModal()">私信管理</div>
+                        <div class="dropdown-item" onclick="logout()">退出登录</div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -1216,9 +1525,14 @@
 
             <div class="map-container">
                 <div class="map-controls">
-                    <input type="text" class="map-input" id="hospitalSearch" placeholder="搜索宠物医院...">
-                    <button class="map-btn" onclick="searchNearbyHospitals()">🔍 搜索</button>
-                    <button class="map-btn" onclick="getCurrentLocation()">📍 定位</button>
+                    <div class="map-input-group">
+                        <input type="text" class="map-input" id="hospitalSearch" placeholder="搜索宠物医院...">
+                        <input type="text" class="map-input" id="startLocation" placeholder="起点（或点击定位）">
+                        <input type="text" class="map-input" id="endLocation" placeholder="终点（或选择医院）">
+                    </div>
+                    <button class="map-btn" onclick="getCurrentLocation()">📍 获取当前位置</button>
+                    <button class="map-btn" onclick="searchNearbyHospitals()">🔍 搜索附近医院</button>
+                    <button class="map-btn" onclick="startNavigation()">🧭 开始导航</button>
                 </div>
                 <div id="map"></div>
             </div>
@@ -1353,7 +1667,12 @@
                 <p>系统管理和数据分析</p>
             </div>
 
-            <div class="admin-dashboard">
+            <div id="adminPermission" class="permission-denied" style="display: none;">
+                <h3>🚫 权限不足</h3>
+                <p>您没有权限访问管理员面板</p>
+            </div>
+
+            <div id="adminContent" class="admin-dashboard">
                 <div class="admin-card">
                     <h3 class="admin-title">📊 数据统计</h3>
                     <div class="admin-stats">
@@ -1388,6 +1707,131 @@
                     <h3 class="admin-title">👥 用户管理</h3>
                     <button class="btn btn-primary" onclick="showUsers()">用户列表</button>
                 </div>
+
+                <div class="admin-card">
+                    <h3 class="admin-title">✉️ 私信管理</h3>
+                    <button class="btn btn-primary" onclick="showAdminMessages()">查看私信</button>
+                </div>
+
+                <div class="admin-card">
+                    <h3 class="admin-title">📝 内容管理</h3>
+                    <div class="btn-group">
+                        <button class="btn btn-primary" onclick="manageCats()">管理猫咪</button>
+                        <button class="btn btn-secondary" onclick="managePosts()">管理帖子</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 个人中心页面 -->
+        <div id="profile" class="page">
+            <div class="hero">
+                <h1>👤 个人中心</h1>
+                <p>管理您的个人信息和设置</p>
+            </div>
+
+            <div class="profile-container">
+                <!-- 侧边栏 -->
+                <aside class="profile-sidebar">
+                    <div class="profile-avatar">👤</div>
+                    <div class="profile-name">访客用户</div>
+                    <div class="profile-stats">
+                        <div class="stat-item">
+                            <div class="stat-number" id="userPostCount">0</div>
+                            <div class="stat-label">发帖数</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-number" id="userCommentCount">0</div>
+                            <div class="stat-label">评论数</div>
+                        </div>
+                    </div>
+                </aside>
+
+                <!-- 主内容区 -->
+                <main class="profile-content">
+                    <div class="profile-tabs">
+                        <button class="profile-tab active" onclick="switchProfileTab('info')">个人信息</button>
+                        <button class="profile-tab" onclick="switchProfileTab('activity')">我的活动</button>
+                        <button class="profile-tab" onclick="switchProfileTab('settings')">设置</button>
+                    </div>
+
+                    <div id="profile-info" class="tab-content active">
+                        <h3>个人信息</h3>
+                        <p>用户名：访客用户</p>
+                        <p>注册时间：2024-01-01</p>
+                        <p>邮箱：未设置</p>
+                    </div>
+
+                    <div id="profile-activity" class="tab-content">
+                        <h3>我的活动</h3>
+                        <p>您的发帖和评论记录</p>
+                    </div>
+
+                    <div id="profile-settings" class="tab-content">
+                        <h3>账户设置</h3>
+                        <p>通知设置、隐私设置等</p>
+                    </div>
+                </main>
+            </div>
+        </div>
+
+        <!-- 购物车页面 -->
+        <div id="cart" class="page">
+            <div class="hero">
+                <h1>🛒 购物车</h1>
+                <p>管理您的购物车商品</p>
+            </div>
+
+            <div class="cart-container">
+                <div class="cart-header">
+                    <h2 class="cart-title">我的购物车</h2>
+                    <button class="btn btn-secondary" onclick="clearCart()">清空购物车</button>
+                </div>
+
+                <div id="cartItems">
+                    <!-- 购物车商品将动态生成 -->
+                </div>
+
+                <div id="cartEmpty" class="cart-empty" style="display: none;">
+                    <h3>🛒 购物车是空的</h3>
+                    <p>快去商城挑选您喜欢的商品吧！</p>
+                    <button class="btn btn-primary" onclick="showPage('shop')">去商城</button>
+                </div>
+
+                <div id="cartTotal" class="cart-total" style="display: none;">
+                    总计：¥<span id="totalPrice">0.00</span>
+                </div>
+
+                <button class="checkout-btn" onclick="checkout()" style="display: none;">立即结算</button>
+            </div>
+        </div>
+
+        <!-- 订单页面 -->
+        <div id="orders" class="page">
+            <div class="hero">
+                <h1>📋 我的订单</h1>
+                <p>查看您的订单历史</p>
+            </div>
+
+            <div class="tab-container">
+                <div class="tab-nav">
+                    <button class="tab-btn active" onclick="switchTab('orders', 'all')">全部订单</button>
+                    <button class="tab-btn" onclick="switchTab('orders', 'pending')">待付款</button>
+                    <button class="tab-btn" onclick="switchTab('orders', 'shipping')">配送中</button>
+                    <button class="tab-btn" onclick="switchTab('orders', 'completed')">已完成</button>
+                </div>
+                <div id="orders-all" class="tab-content active">
+                    <!-- 订单列表将动态生成 -->
+                </div>
+                <div id="orders-pending" class="tab-content">
+                    <p>暂无待付款订单</p>
+                </div>
+                <div id="orders-shipping" class="tab-content">
+                    <p>暂无配送中订单</p>
+                </div>
+                <div id="orders-completed" class="tab-content">
+                    <p>暂无已完成订单</p>
+                </div>
             </div>
         </div>
 
@@ -1421,9 +1865,6 @@
             </div>
         </div>
     </div>
-
-    <!-- 私信按钮 -->
-    <button class="message-btn" onclick="showMessageModal()">💬</button>
 
     <!-- 私信弹窗 -->
     <div id="messageModal" class="modal">
@@ -1481,17 +1922,24 @@
         let currentCatId = null;
         let posts = [];
         let products = [];
+        let cart = [];
+        let orders = [];
         let messages = [];
         let currentUser = null;
         let isAdmin = false;
+        let map = null;
+        let currentLocation = null;
+        let selectedHospital = null;
 
         // 初始化应用
         document.addEventListener('DOMContentLoaded', function() {
             initializeApp();
             checkAdminStatus();
+            loadCartFromStorage();
             renderCatGrid();
             initializeProducts();
             initializePosts();
+            updateCartCount();
         });
 
         // 检查管理员状态
@@ -1520,6 +1968,12 @@
 
         // 页面切换
         function showPage(pageId) {
+            // 检查管理员权限
+            if (pageId === 'admin' && !isAdmin) {
+                alert('您没有权限访问管理员面板');
+                return;
+            }
+
             // 隐藏所有页面
             document.querySelectorAll('.page').forEach(page => {
                 page.classList.remove('active');
@@ -1536,11 +1990,18 @@
             const activeLink = document.querySelector(`.nav-link[onclick="showPage('${pageId}')"]`);
             if (activeLink) activeLink.classList.add('active');
             
+            // 关闭用户菜单
+            document.getElementById('userDropdown').classList.remove('active');
+            
             // 特殊页面处理
             if (pageId === 'hospital') {
-                initializeMap();
+                setTimeout(initializeMap, 100);
             } else if (pageId === 'admin') {
                 updateAdminStats();
+            } else if (pageId === 'cart') {
+                renderCart();
+            } else if (pageId === 'profile') {
+                updateProfileStats();
             }
         }
 
@@ -1552,15 +2013,22 @@
                 return;
             }
 
-            const map = new AMap.Map('map', {
+            // 创建地图
+            map = new AMap.Map('map', {
                 zoom: 13,
                 center: [120.15507, 30.27408], // 杭州市中心
                 viewMode: '2D'
             });
 
-            // 添加定位控件
+            // 添加控件
             map.addControl(new AMap.ToolBar({
                 position: 'RB'
+            }));
+
+            // 添加定位控件
+            map.addControl(new AMap.Geolocation({
+                position: 'LT',
+                buttonOffset: new AMap.Pixel(10, 20)
             }));
 
             // 获取当前位置
@@ -1575,50 +2043,64 @@
                         const lng = position.coords.longitude;
                         const lat = position.coords.latitude;
                         
-                        if (typeof AMap !== 'undefined') {
-                            const map = new AMap.Map('map', {
-                                zoom: 14,
-                                center: [lng, lat]
-                            });
+                        currentLocation = [lng, lat];
+                        
+                        if (map) {
+                            map.setCenter(currentLocation);
+                            map.setZoom(14);
                             
                             // 添加当前位置标记
-                            const marker = new AMap.Marker({
-                                position: [lng, lat],
-                                title: '您的位置'
-                            });
-                            map.add(marker);
+                            new AMap.Marker({
+                                position: currentLocation,
+                                title: '您的位置',
+                                icon: new AMap.Icon({
+                                    size: new AMap.Size(25, 34),
+                                    imageSize: new AMap.Size(25, 34),
+                                    image: 'https://webapi.amap.com/theme/v1.3/markers/b/mark_bs.png'
+                                })
+                            }).setMap(map);
+                            
+                            // 设置起点输入框
+                            document.getElementById('startLocation').value = `当前位置 (${lat.toFixed(4)}, ${lng.toFixed(4)})`;
                             
                             // 搜索附近医院
-                            searchNearbyHospitals(lng, lat);
+                            searchNearbyHospitals();
                         }
                     },
                     (error) => {
                         console.error('定位失败:', error);
+                        alert('无法获取您的位置，请检查定位权限');
                         // 使用默认位置
-                        searchNearbyHospitals(120.15507, 30.27408);
+                        searchNearbyHospitals();
                     }
                 );
+            } else {
+                alert('您的浏览器不支持定位功能');
             }
         }
 
         // 搜索附近医院
-        function searchNearbyHospitals(lng, lat) {
-            if (typeof AMap === 'undefined') return;
+        function searchNearbyHospitals() {
+            if (!map) {
+                alert('地图正在加载中，请稍后再试');
+                return;
+            }
 
             const placeSearch = new AMap.PlaceSearch({
                 pageSize: 10,
                 pageIndex: 1,
                 city: '杭州',
-                map: document.getElementById('map'),
-                panel: 'hospitalList'
+                map: map
             });
 
             // 搜索关键词
             const keywords = document.getElementById('hospitalSearch').value || '宠物医院';
+            const searchCenter = currentLocation || [120.15507, 30.27408];
             
-            placeSearch.searchNearBy(keywords, [lng || 120.15507, lat || 30.27408], 5000, (status, result) => {
-                if (status === 'complete') {
+            placeSearch.searchNearBy(keywords, searchCenter, 5000, (status, result) => {
+                if (status === 'complete' && result.poiList && result.poiList.pois.length > 0) {
                     console.log('搜索完成:', result);
+                    displayHospitalList(result.poiList.pois);
                 } else {
                     console.error('搜索失败:', result);
                     // 显示模拟数据
@@ -1627,22 +2109,107 @@
             });
         }
 
+        // 显示医院列表
+        function displayHospitalList(pois) {
+            const hospitalList = document.getElementById('hospitalList');
+            hospitalList.innerHTML = pois.map(poi => `
+                <div class="comment-item" onclick="selectHospital(${poi.location.lng}, ${poi.location.lat}, '${poi.name}', '${poi.address}')">
+                    <h4>${poi.name}</h4>
+                    <p>📍 ${poi.address || '地址未知'}</p>
+                    <p>📞 ${poi.tel || '电话未知'}</p>
+                    <p>📏 距离：${poi.distance ? (poi.distance/1000).toFixed(2) + 'km' : '未知'}</p>
+                    <button class="btn btn-primary" onclick="event.stopPropagation(); setAsDestination(${poi.location.lng}, ${poi.location.lat}, '${poi.name}')">设为目的地</button>
+                </div>
+            `).join('');
+        }
+
+        // 选择医院
+        function selectHospital(lng, lat, name, address) {
+            selectedHospital = { lng, lat, name, address };
+            document.getElementById('endLocation').value = name;
+            
+            if (map) {
+                map.setCenter([lng, lat]);
+                
+                // 清除之前的标记
+                map.clearMap();
+                
+                // 重新添加当前位置标记
+                if (currentLocation) {
+                    new AMap.Marker({
+                        position: currentLocation,
+                        title: '您的位置'
+                    }).setMap(map);
+                }
+                
+                // 添加医院标记
+                new AMap.Marker({
+                    position: [lng, lat],
+                    title: name,
+                    icon: new AMap.Icon({
+                        size: new AMap.Size(25, 34),
+                        imageSize: new AMap.Size(25, 34),
+                        image: 'https://webapi.amap.com/theme/v1.3/markers/n/mark_r.png'
+                    })
+                }).setMap(map);
+            }
+        }
+
+        // 设为目的地
+        function setAsDestination(lng, lat, name) {
+            selectedHospital = { lng, lat, name };
+            document.getElementById('endLocation').value = name;
+            alert(`已设置 "${name}" 为目的地`);
+        }
+
+        // 开始导航
+        function startNavigation() {
+            if (!currentLocation) {
+                alert('请先获取当前位置');
+                return;
+            }
+            
+            if (!selectedHospital) {
+                alert('请先选择一个医院作为目的地');
+                return;
+            }
+
+            // 使用高德地图导航
+            const startLng = currentLocation[0];
+            const startLat = currentLocation[1];
+            const endLng = selectedHospital.lng;
+            const endLat = selectedHospital.lat;
+
+            // 构建导航URL
+            const navUrl = `https://uri.amap.com/navigation?from=${startLng},${startLat},我的位置&to=${endLng},${endLat},${encodeURIComponent(selectedHospital.name)}&mode=car&policy=1&src=mypage&coordinate=gaode&callnative=0`;
+            
+            // 在新窗口打开导航
+            window.open(navUrl, '_blank');
+        }
+
         // 显示模拟医院数据
         function showMockHospitals() {
             const mockHospitals = [
-                { name: '杭州宠物医院', address: '杭州市西湖区', phone: '0571-12345678' },
-                { name: '爱心动物医院', address: '杭州市上城区', phone: '0571-87654321' },
-                { name: '宠物健康中心', address: '杭州市江干区', phone: '0571-11223344' }
+                { name: '杭州宠物医院', address: '杭州市西湖区', phone: '0571-12345678', lng: 120.15507, lat: 30.27408 },
+                { name: '爱心动物医院', address: '杭州市上城区', phone: '0571-87654321', lng: 120.16507, lat: 30.28408 },
+                { name: '宠物健康中心', address: '杭州市江干区', phone: '0571-11223344', lng: 120.14507, lat: 30.26408 }
             ];
 
             const hospitalList = document.getElementById('hospitalList');
             hospitalList.innerHTML = mockHospitals.map(hospital => `
-                <div class="comment-item">
+                <div class="comment-item" onclick="selectHospital(${hospital.lng}, ${hospital.lat}, '${hospital.name}', '${hospital.address}')">
                     <h4>${hospital.name}</h4>
                     <p>📍 ${hospital.address}</p>
                     <p>📞 ${hospital.phone}</p>
+                    <button class="btn btn-primary" onclick="event.stopPropagation(); setAsDestination(${hospital.lng}, ${hospital.lat}, '${hospital.name}')">设为目的地</button>
                 </div>
             `).join('');
+        }
+
+        // 用户菜单切换
+        function toggleUserMenu() {
+            const dropdown = document.getElementById('userDropdown');
+            dropdown.classList.toggle('active');
         }
 
         // 物流查询
@@ -1739,11 +2306,137 @@
             renderProducts(category);
         }
 
-        // 加入购物车
+        // 添加到购物车
         function addToCart(productId) {
             const product = products.find(p => p.id === productId);
             if (product) {
+                const existingItem = cart.find(item => item.id === productId);
+                if (existingItem) {
+                    existingItem.quantity += 1;
+                } else {
+                    cart.push({
+                        ...product,
+                        quantity: 1
+                    });
+                }
+                saveCartToStorage();
+                updateCartCount();
                 alert(`✅ "${product.name}" 已加入购物车！`);
+            }
+        }
+
+        // 保存购物车到本地存储
+        function saveCartToStorage() {
+            localStorage.setItem('cart', JSON.stringify(cart));
+        }
+
+        // 从本地存储加载购物车
+        function loadCartFromStorage() {
+            const savedCart = localStorage.getItem('cart');
+            if (savedCart) {
+                cart = JSON.parse(savedCart);
+            }
+        }
+
+        // 更新购物车数量
+        function updateCartCount() {
+            const count = cart.reduce((total, item) => total + item.quantity, 0);
+            document.getElementById('cartCount').textContent = count;
+        }
+
+        // 渲染购物车
+        function renderCart() {
+            const cartItems = document.getElementById('cartItems');
+            const cartEmpty = document.getElementById('cartEmpty');
+            const cartTotal = document.getElementById('cartTotal');
+            const checkoutBtn = document.querySelector('.checkout-btn');
+
+            if (cart.length === 0) {
+                cartItems.style.display = 'none';
+                cartEmpty.style.display = 'block';
+                cartTotal.style.display = 'none';
+                checkoutBtn.style.display = 'none';
+            } else {
+                cartItems.style.display = 'block';
+                cartEmpty.style.display = 'none';
+                cartTotal.style.display = 'block';
+                checkoutBtn.style.display = 'block';
+
+                cartItems.innerHTML = cart.map(item => `
+                    <div class="cart-item">
+                        <img src="${item.image}" alt="${item.name}" class="cart-item-image">
+                        <div class="cart-item-info">
+                            <div class="cart-item-name">${item.name}</div>
+                            <div class="cart-item-price">¥${item.price.toFixed(2)}</div>
+                        </div>
+                        <div class="cart-item-quantity">
+                            <button class="quantity-btn" onclick="updateQuantity(${item.id}, -1)">-</button>
+                            <input type="number" class="quantity-input" value="${item.quantity}" readonly>
+                            <button class="quantity-btn" onclick="updateQuantity(${item.id}, 1)">+</button>
+                        </div>
+                    </div>
+                `).join('');
+
+                // 计算总价
+                const totalPrice = cart.reduce((total, item) => total + (item.price * item.quantity), 0);
+                document.getElementById('totalPrice').textContent = totalPrice.toFixed(2);
+            }
+        }
+
+        // 更新数量
+        function updateQuantity(productId, change) {
+            const item = cart.find(item => item.id === productId);
+            if (item) {
+                item.quantity += change;
+                if (item.quantity <= 0) {
+                    cart = cart.filter(item => item.id !== productId);
+                }
+                saveCartToStorage();
+                updateCartCount();
+                renderCart();
+            }
+        }
+
+        // 清空购物车
+        function clearCart() {
+            if (confirm('确定要清空购物车吗？')) {
+                cart = [];
+                saveCartToStorage();
+                updateCartCount();
+                renderCart();
+            }
+        }
+
+        // 结算
+        function checkout() {
+            if (cart.length === 0) {
+                alert('购物车是空的');
+                return;
+            }
+
+            const totalPrice = cart.reduce((total, item) => total + (item.price * item.quantity), 0);
+            
+            if (confirm(`总计：¥${totalPrice.toFixed(2)}\n确认下单吗？`)) {
+                // 创建订单
+                const order = {
+                    id: Date.now(),
+                    items: [...cart],
+                    totalPrice: totalPrice,
+                    status: 'pending',
+                    createTime: new Date().toLocaleString()
+                };
+                
+                orders.push(order);
+                localStorage.setItem('orders', JSON.stringify(orders));
+                
+                // 清空购物车
+                cart = [];
+                saveCartToStorage();
+                updateCartCount();
+                renderCart();
+                
+                alert('🎉 订单创建成功！请在"我的订单"中查看订单状态。');
+                showPage('orders');
             }
         }
 
@@ -1788,7 +2481,7 @@
                                 <div class="post-time">${post.time}</div>
                             </div>
                         </div>
-                        <button class="btn btn-secondary" onclick="deletePost(${post.id}, event)">删除</button>
+                        ${isAdmin ? `<button class="btn btn-secondary" onclick="deletePost(${post.id}, event)">删除</button>` : ''}
                     </div>
                     <h3 class="post-title">${post.title}</h3>
                     <p class="post-content">${post.content}</p>
@@ -1844,8 +2537,13 @@
             alert('✅ 帖子发布成功！');
         }
 
-        // 删除帖子
+        // 删除帖子（仅管理员）
         function deletePost(postId, event) {
+            if (!isAdmin) {
+                alert('您没有权限删除帖子');
+                return;
+            }
+            
             event.stopPropagation();
             
             if (confirm('确定要删除这篇帖子吗？')) {
@@ -1905,10 +2603,12 @@
                         ${cat.neutered ? '<span class="cat-tag">✅ 已绝育</span>' : ''}
                     </div>
                     
+                    ${isAdmin ? `
                     <div class="btn-group">
                         <button class="btn btn-primary" onclick="showEditCatPage(${cat.id})">✏️ 编辑</button>
                         <button class="btn btn-danger" onclick="deleteCat(${cat.id})">🗑️ 删除</button>
                     </div>
+                    ` : ''}
                     
                     <!-- 评论区域 -->
                     <div class="comments-section">
@@ -1939,11 +2639,12 @@
                 return '<p style="text-align: center; color: #86868b;">暂无评论，来抢沙发吧！</p>';
             }
             
-            return comments.map(comment => `
+            return comments.map((comment, index) => `
                 <div class="comment-item">
                     <div class="comment-author">${comment.author}</div>
                     <div class="comment-time">${comment.time}</div>
                     <div class="comment-content">${comment.content}</div>
+                    ${isAdmin ? `<button class="btn btn-danger" style="margin-top: 8px;" onclick="deleteComment(${index})">删除评论</button>` : ''}
                 </div>
             `).join('');
         }
@@ -1976,6 +2677,24 @@
                 document.getElementById('commentInput').value = '';
                 
                 alert('✅ 评论发表成功！');
+            }
+        }
+
+        // 删除评论（仅管理员）
+        function deleteComment(commentIndex) {
+            if (!isAdmin) {
+                alert('您没有权限删除评论');
+                return;
+            }
+
+            const cat = cats.find(c => c.id === currentCatId);
+            if (cat && cat.comments) {
+                if (confirm('确定要删除这条评论吗？')) {
+                    cat.comments.splice(commentIndex, 1);
+                    localStorage.setItem('cats', JSON.stringify(cats));
+                    document.getElementById('commentsList').innerHTML = renderComments(cat.comments);
+                    alert('✅ 评论已删除');
+                }
             }
         }
 
@@ -2017,6 +2736,18 @@
 
         // 管理员功能
         function updateAdminStats() {
+            const adminPermission = document.getElementById('adminPermission');
+            const adminContent = document.getElementById('adminContent');
+            
+            if (!isAdmin) {
+                adminPermission.style.display = 'block';
+                adminContent.style.display = 'none';
+                return;
+            }
+            
+            adminPermission.style.display = 'none';
+            adminContent.style.display = 'grid';
+            
             document.getElementById('totalCats').textContent = cats.length;
             document.getElementById('totalPosts').textContent = posts.length;
             document.getElementById('totalProducts').textContent = products.length;
@@ -2027,20 +2758,22 @@
             
             cats.forEach(cat => {
                 if (cat.comments) {
-                    cat.comments.forEach(comment => {
+                    cat.comments.forEach((comment, index) => {
                         allComments.push({
                             cat: cat.name,
-                            ...comment
+                            comment: comment,
+                            index: index
                         });
                     });
                 }
             });
             
             if (allComments.length > 0) {
-                latestComments.innerHTML = allComments.slice(-3).map(comment => `
+                latestComments.innerHTML = allComments.slice(-3).map(item => `
                     <div style="padding: 10px; border-bottom: 1px solid #eee;">
-                        <strong>${comment.author}</strong> 评论了 <strong>${comment.cat}</strong><br>
-                        <small>${comment.content}</small>
+                        <strong>${item.comment.author}</strong> 评论了 <strong>${item.cat}</strong><br>
+                        <small>${item.comment.content}</small>
+                        <button class="btn btn-danger" style="margin-top: 4px; padding: 4px 8px; font-size: 12px;" onclick="deleteCommentByAdmin('${item.cat}', ${item.index})">删除</button>
                     </div>
                 `).join('');
             } else {
@@ -2048,14 +2781,106 @@
             }
         }
 
+        // 管理员删除评论
+        function deleteCommentByAdmin(catName, commentIndex) {
+            if (!isAdmin) {
+                alert('您没有权限删除评论');
+                return;
+            }
+
+            const cat = cats.find(c => c.name === catName);
+            if (cat && cat.comments) {
+                if (confirm('确定要删除这条评论吗？')) {
+                    cat.comments.splice(commentIndex, 1);
+                    localStorage.setItem('cats', JSON.stringify(cats));
+                    updateAdminStats();
+                    alert('✅ 评论已删除');
+                }
+            }
+        }
+
         // 显示订单管理
         function showOrders() {
+            if (!isAdmin) {
+                alert('您没有权限查看订单管理');
+                return;
+            }
             alert('订单管理功能开发中...');
         }
 
         // 显示用户管理
         function showUsers() {
+            if (!isAdmin) {
+                alert('您没有权限查看用户管理');
+                return;
+            }
             alert('用户管理功能开发中...');
+        }
+
+        // 显示管理员私信
+        function showAdminMessages() {
+            if (!isAdmin) {
+                alert('您没有权限查看私信管理');
+                return;
+            }
+            
+            if (messages.length === 0) {
+                alert('暂无私信');
+            } else {
+                const messageList = messages.map(msg => 
+                    `来自：${msg.from}\n时间：${msg.time}\n内容：${msg.content}\n---`
+                ).join('\n');
+                alert('私信列表：\n\n' + messageList);
+            }
+        }
+
+        // 管理猫咪
+        function manageCats() {
+            if (!isAdmin) {
+                alert('您没有权限管理猫咪');
+                return;
+            }
+            showPage('cats');
+        }
+
+        // 管理帖子
+        function managePosts() {
+            if (!isAdmin) {
+                alert('您没有权限管理帖子');
+                return;
+            }
+            showPage('forum');
+        }
+
+        // 更新个人统计
+        function updateProfileStats() {
+            // 计算用户发帖数
+            const userPosts = posts.filter(p => p.author === '当前用户').length;
+            document.getElementById('userPostCount').textContent = userPosts;
+            
+            // 计算用户评论数
+            let userComments = 0;
+            cats.forEach(cat => {
+                if (cat.comments) {
+                    userComments += cat.comments.filter(c => c.author === '访客用户').length;
+                }
+            });
+            document.getElementById('userCommentCount').textContent = userComments;
+        }
+
+        // 切换个人资料标签
+        function switchProfileTab(tab) {
+            // 更新标签状态
+            document.querySelectorAll('.profile-tab').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            // 更新内容显示
+            document.querySelectorAll('[id^="profile-"]').forEach(content => {
+                content.classList.remove('active');
+            });
+            document.getElementById(`profile-${tab}`).classList.add('active');
         }
 
         // Tab切换
@@ -2073,6 +2898,18 @@
                 content.classList.remove('active');
             });
             document.getElementById(`${context}-${tab}`).classList.add('active');
+        }
+
+        // 登出
+        function logout() {
+            if (confirm('确定要退出登录吗？')) {
+                currentUser = null;
+                isAdmin = false;
+                localStorage.removeItem('adminCode');
+                document.getElementById('adminLink').style.display = 'none';
+                showPage('home');
+                alert('已退出登录');
+            }
         }
 
         // 猫咪相关功能
@@ -2161,6 +2998,11 @@
         }
 
         function deleteCat(catId) {
+            if (!isAdmin) {
+                alert('您没有权限删除猫咪');
+                return;
+            }
+            
             if (confirm('确定要删除这只猫咪吗？此操作不可恢复。')) {
                 cats = cats.filter(cat => cat.id !== catId);
                 filteredCats = filteredCats.filter(cat => cat.id !== catId);
@@ -2172,8 +3014,12 @@
         }
 
         function showEditCatPage(catId) {
+            if (!isAdmin) {
+                alert('您没有权限编辑猫咪');
+                return;
+            }
+            
             currentCatId = catId;
-            // 这里应该显示编辑页面，简化处理
             alert('编辑功能开发中...');
         }
 
@@ -2187,15 +3033,31 @@
 
         function handleEditCat(event) {
             event.preventDefault();
-            // 编辑处理逻辑
+            if (!isAdmin) {
+                alert('您没有权限编辑猫咪');
+                return;
+            }
             alert('编辑功能开发中...');
         }
 
         function handleAddCat(event) {
             event.preventDefault();
-            // 添加处理逻辑
+            if (!isAdmin) {
+                alert('您没有权限添加猫咪');
+                return;
+            }
             alert('添加功能开发中...');
         }
+
+        // 点击其他地方关闭用户菜单
+        document.addEventListener('click', function(event) {
+            const userMenu = document.querySelector('.user-menu');
+            const dropdown = document.getElementById('userDropdown');
+            
+            if (!userMenu.contains(event.target)) {
+                dropdown.classList.remove('active');
+            }
+        });
 
         // 保存数据到localStorage
         window.addEventListener('beforeunload', function() {
