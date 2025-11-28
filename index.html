@@ -643,14 +643,23 @@
             margin-bottom: var(--spacing-sm);
         }
 
-        /* 购物车 */
-        .cart-item {
-            display: flex;
-            gap: var(--spacing-sm);
-            padding: var(--spacing-sm);
-            border-bottom: 1px solid var(--apple-border);
-            align-items: center;
-        }
+            /* 购物车 */
+            .cart-item {
+                display: flex;
+                gap: var(--spacing-sm);
+                padding: var(--spacing-sm);
+                border-bottom: 1px solid var(--apple-border);
+                align-items: center;
+                background: white;
+                border-radius: var(--border-radius-md);
+                margin-bottom: var(--spacing-sm);
+                transition: all 0.3s ease;
+            }
+
+            .cart-item:hover {
+                box-shadow: var(--shadow-light);
+                transform: translateY(-2px);
+            }
 
         .cart-item:last-child {
             border-bottom: none;
@@ -680,25 +689,212 @@
         .cart-item-quantity {
             display: flex;
             align-items: center;
-            gap: var(--spacing-xs);
+            gap: 0;
+            border: 1px solid var(--apple-border);
+            border-radius: var(--border-radius-sm);
+            background: white;
+            overflow: hidden;
         }
 
         .quantity-btn {
-            width: 24px;
-            height: 24px;
-            border: 1px solid var(--apple-border);
-            background: white;
-            border-radius: 50%;
+            width: 32px;
+            height: 32px;
+            border: none;
+            background: var(--apple-gray-light);
             cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 14px;
+            font-size: 16px;
             transition: all 0.3s ease;
+            color: var(--apple-black);
         }
 
         .quantity-btn:hover {
-            background: var(--apple-gray-light);
+            background: var(--apple-gray-medium);
+            color: white;
+        }
+
+        .quantity-btn:active {
+            transform: scale(0.95);
+        }
+
+        .quantity-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .quantity-value {
+            width: 50px;
+            text-align: center;
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--apple-black);
+            border-left: 1px solid var(--apple-border);
+            border-right: 1px solid var(--apple-border);
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* 支付相关 */
+        .payment-section {
+            background: white;
+            border-radius: var(--border-radius-lg);
+            padding: var(--spacing-md);
+            margin-top: var(--spacing-md);
+            box-shadow: var(--shadow-light);
+        }
+
+        .payment-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: var(--spacing-sm);
+            color: var(--apple-black);
+        }
+
+        .payment-methods {
+            display: flex;
+            gap: var(--spacing-sm);
+            margin-bottom: var(--spacing-md);
+        }
+
+        .payment-method {
+            flex: 1;
+            padding: var(--spacing-sm);
+            border: 2px solid var(--apple-border);
+            border-radius: var(--border-radius-md);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .payment-method:hover {
+            border-color: var(--apple-blue);
+            background: rgba(0, 113, 227, 0.05);
+        }
+
+        .payment-method.selected {
+            border-color: var(--apple-blue);
+            background: rgba(0, 113, 227, 0.1);
+        }
+
+        .payment-icon {
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .checkout-button {
+            width: 100%;
+            background: linear-gradient(135deg, #ff6b00, #ff9500);
+            color: white;
+            border: none;
+            border-radius: var(--border-radius-md);
+            padding: 16px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .checkout-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(255, 107, 0, 0.3);
+        }
+
+        .checkout-button:active {
+            transform: translateY(0);
+        }
+
+        .checkout-button:disabled {
+            background: var(--apple-gray-medium);
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* 淘宝风格的商品选择 */
+        .product-selector {
+            display: flex;
+            flex-direction: column;
+            gap: var(--spacing-sm);
+            margin-top: var(--spacing-sm);
+        }
+
+        .sku-options {
+            display: flex;
+            gap: var(--spacing-xs);
+            flex-wrap: wrap;
+        }
+
+        .sku-option {
+            padding: 6px 12px;
+            border: 1px solid var(--apple-border);
+            border-radius: var(--border-radius-sm);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 14px;
+            background: white;
+        }
+
+        .sku-option:hover {
+            border-color: var(--apple-blue);
+            background: rgba(0, 113, 227, 0.05);
+        }
+
+        .sku-option.selected {
+            border-color: var(--apple-blue);
+            background: var(--apple-blue);
+            color: white;
+        }
+
+        .sku-option.disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        /* 订单确认弹窗 */
+        .order-summary {
+            background: white;
+            border-radius: var(--border-radius-lg);
+            padding: var(--spacing-md);
+            margin-bottom: var(--spacing-md);
+        }
+
+        .summary-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 0;
+            border-bottom: 1px solid var(--apple-gray-light);
+        }
+
+        .summary-item:last-child {
+            border-bottom: none;
+            font-weight: 600;
+            font-size: 18px;
+            color: var(--apple-red);
+            padding-top: var(--spacing-sm);
+        }
+
+        .summary-label {
+            color: var(--apple-gray-medium);
+            font-size: 14px;
+        }
+
+        .summary-value {
+            font-weight: 500;
+            color: var(--apple-black);
         }
 
         /* 地图 */
@@ -707,28 +903,81 @@
             border-radius: var(--border-radius-lg);
             overflow: hidden;
             margin-bottom: var(--spacing-md);
+            box-shadow: var(--shadow-light);
         }
 
+        /* 地图控件样式 */
+        .map-controls {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .map-btn {
+            width: 40px;
+            height: 40px;
+            background: white;
+            border: 1px solid var(--apple-border);
+            border-radius: var(--border-radius-sm);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: var(--shadow-light);
+            transition: all 0.3s ease;
+            font-size: 16px;
+        }
+
+        .map-btn:hover {
+            background: var(--apple-gray-light);
+            transform: scale(1.05);
+        }
+
+        .map-btn:active {
+            transform: scale(0.95);
+        }
+
+        /* 医院列表 */
         .hospital-list {
             background: white;
             border-radius: var(--border-radius-lg);
             overflow: hidden;
+            box-shadow: var(--shadow-light);
+            max-height: 400px;
+            overflow-y: auto;
         }
 
         .hospital-item {
             padding: var(--spacing-sm);
             border-bottom: 1px solid var(--apple-border);
             cursor: pointer;
-            transition: background 0.3s ease;
+            transition: all 0.3s ease;
+            position: relative;
         }
 
         .hospital-item:hover {
             background: var(--apple-gray-light);
+            transform: translateX(4px);
+        }
+
+        .hospital-item:last-child {
+            border-bottom: none;
+        }
+
+        .hospital-item.highlight {
+            background: linear-gradient(135deg, #e3f2fd, #bbdefb);
+            border-left: 4px solid var(--apple-blue);
+            transform: translateX(4px);
         }
 
         .hospital-name {
             font-weight: 600;
             margin-bottom: 4px;
+            font-size: 16px;
         }
 
         .hospital-address {
@@ -740,6 +989,225 @@
         .hospital-phone {
             color: var(--apple-blue);
             font-size: 14px;
+            margin-bottom: 8px;
+        }
+
+        .hospital-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .hospital-distance {
+            position: absolute;
+            top: var(--spacing-sm);
+            right: var(--spacing-sm);
+            background: var(--apple-green);
+            color: white;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        /* 搜索建议框 */
+        .search-suggestions {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: white;
+            border: 1px solid var(--apple-border);
+            border-top: none;
+            border-radius: 0 0 var(--border-radius-md) var(--border-radius-md);
+            max-height: 200px;
+            overflow-y: auto;
+            z-index: 1000;
+            display: none;
+        }
+
+        .search-suggestions.active {
+            display: block;
+        }
+
+        .suggestion-item {
+            padding: 10px 12px;
+            cursor: pointer;
+            border-bottom: 1px solid var(--apple-gray-light);
+            font-size: 14px;
+            transition: background 0.3s ease;
+        }
+
+        .suggestion-item:hover {
+            background: var(--apple-gray-light);
+        }
+
+        .suggestion-item:last-child {
+            border-bottom: none;
+        }
+
+        /* 地图信息窗口 */
+        .map-info-window {
+            padding: 12px;
+            max-width: 280px;
+        }
+
+        .info-window-title {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: var(--apple-black);
+        }
+
+        .info-window-address {
+            font-size: 14px;
+            color: var(--apple-gray-medium);
+            margin-bottom: 4px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .info-window-phone {
+            font-size: 14px;
+            color: var(--apple-blue);
+            margin-bottom: 4px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .info-window-distance {
+            font-size: 12px;
+            color: var(--apple-green);
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .info-window-actions {
+            display: flex;
+            gap: 8px;
+            margin-top: 8px;
+        }
+
+        .info-window-btn {
+            flex: 1;
+            padding: 6px 12px;
+            border: none;
+            border-radius: var(--border-radius-sm);
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+
+        .info-window-btn-primary {
+            background: var(--apple-blue);
+            color: white;
+        }
+
+        .info-window-btn-primary:hover {
+            background: var(--apple-blue-hover);
+        }
+
+        .info-window-btn-secondary {
+            background: var(--apple-gray-light);
+            color: var(--apple-black);
+        }
+
+        .info-window-btn-secondary:hover {
+            background: var(--apple-gray-medium);
+            color: white;
+        }
+
+        /* 地图加载状态 */
+        .map-loading {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: var(--spacing-md);
+            border-radius: var(--border-radius-lg);
+            box-shadow: var(--shadow-medium);
+            text-align: center;
+            z-index: 1000;
+        }
+
+        .map-loading-icon {
+            font-size: 24px;
+            animation: spin 1s linear infinite;
+            margin-bottom: var(--spacing-sm);
+        }
+
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        /* 地图路线详情 */
+        .route-details {
+            background: white;
+            border-radius: var(--border-radius-lg);
+            padding: var(--spacing-md);
+            margin-top: var(--spacing-md);
+            box-shadow: var(--shadow-light);
+            display: none;
+        }
+
+        .route-details.active {
+            display: block;
+        }
+
+        .route-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: var(--spacing-sm);
+            padding-bottom: var(--spacing-sm);
+            border-bottom: 1px solid var(--apple-border);
+        }
+
+        .route-title {
+            font-size: 16px;
+            font-weight: 600;
+        }
+
+        .route-close {
+            background: none;
+            border: none;
+            font-size: 20px;
+            cursor: pointer;
+            color: var(--apple-gray-medium);
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .route-info {
+            display: flex;
+            gap: var(--spacing-md);
+            margin-bottom: var(--spacing-sm);
+        }
+
+        .route-item {
+            flex: 1;
+            text-align: center;
+            padding: var(--spacing-sm);
+            background: var(--apple-gray-light);
+            border-radius: var(--border-radius-md);
+        }
+
+        .route-value {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--apple-blue);
+            margin-bottom: 4px;
+        }
+
+        .route-label {
+            font-size: 12px;
+            color: var(--apple-gray-medium);
         }
 
         /* 物流追踪 */
@@ -963,9 +1431,29 @@
                 padding: 0 12px;
             }
 
+            .nav-content {
+                flex-wrap: wrap;
+                height: auto;
+                min-height: 60px;
+                padding: 8px 0;
+            }
+
             .nav-menu {
-                flex-direction: column;
+                order: 2;
+                width: 100%;
+                flex-wrap: wrap;
+                justify-content: center;
                 gap: 8px;
+                margin-top: 8px;
+            }
+
+            .nav-link {
+                padding: 6px 10px;
+                font-size: 13px;
+            }
+
+            .user-menu {
+                order: 1;
             }
 
             .page-title {
@@ -973,14 +1461,23 @@
                 margin: var(--spacing-lg) 0 var(--spacing-md);
             }
 
-            .grid-2,
-            .grid-3,
-            .grid-4 {
+            .grid-2 {
                 grid-template-columns: 1fr;
+            }
+
+            .grid-3 {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 12px;
+            }
+
+            .grid-4 {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 12px;
             }
 
             .search-bar {
                 flex-direction: column;
+                gap: 8px;
             }
 
             .search-bar .form-control,
@@ -995,38 +1492,318 @@
             .modal-content {
                 width: 95%;
                 margin: 10px;
+                max-height: 90vh;
+            }
+
+            .modal-body {
+                max-height: 60vh;
+                overflow-y: auto;
             }
 
             .cart-item {
                 flex-direction: column;
                 align-items: flex-start;
+                gap: 8px;
             }
 
+            .cart-item-quantity {
+                align-self: flex-end;
+            }
+
+            /* 地图优化 */
             #mapContainer {
-                height: 300px;
+                height: 350px;
+            }
+
+            .map-controls {
+                top: 8px;
+                right: 8px;
+            }
+
+            .map-btn {
+                width: 36px;
+                height: 36px;
+                font-size: 14px;
+            }
+
+            .hospital-list {
+                max-height: 300px;
+            }
+
+            .hospital-item {
+                padding: 12px;
+            }
+
+            .hospital-name {
+                font-size: 15px;
+            }
+
+            .hospital-actions {
+                flex-wrap: wrap;
+            }
+
+            .hospital-actions .btn {
+                flex: 1;
+                min-width: 80px;
+                font-size: 13px;
+                padding: 6px 8px;
+            }
+
+            /* 信息窗口优化 */
+            .map-info-window {
+                max-width: 240px;
+            }
+
+            .info-window-actions {
+                flex-direction: column;
+            }
+
+            /* 路线详情优化 */
+            .route-info {
+                flex-direction: column;
+                gap: 8px;
+            }
+
+            /* 商品卡片优化 */
+            .product-card {
+                font-size: 14px;
+            }
+
+            .product-image {
+                height: 150px;
+            }
+
+            .product-info {
+                padding: 12px;
+            }
+
+            .product-name {
+                font-size: 16px;
+            }
+
+            .product-price {
+                font-size: 18px;
+            }
+
+            /* 猫咪卡片优化 */
+            .cat-image {
+                height: 180px;
+            }
+
+            .cat-info {
+                padding: 12px;
+            }
+
+            .cat-name {
+                font-size: 16px;
+            }
+
+            /* 论坛帖子优化 */
+            .forum-post {
+                padding: 12px;
+            }
+
+            .forum-post-title {
+                font-size: 16px;
+            }
+
+            .forum-post-content {
+                font-size: 14px;
             }
         }
 
         @media (max-width: 480px) {
-            .stats-grid {
+            .container {
+                padding: 0 8px;
+            }
+
+            .nav-menu {
+                gap: 6px;
+            }
+
+            .nav-link {
+                padding: 5px 8px;
+                font-size: 12px;
+            }
+
+            .page-title {
+                font-size: 28px;
+            }
+
+            .grid-3,
+            .grid-4 {
                 grid-template-columns: 1fr;
             }
 
-            .nav-content {
-                flex-direction: column;
-                height: auto;
-                padding: 10px 0;
+            .stats-grid {
+                grid-template-columns: 1fr;
+                gap: 8px;
             }
 
-            .user-dropdown {
-                position: fixed;
-                top: auto;
-                bottom: 0;
-                left: 0;
-                right: 0;
-                border-radius: var(--border-radius-lg) var(--border-radius-lg) 0 0;
-                margin: 0;
-                animation: slideUp 0.3s ease;
+            .stat-card {
+                padding: 16px;
+            }
+
+            .stat-number {
+                font-size: 28px;
+            }
+
+            .modal-content {
+                width: 98%;
+                margin: 5px;
+                border-radius: var(--border-radius-md);
+            }
+
+            .modal-header {
+                padding: 16px;
+            }
+
+            .modal-body {
+                padding: 16px;
+            }
+
+            .modal-footer {
+                padding: 16px;
+                flex-direction: column-reverse;
+            }
+
+            .modal-footer .btn {
+                width: 100%;
+                margin-bottom: 8px;
+            }
+
+            /* 手机端地图优化 */
+            #mapContainer {
+                height: 280px;
+            }
+
+            .map-controls {
+                top: 5px;
+                right: 5px;
+            }
+
+            .map-btn {
+                width: 32px;
+                height: 32px;
+                font-size: 12px;
+            }
+
+            .hospital-list {
+                max-height: 250px;
+            }
+
+            .hospital-item {
+                padding: 10px;
+            }
+
+            .hospital-name {
+                font-size: 14px;
+            }
+
+            .hospital-actions {
+                gap: 6px;
+            }
+
+            .hospital-actions .btn {
+                min-width: 70px;
+                font-size: 12px;
+                padding: 5px 6px;
+            }
+
+            .hospital-distance {
+                font-size: 10px;
+                padding: 1px 6px;
+            }
+
+            /* 搜索栏优化 */
+            .search-bar {
+                gap: 6px;
+            }
+
+            .form-control,
+            .form-select {
+                font-size: 14px;
+                padding: 8px 12px;
+            }
+
+            .btn {
+                padding: 8px 16px;
+                font-size: 14px;
+            }
+
+            /* 购物车优化 */
+            .cart-item-image {
+                width: 50px;
+                height: 50px;
+            }
+
+            .quantity-btn {
+                width: 20px;
+                height: 20px;
+                font-size: 12px;
+            }
+
+            /* 详情模态框优化 */
+            .cat-detail-info {
+                flex-direction: column;
+            }
+
+            .cat-detail-info img {
+                width: 100% !important;
+                max-width: none;
+            }
+
+            /* 论坛图片预览优化 */
+            .image-preview {
+                grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+                gap: 6px;
+            }
+
+            .preview-image {
+                height: 80px;
+            }
+
+            /* Toast优化 */
+            .toast {
+                left: 10px;
+                right: 10px;
+                bottom: 10px;
+                width: auto;
+            }
+        }
+
+        /* 横屏优化 */
+        @media (max-width: 896px) and (orientation: landscape) {
+            .nav-menu {
+                flex-direction: row;
+                flex-wrap: nowrap;
+                overflow-x: auto;
+                scrollbar-width: none;
+                -ms-overflow-style: none;
+            }
+
+            .nav-menu::-webkit-scrollbar {
+                display: none;
+            }
+
+            #mapContainer {
+                height: 400px;
+            }
+        }
+
+        /* 小屏幕手机专用 */
+        @media (max-width: 360px) {
+            .grid-3 {
+                grid-template-columns: 1fr;
+            }
+
+            .nav-link {
+                padding: 4px 6px;
+                font-size: 11px;
+            }
+
+            .page-title {
+                font-size: 24px;
             }
         }
 
@@ -1267,12 +2044,46 @@
             
             <div id="cartItems"></div>
             
-            <div style="margin-top: var(--spacing-lg); padding: var(--spacing-md); background: white; border-radius: var(--border-radius-lg);">
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--spacing-sm);">
-                    <span style="font-size: 18px; font-weight: 600;">总计</span>
-                    <span id="totalPrice" style="font-size: 24px; font-weight: 600; color: var(--apple-red);">¥0.00</span>
+            <!-- 订单确认 -->
+            <div class="order-summary">
+                <div class="summary-item">
+                    <span class="summary-label">商品总额</span>
+                    <span class="summary-value" id="subtotal">¥0.00</span>
                 </div>
-                <button class="btn" style="width: 100%;" onclick="checkout()">立即结算</button>
+                <div class="summary-item">
+                    <span class="summary-label">运费</span>
+                    <span class="summary-value" id="shipping">¥0.00</span>
+                </div>
+                <div class="summary-item">
+                    <span class="summary-label">优惠券</span>
+                    <span class="summary-value" id="discount">-¥0.00</span>
+                </div>
+                <div class="summary-item">
+                    <span>应付总额</span>
+                    <span id="totalPrice">¥0.00</span>
+                </div>
+            </div>
+
+            <!-- 支付方式 -->
+            <div class="payment-section">
+                <h3 class="payment-title">支付方式</h3>
+                <div class="payment-methods">
+                    <div class="payment-method selected" onclick="selectPaymentMethod(this, 'alipay')">
+                        <div class="payment-icon">💰</div>
+                        <span>支付宝</span>
+                    </div>
+                    <div class="payment-method" onclick="selectPaymentMethod(this, 'wechat')">
+                        <div class="payment-icon">💚</div>
+                        <span>微信支付</span>
+                    </div>
+                    <div class="payment-method" onclick="selectPaymentMethod(this, 'balance')">
+                        <div class="payment-icon">👛</div>
+                        <span>余额支付</span>
+                    </div>
+                </div>
+                <button class="checkout-button" id="checkoutBtn" onclick="processCheckout()">
+                    立即支付
+                </button>
             </div>
         </div>
     </div>
@@ -1581,7 +2392,14 @@
             isAdmin: false,
             currentCatId: null,
             map: null,
-            currentLocation: null
+            currentLocation: null,
+            mapType: 'standard', // 地图类型
+            currentRoute: null, // 当前路线
+            markers: [], // 地图标记
+            currentInfoWindow: null, // 当前信息窗口
+            selectedPaymentMethod: 'alipay', // 选中的支付方式
+            modalQuantity: 1, // 模态框中的商品数量
+            currentProductId: null // 当前商品ID
         };
 
         // 初始化
@@ -2158,10 +2976,16 @@
         // 初始化地图
         function initMap() {
             if (!appData.map) {
+                showMapLoading(true);
+                
+                // 创建地图实例
                 appData.map = new AMap.Map('mapContainer', {
-                    zoom: 13,
+                    zoom: 14,
                     center: [120.1551, 30.2741], // 杭州坐标
-                    resizeEnable: true
+                    resizeEnable: true,
+                    viewMode: '2D', // 2D模式更适合手机
+                    features: ['bg', 'road', 'building', 'point'], // 显示地图要素
+                    mapStyle: 'amap://styles/normal' // 标准地图样式
                 });
 
                 // 添加定位控件
@@ -2192,109 +3016,372 @@
         function searchNearbyHospitals() {
             if (!appData.map) return;
 
-            // 使用模拟数据
+            // 清除原有标记
+            appData.map.clearMap();
+            appData.markers = [];
+            closeInfoWindow();
+
+            // 使用更丰富的模拟数据
             const hospitals = [
                 {
+                    id: 1,
                     name: '杭州宠物医院',
-                    address: '杭州市江干区钱江新城',
+                    address: '杭州市江干区钱江新城民心路88号',
                     lat: 30.2941,
                     lng: 120.1751,
-                    phone: '0571-11223344'
+                    phone: '0571-11223344',
+                    distance: '1.2km',
+                    rating: 4.8,
+                    openTime: '08:00-20:00'
                 },
                 {
+                    id: 2,
                     name: '协和宠物医院',
-                    address: '杭州市西湖区文三路',
+                    address: '杭州市西湖区文三路128号',
                     lat: 30.2841,
                     lng: 120.1551,
-                    phone: '0571-55667788'
+                    phone: '0571-55667788',
+                    distance: '2.5km',
+                    rating: 4.6,
+                    openTime: '09:00-21:00'
                 },
                 {
+                    id: 3,
                     name: '爱心宠物医院',
-                    address: '杭州市拱墅区莫干山路',
+                    address: '杭州市拱墅区莫干山路200号',
                     lat: 30.3041,
                     lng: 120.1651,
-                    phone: '0571-99887766'
+                    phone: '0571-99887766',
+                    distance: '3.1km',
+                    rating: 4.9,
+                    openTime: '08:30-20:30'
+                },
+                {
+                    id: 4,
+                    name: '宠康动物医院',
+                    address: '杭州市上城区解放路18号',
+                    lat: 30.2541,
+                    lng: 120.1851,
+                    phone: '0571-12345678',
+                    distance: '4.2km',
+                    rating: 4.5,
+                    openTime: '08:00-22:00'
+                },
+                {
+                    id: 5,
+                    name: '宠爱动物医院',
+                    address: '杭州市滨江区江南大道500号',
+                    lat: 30.2141,
+                    lng: 120.1451,
+                    phone: '0571-87654321',
+                    distance: '5.8km',
+                    rating: 4.7,
+                    openTime: '09:00-21:00'
                 }
             ];
 
-            // 清除原有标记
-            appData.map.clearMap();
-
             // 添加医院标记
-            hospitals.forEach(hospital => {
+            hospitals.forEach((hospital, index) => {
                 const marker = new AMap.Marker({
                     position: [hospital.lng, hospital.lat],
-                    title: hospital.name
+                    title: hospital.name,
+                    icon: new AMap.Icon({
+                        image: 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzIiIGhlaWdodD0iMzIiIHZpZXdCb3g9IjAgMCAzMiAzMiIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPGNpcmNsZSBjeD0iMTYiIGN5PSIxMCIgcj0iOCIgZmlsbD0iI0ZGNjAwMCIvPgo8cGF0aCBkPSJNMTYgMTZMMTIgMjhIMjBMMTYgMTZaIiBmaWxsPSIjRkZDMDAwIi8+CjxjaXJjbGUgY3g9IjE2IiBjeT0iMTAiIHI9IjYiIGZpbGw9IndoaXRlIi8+Cjwvc3ZnPgo=',
+                        size: new AMap.Size(32, 32)
+                    })
                 });
 
+                appData.markers.push(marker);
                 appData.map.addMarker(marker);
+
+                // 创建信息窗体内容
+                const infoContent = `
+                    <div class="map-info-window">
+                        <div class="info-window-title">${hospital.name}</div>
+                        <div class="info-window-address">📍 ${hospital.address}</div>
+                        <div class="info-window-phone">📞 ${hospital.phone}</div>
+                        <div class="info-window-distance">📏 距离：${hospital.distance}</div>
+                        <div class="info-window-distance">⭐ 评分：${hospital.rating}</div>
+                        <div class="info-window-distance">🕒 营业时间：${hospital.openTime}</div>
+                        <div class="info-window-actions">
+                            <button class="info-window-btn info-window-btn-primary" onclick="startNavigation(${hospital.lat}, ${hospital.lng}, '${hospital.name}')">导航</button>
+                            <button class="info-window-btn info-window-btn-secondary" onclick="callHospital('${hospital.phone}')">电话</button>
+                        </div>
+                    </div>
+                `;
 
                 // 添加信息窗体
                 const infoWindow = new AMap.InfoWindow({
-                    content: `
-                        <div style="padding: 10px;">
-                            <h4>${hospital.name}</h4>
-                            <p>地址：${hospital.address}</p>
-                            <p>电话：${hospital.phone}</p>
-                            <button onclick="startNavigation(${hospital.lat}, ${hospital.lng})" style="margin-top: 8px; padding: 4px 8px; background: #0071e3; color: white; border: none; border-radius: 4px; cursor: pointer;">导航</button>
-                        </div>
-                    `,
-                    offset: new AMap.Pixel(0, -30)
+                    content: infoContent,
+                    offset: new AMap.Pixel(0, -32)
                 });
 
                 marker.on('click', function() {
+                    closeInfoWindow();
+                    appData.currentInfoWindow = infoWindow;
                     infoWindow.open(appData.map, marker.getPosition());
+                    
+                    // 高亮列表项
+                    highlightHospitalItem(hospital.id);
                 });
             });
 
             // 渲染医院列表
             renderHospitalList(hospitals);
+            hideMapLoading();
+        }
+
+        // 高亮医院列表项
+        function highlightHospitalItem(hospitalId) {
+            document.querySelectorAll('.hospital-item').forEach(item => {
+                item.classList.remove('highlight');
+            });
+            
+            const targetItem = document.querySelector(`[data-hospital-id="${hospitalId}"]`);
+            if (targetItem) {
+                targetItem.classList.add('highlight');
+                targetItem.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
+        }
+
+        // 拨打医院电话
+        function callHospital(phone) {
+            if (confirm(`确定要拨打 ${phone} 吗？`)) {
+                window.location.href = `tel:${phone}`;
+            }
+        }
+
+        // 关闭信息窗体
+        function closeInfoWindow() {
+            if (appData.currentInfoWindow) {
+                appData.currentInfoWindow.close();
+                appData.currentInfoWindow = null;
+            }
+        }
+
+        // 显示地图加载状态
+        function showMapLoading(show) {
+            const loading = document.getElementById('mapLoading');
+            if (loading) {
+                loading.style.display = show ? 'flex' : 'none';
+            }
+        }
+
+        // 隐藏地图加载状态
+        function hideMapLoading() {
+            showMapLoading(false);
+        }
+
+        // 地图放大
+        function zoomIn() {
+            if (appData.map) {
+                appData.map.zoomIn();
+            }
+        }
+
+        // 地图缩小
+        function zoomOut() {
+            if (appData.map) {
+                appData.map.zoomOut();
+            }
+        }
+
+        // 切换地图类型
+        function toggleMapType() {
+            if (appData.map) {
+                const currentType = appData.mapType || 'standard';
+                const newType = currentType === 'standard' ? 'satellite' : 'standard';
+                appData.mapType = newType;
+                
+                if (newType === 'satellite') {
+                    appData.map.setMapStyle('amap://styles/satellite');
+                    showToast('切换到卫星地图', 'success');
+                } else {
+                    appData.map.setMapStyle('amap://styles/normal');
+                    showToast('切换到标准地图', 'success');
+                }
+            }
+        }
+
+        // 清除搜索
+        function clearSearch() {
+            document.getElementById('hospitalSearch').value = '';
+            document.getElementById('hospitalFilter').value = '';
+            closeSearchSuggestions();
+            searchNearbyHospitals();
+        }
+
+        // 显示搜索建议
+        function showSearchSuggestions() {
+            const searchInput = document.getElementById('hospitalSearch').value.trim();
+            const suggestionsContainer = document.getElementById('searchSuggestions');
+            
+            if (!searchInput) {
+                closeSearchSuggestions();
+                return;
+            }
+
+            // 模拟搜索建议
+            const suggestions = [
+                { name: '杭州宠物医院', type: '医院' },
+                { name: '杭州动物医院', type: '医院' },
+                { name: '杭州24小时宠物医院', type: '医院' },
+                { name: '钱江新城宠物医院', type: '医院' }
+            ].filter(item => item.name.includes(searchInput));
+
+            if (suggestions.length > 0) {
+                suggestionsContainer.innerHTML = suggestions.map(suggestion => `
+                    <div class="suggestion-item" onclick="selectSuggestion('${suggestion.name}')">
+                        <span>${suggestion.name}</span>
+                        <span style="color: var(--apple-gray-medium); font-size: 12px;">${suggestion.type}</span>
+                    </div>
+                `).join('');
+                suggestionsContainer.classList.add('active');
+            } else {
+                closeSearchSuggestions();
+            }
+        }
+
+        // 选择搜索建议
+        function selectSuggestion(name) {
+            document.getElementById('hospitalSearch').value = name;
+            closeSearchSuggestions();
+            searchHospitals();
+        }
+
+        // 关闭搜索建议
+        function closeSearchSuggestions() {
+            const suggestionsContainer = document.getElementById('searchSuggestions');
+            suggestionsContainer.classList.remove('active');
+        }
+
+        // 关闭路线详情
+        function closeRouteDetails() {
+            document.getElementById('routeDetails').classList.remove('active');
+            if (appData.currentRoute) {
+                appData.currentRoute.clear();
+                appData.currentRoute = null;
+            }
         }
 
         // 渲染医院列表
         function renderHospitalList(hospitals) {
             const list = document.getElementById('hospitalList');
+            
+            if (hospitals.length === 0) {
+                list.innerHTML = '<div class="empty-state">没有找到附近的宠物医院</div>';
+                return;
+            }
+
             list.innerHTML = hospitals.map(hospital => `
-                <div class="hospital-item" onclick="focusHospital(${hospital.lat}, ${hospital.lng})">
+                <div class="hospital-item" data-hospital-id="${hospital.id}" onclick="focusHospital(${hospital.lat}, ${hospital.lng}, ${hospital.id})">
+                    <div class="hospital-distance">${hospital.distance}</div>
                     <div class="hospital-name">${hospital.name}</div>
                     <div class="hospital-address">📍 ${hospital.address}</div>
                     <div class="hospital-phone">📞 ${hospital.phone}</div>
-                    <button class="btn" style="margin-top: 8px;" onclick="event.stopPropagation(); startNavigation(${hospital.lat}, ${hospital.lng})">导航</button>
+                    <div style="display: flex; gap: 8px; font-size: 14px; margin-bottom: 8px;">
+                        <span>⭐ ${hospital.rating}</span>
+                        <span>🕒 ${hospital.openTime}</span>
+                    </div>
+                    <div class="hospital-actions">
+                        <button class="btn info-window-btn-primary" onclick="event.stopPropagation(); startNavigation(${hospital.lat}, ${hospital.lng}, '${hospital.name}')">🚗 导航</button>
+                        <button class="btn info-window-btn-secondary" onclick="event.stopPropagation(); callHospital('${hospital.phone}')">📞 电话</button>
+                    </div>
                 </div>
             `).join('');
         }
 
         // 聚焦到医院位置
-        function focusHospital(lat, lng) {
+        function focusHospital(lat, lng, hospitalId) {
             if (appData.map) {
                 appData.map.setCenter([lng, lat]);
                 appData.map.setZoom(16);
+                
+                // 触发标记点击事件
+                const marker = appData.markers.find((m, index) => {
+                    const hospitals = [
+                        { id: 1, lat: 30.2941, lng: 120.1751 },
+                        { id: 2, lat: 30.2841, lng: 120.1551 },
+                        { id: 3, lat: 30.3041, lng: 120.1651 },
+                        { id: 4, lat: 30.2541, lng: 120.1851 },
+                        { id: 5, lat: 30.2141, lng: 120.1451 }
+                    ];
+                    const hospital = hospitals.find(h => h.id === hospitalId);
+                    return hospital && Math.abs(hospital.lat - lat) < 0.0001 && Math.abs(hospital.lng - lng) < 0.0001;
+                });
+                
+                if (marker) {
+                    // 模拟点击标记
+                    const event = { type: 'click' };
+                    marker.emit('click', event);
+                }
             }
         }
 
         // 开始导航
-        function startNavigation(targetLat, targetLng) {
+        function startNavigation(targetLat, targetLng, hospitalName = '') {
             if (!appData.map) return;
+
+            // 清除之前的路线
+            if (appData.currentRoute) {
+                appData.currentRoute.clear();
+            }
+
+            // 获取起点位置
+            const startLat = appData.currentLocation ? appData.currentLocation[1] : 30.2741;
+            const startLng = appData.currentLocation ? appData.currentLocation[0] : 120.1551;
 
             appData.map.plugin('AMap.Driving', function() {
                 const driving = new AMap.Driving({
                     map: appData.map,
-                    panel: 'mapContainer'
+                    hideMarkers: false, // 显示起终点标记
+                    showTraffic: true, // 显示路况信息
+                    policy: 'LEAST_TIME' // 最短时间策略
                 });
 
-                // 根据当前位置规划路线（这里使用模拟位置）
                 driving.search(
-                    [120.1551, 30.2741], // 起点
+                    [startLng, startLat], // 起点
                     [targetLng, targetLat], // 终点
+                    {
+                        waypoints: [], // 途经点
+                        avoid: ['收费站'] // 避让区域
+                    },
                     function(status, result) {
                         if (status === 'complete') {
-                            showToast('路线规划成功', 'success');
+                            appData.currentRoute = driving;
+                            showToast(`路线规划成功：${hospitalName}`, 'success');
+                            
+                            // 显示路线详情
+                            showRouteDetails(result);
+                            
+                            // 调整视野
+                            if (result.routes && result.routes.length > 0) {
+                                appData.map.setFitView([result.routes[0]]);
+                            }
                         } else {
-                            showToast('路线规划失败', 'error');
+                            showToast('路线规划失败，请重试', 'error');
                         }
                     }
                 );
             });
+        }
+
+        // 显示路线详情
+        function showRouteDetails(result) {
+            const routeDetails = document.getElementById('routeDetails');
+            const route = result.routes[0];
+            
+            if (route) {
+                const distance = (route.distance / 1000).toFixed(1) + 'km';
+                const time = Math.ceil(route.time / 60) + '分钟';
+                const steps = route.steps.length;
+                
+                document.getElementById('routeDistance').textContent = distance;
+                document.getElementById('routeTime').textContent = time;
+                document.getElementById('routeSteps').textContent = steps;
+                
+                routeDetails.classList.add('active');
+            }
         }
 
         // 搜索医院
@@ -2313,37 +3400,64 @@
         }
 
         // 获取当前位置
-        function getCurrentLocation() {
+        function getCurrentLocation(showMessage = true) {
             if (!appData.map) {
                 initMap();
                 return;
             }
 
+            showMapLoading(true);
+
             appData.map.plugin('AMap.Geolocation', function() {
                 const geolocation = new AMap.Geolocation({
                     enableHighAccuracy: true,
-                    timeout: 10000,
+                    timeout: 15000,
+                    maximumAge: 0,
+                    convert: true,
                     showButton: false
                 });
 
                 geolocation.getCurrentPosition(function(status, result) {
+                    showMapLoading(false);
+                    
                     if (status === 'complete') {
                         appData.currentLocation = [result.position.lng, result.position.lat];
                         appData.map.setCenter(appData.currentLocation);
+                        appData.map.setZoom(15);
                         
                         // 添加当前位置标记
                         new AMap.Marker({
                             position: appData.currentLocation,
-                            title: '当前位置',
-                            icon: 'https://webapi.amap.com/theme/v1.3/markers/n/mark_b.png'
+                            title: '我的位置',
+                            icon: new AMap.Icon({
+                                image: 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzIiIGhlaWdodD0iMzIiIHZpZXdCb3g9IjAgMCAzMiAzMiIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPGNpcmNsZSBjeD0iMTYiIGN5PSIxMCIgcj0iOCIgZmlsbD0iIzAwNzFFMyIvPgo8cGF0aCBkPSJNMTYgMTZMMTIgMjhIMjBMMTYgMTZaIiBmaWxsPSIjMDA3MUUzIi8+CjxjaXJjbGUgY3g9IjE2IiBjeT0iMTAiIHI9IjQiIGZpbGw9IndoaXRlIi8+Cjwvc3ZnPgo=',
+                                size: new AMap.Size(32, 32)
+                            }),
+                            animation: 'AMAP_ANIMATION_DROP'
                         }).setMap(appData.map);
                         
-                        showToast('定位成功', 'success');
+                        // 添加定位精度圆
+                        new AMap.Circle({
+                            center: appData.currentLocation,
+                            radius: result.accuracy || 100,
+                            strokeColor: '#0071e3',
+                            strokeOpacity: 0.3,
+                            fillColor: '#0071e3',
+                            fillOpacity: 0.1
+                        }).setMap(appData.map);
+                        
+                        if (showMessage) {
+                            showToast('定位成功！搜索附近医院...', 'success');
+                        }
                         
                         // 重新搜索附近医院
                         searchNearbyHospitals();
                     } else {
-                        showToast('定位失败，请检查定位权限', 'error');
+                        showToast('定位失败，请检查定位权限或网络连接', 'error');
+                        
+                        // 使用默认位置
+                        appData.currentLocation = [120.1551, 30.2741];
+                        searchNearbyHospitals();
                     }
                 });
             });
@@ -2607,22 +3721,58 @@
             const product = appData.products.find(p => p.id === productId);
             if (!product) return;
 
+            appData.currentProductId = productId;
+            appData.modalQuantity = 1; // 重置数量
+
             const modal = document.getElementById('productModal');
             const title = document.getElementById('productTitle');
             const content = document.getElementById('productContent');
+            const quantityElement = document.getElementById('modalQuantity');
 
             title.textContent = product.name;
+            quantityElement.textContent = appData.modalQuantity;
+            
             content.innerHTML = `
                 <img src="${product.image}" alt="${product.name}" style="width: 100%; max-height: 300px; object-fit: cover; border-radius: var(--border-radius-md);">
                 <div style="margin-top: var(--spacing-md);">
                     <p style="font-size: 18px; font-weight: 600; color: var(--apple-red);">¥${product.price.toFixed(2)}</p>
                     <p style="margin-top: var(--spacing-sm);">${product.description}</p>
-                    <p style="margin-top: var(--spacing-sm); color: var(--apple-gray-medium);">库存：${product.stock}件</p>
+                    <div style="margin-top: var(--spacing-sm); display: flex; gap: var(--spacing-sm);">
+                        <span style="color: var(--apple-gray-medium);">库存：${product.stock}件</span>
+                        <span style="color: var(--apple-green); font-weight: 600;">${product.stock > 0 ? '有货' : '缺货'}</span>
+                    </div>
+                    <div style="margin-top: var(--spacing-sm); padding: var(--spacing-sm); background: var(--apple-gray-light); border-radius: var(--border-radius-md);">
+                        <div style="font-size: 14px; margin-bottom: 4px;">🎁 促销信息</div>
+                        <div style="font-size: 12px; color: var(--apple-gray-medium);">
+                            满99元免运费，满200元减20元
+                        </div>
+                    </div>
                 </div>
             `;
 
+            // 更新商品选择器
+            const selector = document.getElementById('productSelector');
+            selector.innerHTML = `
+                <div class="form-group">
+                    <label class="form-label">数量</label>
+                    <div class="cart-item-quantity" style="width: fit-content;">
+                        <button class="quantity-btn" onclick="decreaseModalQuantity()">−</button>
+                        <div class="quantity-value" id="modalQuantity">${appData.modalQuantity}</div>
+                        <button class="quantity-btn" onclick="increaseModalQuantity()">+</button>
+                    </div>
+                </div>
+                ${product.stock > 0 ? `
+                    <div class="form-group">
+                        <div style="display: flex; gap: var(--spacing-sm); margin-top: var(--spacing-sm);">
+                            <span style="background: var(--apple-green); color: white; padding: 2px 6px; border-radius: 4px; font-size: 12px;">24小时发货</span>
+                            <span style="background: var(--apple-blue); color: white; padding: 2px 6px; border-radius: 4px; font-size: 12px;">7天无理由退换</span>
+                            <span style="background: var(--apple-orange); color: white; padding: 2px 6px; border-radius: 4px; font-size: 12px;">正品保证</span>
+                        </div>
+                    </div>
+                ` : ''}
+            `;
+
             modal.classList.add('active');
-            appData.currentProductId = productId;
         }
 
         // 从商品列表加入购物车
@@ -2670,8 +3820,9 @@
             const itemsContainer = document.getElementById('cartItems');
             
             if (appData.cart.length === 0) {
-                itemsContainer.innerHTML = '<div class="empty-state">购物车是空的</div>';
-                updateTotalPrice();
+                itemsContainer.innerHTML = '<div class="empty-state">购物车是空的，快去选购商品吧！</div>';
+                updateOrderSummary();
+                updateCheckoutButton();
                 return;
             }
 
@@ -2679,27 +3830,79 @@
                 const product = appData.products.find(p => p.id === item.productId);
                 if (!product) return '';
 
+                const itemTotal = product.price * item.quantity;
+                const stockAvailable = product.stock >= item.quantity;
+
                 return `
                     <div class="cart-item">
                         <img src="${product.image}" alt="${product.name}" class="cart-item-image">
-                        <div class="cart-item-info">
+                        <div class="cart-item-info" style="flex: 1;">
                             <div class="cart-item-name">${product.name}</div>
                             <div class="cart-item-price">¥${product.price.toFixed(2)}</div>
+                            ${!stockAvailable ? '<div style="color: var(--apple-red); font-size: 12px;">库存不足</div>' : ''}
                         </div>
                         <div class="cart-item-quantity">
-                            <button class="quantity-btn" onclick="updateQuantity(${item.productId}, -1)">-</button>
-                            <span style="margin: 0 8px;">${item.quantity}</span>
-                            <button class="quantity-btn" onclick="updateQuantity(${item.productId}, 1)">+</button>
+                            <button class="quantity-btn" onclick="updateQuantity(${item.productId}, -1)" ${item.quantity <= 1 ? 'disabled' : ''}>−</button>
+                            <div class="quantity-value">${item.quantity}</div>
+                            <button class="quantity-btn" onclick="updateQuantity(${item.productId}, 1)" ${!stockAvailable ? 'disabled' : ''}>+</button>
                         </div>
-                        <div style="margin-left: var(--spacing-sm); font-weight: 600; color: var(--apple-red);">
-                            ¥${(product.price * item.quantity).toFixed(2)}
+                        <div style="margin-left: var(--spacing-sm); font-weight: 600; color: var(--apple-red); min-width: 80px; text-align: right;">
+                            ¥${itemTotal.toFixed(2)}
                         </div>
-                        <button class="btn btn-danger" style="margin-left: var(--spacing-sm); padding: 4px 8px;" onclick="removeFromCart(${item.productId})">删除</button>
+                        <button class="btn btn-danger" style="margin-left: var(--spacing-sm); padding: 6px 12px;" onclick="removeFromCart(${item.productId})">删除</button>
                     </div>
                 `;
             }).join('');
 
-            updateTotalPrice();
+            updateOrderSummary();
+            updateCheckoutButton();
+        }
+
+        // 更新订单汇总
+        function updateOrderSummary() {
+            const subtotal = calculateSubtotal();
+            const shipping = calculateShipping();
+            const discount = calculateDiscount();
+            const total = subtotal + shipping - discount;
+
+            document.getElementById('subtotal').textContent = `¥${subtotal.toFixed(2)}`;
+            document.getElementById('shipping').textContent = shipping > 0 ? `¥${shipping.toFixed(2)}` : '免运费';
+            document.getElementById('discount').textContent = discount > 0 ? `-¥${discount.toFixed(2)}` : '¥0.00';
+            document.getElementById('totalPrice').textContent = `¥${total.toFixed(2)}`;
+        }
+
+        // 计算商品总额
+        function calculateSubtotal() {
+            return appData.cart.reduce((sum, item) => {
+                const product = appData.products.find(p => p.id === item.productId);
+                return sum + (product ? product.price * item.quantity : 0);
+            }, 0);
+        }
+
+        // 计算运费
+        function calculateShipping() {
+            const subtotal = calculateSubtotal();
+            // 满99元免运费，否则10元运费
+            return subtotal >= 99 ? 0 : 10;
+        }
+
+        // 计算优惠
+        function calculateDiscount() {
+            const subtotal = calculateSubtotal();
+            // 满200元减20元
+            return subtotal >= 200 ? 20 : 0;
+        }
+
+        // 更新结算按钮状态
+        function updateCheckoutButton() {
+            const checkoutBtn = document.getElementById('checkoutBtn');
+            const hasValidItems = appData.cart.some(item => {
+                const product = appData.products.find(p => p.id === item.productId);
+                return product && product.stock >= item.quantity;
+            });
+
+            checkoutBtn.disabled = !hasValidItems || appData.cart.length === 0;
+            checkoutBtn.textContent = hasValidItems ? '立即支付' : '商品库存不足';
         }
 
         // 更新数量
@@ -2707,14 +3910,65 @@
             const item = appData.cart.find(item => item.productId === productId);
             if (!item) return;
 
-            item.quantity += change;
-            if (item.quantity <= 0) {
+            const product = appData.products.find(p => p.id === productId);
+            if (!product) return;
+
+            const newQuantity = item.quantity + change;
+            
+            // 检查库存
+            if (newQuantity > product.stock) {
+                showToast('库存不足，最多可购买 ' + product.stock + ' 件', 'error');
+                return;
+            }
+
+            if (newQuantity <= 0) {
                 removeFromCart(productId);
             } else {
+                item.quantity = newQuantity;
                 saveData();
                 renderCartPage();
                 updateCartCount();
             }
+        }
+
+        // 模态框中增加数量
+        function increaseModalQuantity() {
+            if (appData.currentProductId) {
+                const product = appData.products.find(p => p.id === appData.currentProductId);
+                if (product && appData.modalQuantity < product.stock) {
+                    appData.modalQuantity++;
+                    document.getElementById('modalQuantity').textContent = appData.modalQuantity;
+                }
+            }
+        }
+
+        // 模态框中减少数量
+        function decreaseModalQuantity() {
+            if (appData.modalQuantity > 1) {
+                appData.modalQuantity--;
+                document.getElementById('modalQuantity').textContent = appData.modalQuantity;
+            }
+        }
+
+        // 选择支付方式
+        function selectPaymentMethod(element, method) {
+            document.querySelectorAll('.payment-method').forEach(el => {
+                el.classList.remove('selected');
+            });
+            element.classList.add('selected');
+            appData.selectedPaymentMethod = method;
+            
+            // 更新支付确认模态框的显示
+            const icons = {
+                'alipay': '💰',
+                'wechat': '💚',
+                'balance': '👛'
+            };
+            const names = {
+                'alipay': '支付宝支付',
+                'wechat': '微信支付',
+                'balance': '余额支付'
+            };
         }
 
         // 从购物车移除
@@ -2735,28 +3989,175 @@
             document.getElementById('totalPrice').textContent = `¥${total.toFixed(2)}`;
         }
 
+        // 从商品详情加入购物车
+        function addToCartFromModal() {
+            if (!appData.currentProductId) return;
+
+            const existingItem = appData.cart.find(item => item.productId === appData.currentProductId);
+            const product = appData.products.find(p => p.id === appData.currentProductId);
+            
+            if (!product) return;
+
+            const quantityToAdd = appData.modalQuantity;
+            const currentQuantity = existingItem ? existingItem.quantity : 0;
+
+            // 检查库存
+            if (currentQuantity + quantityToAdd > product.stock) {
+                showToast('库存不足，最多可购买 ' + product.stock + ' 件', 'error');
+                return;
+            }
+
+            if (existingItem) {
+                existingItem.quantity += quantityToAdd;
+            } else {
+                appData.cart.push({
+                    productId: appData.currentProductId,
+                    quantity: quantityToAdd
+                });
+            }
+
+            saveData();
+            updateCartCount();
+            
+            closeModal('productModal');
+            showToast(`${product.name} 已加入购物车`, 'success');
+
+            // 重置数量
+            appData.modalQuantity = 1;
+        }
+
         // 结算
-        function checkout() {
+        function processCheckout() {
+            // 检查购物车
             if (appData.cart.length === 0) {
                 showToast('购物车是空的', 'error');
                 return;
             }
 
+            // 检查库存
+            const outOfStockItems = appData.cart.filter(item => {
+                const product = appData.products.find(p => p.id === item.productId);
+                return !product || product.stock < item.quantity;
+            });
+
+            if (outOfStockItems.length > 0) {
+                showToast('部分商品库存不足，请调整数量', 'error');
+                return;
+            }
+
+            // 显示支付确认
+            showPaymentModal();
+        }
+
+        // 显示支付确认模态框
+        function showPaymentModal() {
+            const subtotal = calculateSubtotal();
+            const shipping = calculateShipping();
+            const discount = calculateDiscount();
+            const total = subtotal + shipping - discount;
+            const orderNumber = 'ORD' + Date.now();
+            const itemCount = appData.cart.reduce((sum, item) => sum + item.quantity, 0);
+
+            document.getElementById('paymentOrderNumber').textContent = orderNumber;
+            document.getElementById('paymentAmount').textContent = total.toFixed(2);
+            document.getElementById('paymentItemCount').textContent = itemCount;
+
+            // 设置支付方式图标和名称
+            const icons = {
+                'alipay': '💰',
+                'wechat': '💚',
+                'balance': '👛'
+            };
+            const names = {
+                'alipay': '支付宝支付',
+                'wechat': '微信支付',
+                'balance': '余额支付'
+            };
+
+            document.getElementById('paymentMethodIcon').textContent = icons[appData.selectedPaymentMethod];
+            document.getElementById('paymentMethodName').textContent = names[appData.selectedPaymentMethod];
+
+            document.getElementById('paymentModal').classList.add('active');
+        }
+
+        // 确认支付
+        function confirmPayment() {
+            const total = calculateSubtotal() + calculateShipping() - calculateDiscount();
+            const orderNumber = document.getElementById('paymentOrderNumber').textContent;
+
+            // 创建订单
             const order = {
                 id: Date.now(),
+                orderNumber: orderNumber,
                 items: [...appData.cart],
-                total: calculateTotal(),
-                status: '待支付',
+                subtotal: calculateSubtotal(),
+                shipping: calculateShipping(),
+                discount: calculateDiscount(),
+                total: total,
+                paymentMethod: appData.selectedPaymentMethod,
+                status: 'paid',
                 createdAt: new Date().toISOString()
             };
 
             appData.orders.push(order);
+            
+            // 清空购物车
             appData.cart = [];
             saveData();
             
+            // 关闭支付模态框
+            closeModal('paymentModal');
+            
+            // 跳转到支付
+            redirectToPayment(order);
+            
+            // 更新界面
             renderCartPage();
             updateCartCount();
-            showToast('订单已创建，请完成支付', 'success');
+            
+            showToast('支付成功！订单已生成', 'success');
+        }
+
+        // 跳转到支付
+        function redirectToPayment(order) {
+            const paymentUrls = {
+                'alipay': 'https://openapi.alipay.com/gateway.do',
+                'wechat': 'weixin://',
+                'balance': '#profile'
+            };
+
+            const url = paymentUrls[order.paymentMethod];
+            
+            if (order.paymentMethod === 'alipay') {
+                // 支付宝支付参数
+                const params = {
+                    'out_trade_no': order.orderNumber,
+                    'total_amount': order.total.toFixed(2),
+                    'subject': '金猫之家订单',
+                    'product_code': 'FAST_INSTANT_TRADE_PAY',
+                    'return_url': window.location.href
+                };
+                
+                const queryString = Object.keys(params).map(key => 
+                    encodeURIComponent(key) + '=' + encodeURIComponent(params[key])
+                ).join('&');
+                
+                // 模拟跳转
+                showToast('正在跳转到支付宝...', 'success');
+                setTimeout(() => {
+                    window.open(url + '?' + queryString, '_blank');
+                }, 1000);
+                
+            } else if (order.paymentMethod === 'wechat') {
+                showToast('正在跳转到微信支付...', 'success');
+                setTimeout(() => {
+                    window.open(url, '_blank');
+                }, 1000);
+                
+            } else if (order.paymentMethod === 'balance') {
+                // 余额支付直接成功
+                showPage('orders');
+            }
         }
 
         // 计算总价
