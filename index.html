@@ -499,6 +499,50 @@
             flex-wrap: wrap;
         }
 
+        .hospital-filter-list {
+            background: white;
+            border-radius: var(--border-radius-md);
+            padding: var(--spacing-sm);
+            margin-bottom: var(--spacing-md);
+            box-shadow: var(--shadow-light);
+        }
+
+        .hospital-filter-title {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: var(--spacing-sm);
+            color: var(--apple-black);
+        }
+
+        .hospital-filter-chips {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .hospital-chip {
+            padding: 6px 12px;
+            border-radius: 16px;
+            background: var(--apple-gray-light);
+            color: var(--apple-gray-medium);
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 1px solid transparent;
+        }
+
+        .hospital-chip:hover {
+            background: rgba(0, 113, 227, 0.1);
+            border-color: var(--apple-blue);
+            color: var(--apple-blue);
+        }
+
+        .hospital-chip.active {
+            background: var(--apple-blue);
+            color: white;
+            border-color: var(--apple-blue);
+        }
+
         .search-bar .form-control {
             flex: 1;
             min-width: 200px;
@@ -606,6 +650,50 @@
             box-shadow: var(--shadow-light);
             transition: all 0.3s ease;
             cursor: pointer;
+            position: relative;
+        }
+
+        .taobao-badge {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            background: linear-gradient(135deg, #ff6000, #ff9500);
+            color: white;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+            z-index: 10;
+            box-shadow: 0 2px 8px rgba(255, 96, 0, 0.3);
+        }
+
+        .taobao-link {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(90deg, #ff6000, #ff9500);
+            color: white;
+            text-align: center;
+            padding: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            transform: translateY(100%);
+        }
+
+        .product-card:hover .taobao-link {
+            transform: translateY(0);
+        }
+
+        .product-card:hover {
+            transform: translateY(-6px);
+            box-shadow: var(--shadow-heavy);
+        }
+
+        .taobao-icon {
+            margin-right: 4px;
         }
 
         .product-card:hover {
@@ -838,6 +926,166 @@
         }
 
         .sku-option {
+            padding: 8px 16px;
+            border: 2px solid #e0e0e0;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 14px;
+            background: white;
+            position: relative;
+            min-width: 60px;
+            text-align: center;
+        }
+
+        .sku-option:hover {
+            border-color: #ff6b00;
+            background: rgba(255, 107, 0, 0.05);
+            transform: translateY(-1px);
+        }
+
+        .sku-option.selected {
+            border-color: #ff6b00;
+            background: #ff6b00;
+            color: white;
+            font-weight: 600;
+        }
+
+        .sku-option.disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+            background: #f5f5f5;
+        }
+
+        .sku-option.selected::after {
+            content: '✓';
+            position: absolute;
+            right: 4px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 12px;
+        }
+
+        /* 淘宝风格的商品卡片增强 */
+        .product-card {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .product-taobao-actions {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            display: flex;
+            gap: 4px;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .product-card:hover .product-taobao-actions {
+            opacity: 1;
+        }
+
+        .taobao-action-btn {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid #e0e0e0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 12px;
+        }
+
+        .taobao-action-btn:hover {
+            background: white;
+            transform: scale(1.1);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+        }
+
+        .product-promotion-tag {
+            position: absolute;
+            top: 0;
+            left: 0;
+            background: linear-gradient(135deg, #ff6b00, #ff9500);
+            color: white;
+            padding: 4px 8px;
+            font-size: 11px;
+            font-weight: 600;
+            border-radius: 0 0 var(--border-radius-md) 0;
+            z-index: 10;
+        }
+
+        .product-sales-info {
+            position: absolute;
+            bottom: 8px;
+            left: 8px;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 2px 6px;
+            border-radius: 10px;
+            font-size: 11px;
+            color: #666;
+            backdrop-filter: blur(4px);
+        }
+
+        /* 分类按钮 */
+        .category-btn {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: var(--spacing-sm);
+            border: 1px solid var(--apple-border);
+            border-radius: var(--border-radius-md);
+            background: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            gap: 4px;
+        }
+
+        .category-btn:hover {
+            border-color: var(--apple-blue);
+            background: rgba(0, 113, 227, 0.05);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-light);
+        }
+
+        .category-btn:active {
+            transform: translateY(0);
+        }
+
+        /* 淘宝按钮 */
+        .taobao-btn {
+            background: linear-gradient(135deg, #ff6b00, #ff9500);
+            color: white;
+            border: none;
+            border-radius: var(--border-radius-sm);
+            padding: 8px 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .taobao-btn:hover {
+            background: linear-gradient(135deg, #ff9500, #ff6b00);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(255, 107, 0, 0.3);
+        }
+
+        .taobao-btn:active {
+            transform: translateY(0);
+        }
+
+        .sku-options {
+            display: flex;
+            gap: var(--spacing-xs);
+            flex-wrap: wrap;
+        }
+
+        .sku-option {
             padding: 6px 12px;
             border: 1px solid var(--apple-border);
             border-radius: var(--border-radius-sm);
@@ -957,6 +1205,29 @@
             cursor: pointer;
             transition: all 0.3s ease;
             position: relative;
+            background: white;
+        }
+
+        .hospital-item:active {
+            transform: scale(0.98);
+            background: var(--apple-gray-light);
+        }
+
+        .hospital-link {
+            color: var(--apple-blue);
+            text-decoration: none;
+            display: block;
+            padding: var(--spacing-xs);
+            background: rgba(0, 113, 227, 0.05);
+            border-radius: var(--border-radius-sm);
+            margin-top: var(--spacing-xs);
+            text-align: center;
+            font-size: 12px;
+            transition: all 0.3s ease;
+        }
+
+        .hospital-link:hover {
+            background: rgba(0, 113, 227, 0.1);
         }
 
         .hospital-item:hover {
@@ -1807,6 +2078,33 @@
             }
         }
 
+        /* 右键菜单样式 */
+        .context-menu {
+            border-radius: var(--border-radius-md);
+            box-shadow: var(--shadow-heavy);
+            border: 1px solid var(--apple-border);
+            backdrop-filter: blur(8px);
+        }
+
+        .context-menu-item {
+            padding: 10px 16px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .context-menu-item:hover {
+            background: var(--apple-gray-light);
+        }
+
+        .context-menu-item:active {
+            background: var(--apple-blue);
+            color: white;
+        }
+
         /* 滚动条样式 */
         ::-webkit-scrollbar {
             width: 8px;
@@ -1956,15 +2254,51 @@
             
             <!-- 搜索栏 -->
             <div class="search-bar">
-                <input type="text" class="form-control" id="hospitalSearch" placeholder="搜索医院名称...">
-                <select class="form-select form-control" id="hospitalFilter">
-                    <option value="">附近5公里</option>
-                    <option value="10">附近10公里</option>
-                    <option value="20">附近20公里</option>
-                    <option value="50">附近50公里</option>
+                <input type="text" class="form-control" id="hospitalSearch" placeholder="搜索医院名称..." oninput="showSearchSuggestions()">
+                <select class="form-select form-control" id="hospitalFilter" onchange="updateHospitalList()">
+                    <option value="">附近医院</option>
+                    <option value="5">5公里内</option>
+                    <option value="10">10公里内</option>
+                    <option value="20">20公里内</option>
+                    <option value="50">50公里内</option>
+                </select>
+                <select class="form-select form-control" id="hospitalNameFilter" onchange="filterHospitalsByName()" style="min-width: 140px;">
+                    <option value="">所有医院</option>
+                    <option value="杭州宠物医院">杭州宠物医院</option>
+                    <option value="协和宠物医院">协和宠物医院</option>
+                    <option value="爱心宠物医院">爱心宠物医院</option>
+                    <option value="宠康动物医院">宠康动物医院</option>
+                    <option value="宠爱动物医院">宠爱动物医院</option>
+                </select>
+                <select class="form-select form-control" id="hospitalNameFilter" onchange="selectHospitalByName()">
+                    <option value="">所有医院</option>
+                    <option value="杭州宠物医院">杭州宠物医院</option>
+                    <option value="协和宠物医院">协和宠物医院</option>
+                    <option value="爱心宠物医院">爱心宠物医院</option>
+                    <option value="宠康动物医院">宠康动物医院</option>
+                    <option value="宠爱动物医院">宠爱动物医院</option>
+                    <option value="杭州动物医院">杭州动物医院</option>
+                    <option value="浙大动物医院">浙大动物医院</option>
+                    <option value="杭州农大宠物医院">杭州农大宠物医院</option>
                 </select>
                 <button class="btn" onclick="searchHospitals()">搜索</button>
+                <button class="btn btn-secondary" onclick="openGaodeMap()" title="打开高德地图">🗺️</button>
                 <button class="btn btn-secondary" onclick="getCurrentLocation()">📍 获取位置</button>
+            </div>
+
+            <!-- 附近宠物医院快速筛选 -->
+            <div style="margin-bottom: var(--spacing-md); background: white; padding: var(--spacing-sm); border-radius: var(--border-radius-md); box-shadow: var(--shadow-light);">
+                <div style="font-size: 16px; font-weight: 600; margin-bottom: var(--spacing-sm);">🏥 附近宠物医院</div>
+                <div style="display: flex; flex-wrap: wrap; gap: 8px;">
+                    <button class="sku-option" onclick="selectNearbyHospital('杭州宠物医院')" style="font-size: 14px;">杭州宠物医院</button>
+                    <button class="sku-option" onclick="selectNearbyHospital('协和宠物医院')" style="font-size: 14px;">协和宠物医院</button>
+                    <button class="sku-option" onclick="selectNearbyHospital('爱心宠物医院')" style="font-size: 14px;">爱心宠物医院</button>
+                    <button class="sku-option" onclick="selectNearbyHospital('宠康动物医院')" style="font-size: 14px;">宠康动物医院</button>
+                    <button class="sku-option" onclick="selectNearbyHospital('宠爱动物医院')" style="font-size: 14px;">宠爱动物医院</button>
+                    <button class="sku-option" onclick="selectNearbyHospital('杭州动物医院')" style="font-size: 14px;">杭州动物医院</button>
+                    <button class="sku-option" onclick="selectNearbyHospital('浙大动物医院')" style="font-size: 14px;">浙大动物医院</button>
+                    <button class="sku-option" onclick="selectNearbyHospital('杭州农大宠物医院')" style="font-size: 14px;">杭州农大宠物医院</button>
+                </div>
             </div>
 
             <!-- 地图 -->
@@ -2020,16 +2354,75 @@
         <div class="container">
             <h1 class="page-title">🛍️ 宠物商城</h1>
             
-            <!-- 搜索和筛选 -->
-            <div class="search-bar">
-                <input type="text" class="form-control" id="productSearch" placeholder="搜索商品..." oninput="filterProducts()">
-                <select class="form-select form-control" id="categoryFilter" onchange="filterProducts()">
-                    <option value="">所有分类</option>
-                    <option value="food">食品</option>
-                    <option value="toy">玩具</option>
-                    <option value="care">护理用品</option>
-                    <option value="accessory">配饰</option>
-                </select>
+            <!-- 淘宝风格商品分类 -->
+            <div style="background: white; padding: var(--spacing-md); border-radius: var(--border-radius-lg); margin-bottom: var(--spacing-md); box-shadow: var(--shadow-light);">
+                <div style="font-size: 18px; font-weight: 600; margin-bottom: var(--spacing-sm);">🛒 热门分类</div>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(80px, 1fr)); gap: var(--spacing-sm);">
+                    <button class="category-btn" onclick="showTaobaoCategory('catfood')">
+                        <div style="font-size: 24px; margin-bottom: 4px;">🐟</div>
+                        <div style="font-size: 14px;">猫粮</div>
+                    </button>
+                    <button class="category-btn" onclick="showTaobaoCategory('cansnack')">
+                        <div style="font-size: 24px; margin-bottom: 4px;">🥫</div>
+                        <div style="font-size: 14px;">罐头</div>
+                    </button>
+                    <button class="category-btn" onclick="showTaobaoCategory('toys')">
+                        <div style="font-size: 24px; margin-bottom: 4px;">🧶</div>
+                        <div style="font-size: 14px;">玩具</div>
+                    </button>
+                    <button class="category-btn" onclick="showTaobaoCategory('healthcare')">
+                        <div style="font-size: 24px; margin-bottom: 4px;">💊</div>
+                        <div style="font-size: 14px;">保健</div>
+                    </button>
+                    <button class="category-btn" onclick="showTaobaoCategory('cleaning')">
+                        <div style="font-size: 24px; margin-bottom: 4px;">🧹</div>
+                        <div style="font-size: 14px;">清洁</div>
+                    </button>
+                    <button class="category-btn" onclick="showTaobaoCategory('accessories')">
+                        <div style="font-size: 24px; margin-bottom: 4px;">🎀</div>
+                        <div style="font-size: 14px;">配饰</div>
+                    </button>
+                </div>
+                
+                <div style="margin-top: var(--spacing-md); padding-top: var(--spacing-sm); border-top: 1px solid var(--apple-border);">
+                    <div style="font-size: 14px; color: var(--apple-gray-medium); margin-bottom: var(--spacing-sm);">💡 点击分类直接跳转淘宝选购</div>
+                    <div style="display: flex; gap: var(--spacing-sm); flex-wrap: wrap;">
+                        <button class="taobao-btn" onclick="openTaobaoSearch('猫粮')">
+                            🛒 猫粮零食
+                        </button>
+                        <button class="taobao-btn" onclick="openTaobaoSearch('猫砂')">
+                            🧹 猫砂猫厕所
+                        </button>
+                        <button class="taobao-btn" onclick="openTaobaoSearch('猫玩具')">
+                            🧶 猫玩具逗猫棒
+                        </button>
+                        <button class="taobao-btn" onclick="openTaobaoSearch('猫罐头')">
+                            🥫 湿粮罐头
+                        </button>
+                        <button class="taobao-btn" onclick="openTaobaoSearch('猫疫苗')">
+                            💊 疫苗驱虫
+                        </button>
+                        <button class="taobao-btn" onclick="openTaobaoSearch('猫窝')">
+                            🏠 猫窝猫床
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 本地商品展示 -->
+            <div style="margin-bottom: var(--spacing-md);">
+                <h3 style="margin-bottom: var(--spacing-sm);">🛍️ 本地商品</h3>
+                <!-- 搜索和筛选 -->
+                <div class="search-bar">
+                    <input type="text" class="form-control" id="productSearch" placeholder="搜索本地商品..." oninput="filterProducts()">
+                    <select class="form-select form-control" id="categoryFilter" onchange="filterProducts()">
+                        <option value="">所有分类</option>
+                        <option value="food">食品</option>
+                        <option value="toy">玩具</option>
+                        <option value="care">护理用品</option>
+                        <option value="accessory">配饰</option>
+                    </select>
+                </div>
             </div>
 
             <!-- 商品网格 -->
@@ -2408,6 +2801,11 @@
             initializeEventListeners();
             loadInitialData();
             renderHomePage();
+            
+            // 增强商品卡片
+            setTimeout(() => {
+                enhanceProductCards();
+            }, 1000);
         });
 
         // 初始化事件监听器
@@ -2475,7 +2873,9 @@
                         price: 89.90,
                         description: '天然营养配方，适合成猫食用',
                         image: 'https://picsum.photos/seed/product1/200/200.jpg',
-                        stock: 100
+                        stock: 100,
+                        promotion: '热卖',
+                        sales: 1234
                     },
                     {
                         id: 2,
@@ -2484,7 +2884,9 @@
                         price: 25.90,
                         description: '多种款式猫咪玩具套装',
                         image: 'https://picsum.photos/seed/product2/200/200.jpg',
-                        stock: 150
+                        stock: 150,
+                        promotion: '包邮',
+                        sales: 567
                     },
                     {
                         id: 3,
@@ -2493,7 +2895,8 @@
                         price: 129.00,
                         description: '加厚防漏设计，清洁方便',
                         image: 'https://picsum.photos/seed/product3/200/200.jpg',
-                        stock: 80
+                        stock: 80,
+                        sales: 234
                     },
                     {
                         id: 4,
@@ -2502,7 +2905,9 @@
                         price: 35.00,
                         description: '精美猫咪项圈，带小铃铛',
                         image: 'https://picsum.photos/seed/product4/200/200.jpg',
-                        stock: 80
+                        stock: 80,
+                        promotion: '新品',
+                        sales: 89
                     },
                     {
                         id: 5,
@@ -2511,7 +2916,9 @@
                         price: 45.00,
                         description: '瓦楞纸材质，耐磨耐用',
                         image: 'https://picsum.photos/seed/product5/200/200.jpg',
-                        stock: 60
+                        stock: 60,
+                        promotion: '特价',
+                        sales: 456
                     },
                     {
                         id: 6,
@@ -2520,7 +2927,9 @@
                         price: 55.00,
                         description: '温和无刺激，适合猫咪使用',
                         image: 'https://picsum.photos/seed/product6/200/200.jpg',
-                        stock: 40
+                        stock: 40,
+                        promotion: '限量',
+                        sales: 123
                     }
                 ];
             }
@@ -3009,7 +3418,36 @@
 
                 // 自动搜索附近医院
                 searchNearbyHospitals();
+                
+                // 地图点击事件 - 跳转高德地图APP
+                appData.map.on('click', function(e) {
+                    openGaodeMap(e.lnglat.getLng(), e.lnglat.getLat());
+                });
             }
+        }
+
+        // 跳转到高德地图APP
+        function openGaodeMap(lng, lat) {
+            // 构建高德地图URL
+            const url = `amapuri://route/plan/?sourceApplication=金猫之家&slat=${lat}&slon=${lng}&sname=当前位置&dlat=30.2741&dlon=120.1551&dname=金猫之家&dev=0&t=0`;
+            
+            // 尝试打开高德地图APP
+            const startTime = Date.now();
+            
+            // 打开高德地图APP
+            window.location.href = url;
+            
+            // 检测是否成功跳转，如果3秒后还在当前页面，则打开高德地图H5
+            setTimeout(() => {
+                if (Date.now() - startTime > 2500) { // 2.5秒后执行
+                    // 如果APP打开成功，此时已经不在当前页面了
+                    return;
+                }
+                
+                // APP打开失败，跳转到高德地图网页版
+                const webUrl = `https://uri.amap.com/marker?position=${lng},${lat}&name=宠物医院&coordinate=gaode&callnative=1`;
+                window.open(webUrl, '_blank');
+            }, 3000);
         }
 
         // 搜索附近医院
@@ -3126,6 +3564,9 @@
                 });
             });
 
+            // 保存医院数据到appData
+            appData.hospitals = hospitals;
+            
             // 渲染医院列表
             renderHospitalList(hospitals);
             hideMapLoading();
@@ -3211,8 +3652,8 @@
             searchNearbyHospitals();
         }
 
-        // 显示搜索建议
-        function showSearchSuggestions() {
+        // 显示医院搜索建议
+        function showHospitalSuggestions() {
             const searchInput = document.getElementById('hospitalSearch').value.trim();
             const suggestionsContainer = document.getElementById('searchSuggestions');
             
@@ -3221,19 +3662,26 @@
                 return;
             }
 
-            // 模拟搜索建议
-            const suggestions = [
-                { name: '杭州宠物医院', type: '医院' },
-                { name: '杭州动物医院', type: '医院' },
-                { name: '杭州24小时宠物医院', type: '医院' },
-                { name: '钱江新城宠物医院', type: '医院' }
+            // 模拟医院搜索建议
+            const hospitalSuggestions = [
+                { name: '杭州宠物医院', distance: '1.2km', rating: '4.8' },
+                { name: '杭州动物医院', distance: '2.5km', rating: '4.6' },
+                { name: '协和宠物医院', distance: '3.1km', rating: '4.9' },
+                { name: '爱心宠物医院', distance: '4.2km', rating: '4.5' },
+                { name: '宠康动物医院', distance: '5.8km', rating: '4.7' },
+                { name: '杭州农大宠物医院', distance: '6.3km', rating: '4.8' },
+                { name: '浙大动物医院', distance: '8.1km', rating: '4.9' },
+                { name: '宠爱动物医院', distance: '3.7km', rating: '4.6' }
             ].filter(item => item.name.includes(searchInput));
 
-            if (suggestions.length > 0) {
-                suggestionsContainer.innerHTML = suggestions.map(suggestion => `
-                    <div class="suggestion-item" onclick="selectSuggestion('${suggestion.name}')">
-                        <span>${suggestion.name}</span>
-                        <span style="color: var(--apple-gray-medium); font-size: 12px;">${suggestion.type}</span>
+            if (hospitalSuggestions.length > 0) {
+                suggestionsContainer.innerHTML = hospitalSuggestions.map(hospital => `
+                    <div class="suggestion-item" onclick="selectSuggestion('${hospital.name}')">
+                        <div style="display: flex; justify-content: space-between; align-items: center;">
+                            <span>${hospital.name}</span>
+                            <span style="color: var(--apple-green); font-size: 12px; font-weight: 600;">${hospital.distance}</span>
+                        </div>
+                        <div style="color: var(--apple-gray-medium); font-size: 12px;">评分: ${hospital.rating}</div>
                     </div>
                 `).join('');
                 suggestionsContainer.classList.add('active');
@@ -3262,6 +3710,257 @@
                 appData.currentRoute.clear();
                 appData.currentRoute = null;
             }
+        }
+
+        // 按名称筛选医院
+        function filterHospitalsByName() {
+            const nameFilter = document.getElementById('hospitalNameFilter').value;
+            
+            if (!nameFilter) {
+                renderHospitalList(appData.hospitals || []);
+                return;
+            }
+
+            const filtered = appData.hospitals.filter(hospital => 
+                hospital.name.includes(nameFilter)
+            );
+            
+            renderHospitalList(filtered);
+            showToast(`筛选：${nameFilter}`, 'success');
+        }
+
+        // 跳转高德地图APP
+        function openAmapApp(lat, lng) {
+            // 构建高德地图URI
+            const url = `amapuri://route/plan/?sourceApplication=金猫之家&slat=${lat}&slon=${lng}&sname=当前位置&dlat=30.2741&dlon=120.1551&dname=金猫之家&dev=0&t=0`;
+            
+            // 尝试打开高德地图APP
+            const startTime = Date.now();
+            
+            // 打开高德地图APP
+            window.location.href = url;
+            
+            // 3秒后如果没有跳转，提示用户
+            setTimeout(() => {
+                if (Date.now() - startTime < 3000) {
+                    showToast('请安装高德地图APP', 'warning');
+                    // 备用方案：跳转网页版
+                    const webUrl = `https://uri.amap.com/navigation?to=${lng},${lat},${name},${name}`;
+                    window.open(webUrl, '_blank');
+                }
+            }, 3000);
+        }
+
+        // 跳转淘宝
+        function openTaobao(productId) {
+            const product = appData.products.find(p => p.id === productId);
+            if (!product) return;
+
+            // 构建淘宝搜索URL
+            const taobaoUrl = `https://s.taobao.com/search?q=${encodeURIComponent(product.name)}`;
+            
+            // 尝试打开淘宝APP
+            const taobaoAppUrl = `taobao://s.taobao.com/search?q=${encodeURIComponent(product.name)}`;
+            
+            // 先尝试打开APP，如果失败则打开网页版
+            window.location.href = taobaoAppUrl;
+            
+            setTimeout(() => {
+                window.open(taobaoUrl, '_blank');
+            }, 1000);
+            
+            showToast('正在跳转到淘宝...', 'success');
+        }
+
+        // 跳转淘宝搜索
+        function redirectToTaobao(productName) {
+            const taobaoUrl = `https://s.taobao.com/search?q=${encodeURIComponent(productName)}`;
+            window.open(taobaoUrl, '_blank');
+            showToast('跳转到淘宝搜索', 'success');
+        }
+
+        // 分享商品
+        function shareProduct(productId) {
+            const product = appData.products.find(p => p.id === productId);
+            if (!product) return;
+
+            const shareText = `【金猫之家】${product.name} - ${product.description}，只要¥${product.price}！`;
+            
+            if (navigator.share) {
+                navigator.share({
+                    title: product.name,
+                    text: shareText,
+                    url: window.location.href
+                }).then(() => {
+                    showToast('分享成功', 'success');
+                }).catch(() => {
+                    copyToClipboard(shareText);
+                });
+            } else {
+                copyToClipboard(shareText);
+            }
+        }
+
+        // 复制到剪贴板
+        function copyToClipboard(text) {
+            const textarea = document.createElement('textarea');
+            textarea.value = text;
+            textarea.style.position = 'fixed';
+            textarea.style.opacity = '0';
+            document.body.appendChild(textarea);
+            textarea.select();
+            document.execCommand('copy');
+            document.body.removeChild(textarea);
+            showToast('已复制到剪贴板', 'success');
+        }
+
+        // 增强商品卡片
+        function enhanceProductCards() {
+            const cards = document.querySelectorAll('.product-card');
+            
+            cards.forEach(card => {
+                // 添加触摸事件
+                let pressTimer;
+                let isLongPress = false;
+                
+                card.addEventListener('touchstart', function(e) {
+                    isLongPress = false;
+                    pressTimer = setTimeout(() => {
+                        isLongPress = true;
+                        // 长按显示菜单
+                        const rect = card.getBoundingClientRect();
+                        showContextMenu(e.touches[0].clientX, e.touches[0].clientY, card);
+                    }, 800);
+                });
+                
+                card.addEventListener('touchend', function() {
+                    clearTimeout(pressTimer);
+                    if (!isLongPress) {
+                        hideContextMenu();
+                    }
+                });
+                
+                // 键盘快捷键
+                card.addEventListener('keydown', function(e) {
+                    if (e.ctrlKey && e.key === 'Enter') {
+                        e.preventDefault();
+                        const productId = parseInt(card.getAttribute('onclick').match(/\d+/)[0]);
+                        openTaobao(productId);
+                    }
+                });
+            });
+        }
+
+        // 显示右键菜单
+        function showContextMenu(x, y, card) {
+            hideContextMenu();
+            
+            const menu = document.createElement('div');
+            menu.className = 'context-menu';
+            menu.style.cssText = `
+                position: fixed;
+                left: ${x}px;
+                top: ${y}px;
+                background: white;
+                border-radius: 8px;
+                box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+                z-index: 2000;
+                padding: 8px 0;
+                min-width: 150px;
+            `;
+            
+            const menuItems = [
+                { text: '🛍️ 淘宝搜索', action: () => redirectToTaobao('') },
+                { text: '📤 分享', action: () => shareProduct('') },
+                { text: '🛒 加入购物车', action: () => addToCartFromGrid('') }
+            ];
+            
+            menuItems.forEach(item => {
+                const menuItem = document.createElement('div');
+                menuItem.textContent = item.text;
+                menuItem.style.cssText = `
+                    padding: 8px 16px;
+                    cursor: pointer;
+                    font-size: 14px;
+                    transition: background 0.3s ease;
+                `;
+                
+                menuItem.addEventListener('click', () => {
+                    item.action();
+                    hideContextMenu();
+                });
+                
+                menuItem.addEventListener('mouseenter', () => {
+                    menuItem.style.background = 'var(--apple-gray-light)';
+                });
+                
+                menuItem.addEventListener('mouseleave', () => {
+                    menuItem.style.background = 'white';
+                });
+                
+                menu.appendChild(menuItem);
+            });
+            
+            document.body.appendChild(menu);
+        }
+
+        // 隐藏右键菜单
+        function hideContextMenu() {
+            const menu = document.querySelector('.context-menu');
+            if (menu) {
+                menu.remove();
+            }
+        }
+
+        // 点击其他地方隐藏菜单
+        document.addEventListener('click', hideContextMenu);
+
+        // 选择附近医院
+        function selectNearbyHospital(hospitalName) {
+            document.getElementById('hospitalSearch').value = hospitalName;
+            searchHospitals();
+        }
+
+        // 跳转淘宝分类
+        function showTaobaoCategory(category) {
+            showToast('正在跳转到淘宝...', 'success');
+            
+            // 构建淘宝URL
+            const taobaoUrls = {
+                'catfood': 'https://s.taobao.com/search?q=猫粮',
+                'cansnack': 'https://s.taobao.com/search?q=猫罐头',
+                'toys': 'https://s.taobao.com/search?q=猫玩具',
+                'healthcare': 'https://s.taobao.com/search?q=猫保健',
+                'cleaning': 'https://s.taobao.com/search?q=猫砂',
+                'accessories': 'https://s.taobao.com/search?q=猫咪用品'
+            };
+            
+            const url = taobaoUrls[category] || 'https://s.taobao.com/search?q=猫咪用品';
+            
+            // 尝试打开淘宝APP
+            const appUrl = `taobao://s.taobao.com/search?q=${encodeURIComponent(category)}`;
+            window.location.href = appUrl;
+            
+            // 如果3秒后还在当前页面，则打开网页版
+            setTimeout(() => {
+                window.open(url, '_blank');
+            }, 3000);
+        }
+
+        // 打开淘宝搜索
+        function openTaobaoSearch(keyword) {
+            showToast('正在跳转到淘宝搜索...', 'success');
+            
+            const url = `https://s.taobao.com/search?q=${encodeURIComponent(keyword)}`;
+            const appUrl = `taobao://s.taobao.com/search?q=${encodeURIComponent(keyword)}`;
+            
+            // 尝试打开淘宝APP
+            window.location.href = appUrl;
+            
+            // 备用网页版
+            setTimeout(() => {
+                window.open(url, '_blank');
+            }, 3000);
         }
 
         // 渲染医院列表
@@ -3397,6 +4096,112 @@
             // 这里应该调用实际的地图搜索API
             showToast(`搜索：${searchTerm}（${distance}公里内）`, 'success');
             searchNearbyHospitals(); // 暂时使用模拟数据
+        }
+
+        // 打开高德地图
+        function openGaodeMap() {
+            // 高德地图URL Scheme
+            const gaodeUrl = 'amapuri://route/plan/?sourceApplication=金猫之家';
+            
+            // 高德地图Web版URL
+            const gaodeWebUrl = 'https://www.amap.com/search?query=宠物医院';
+            
+            // 尝试打开APP，失败则打开Web版
+            const now = Date.now();
+            const timeout = 3000;
+            
+            window.location.href = gaodeUrl;
+            
+            setTimeout(() => {
+                const elapsed = Date.now() - now;
+                if (elapsed < timeout + 200) {
+                    // 如果3秒内没有跳转，说明APP未安装，打开Web版
+                    window.open(gaodeWebUrl, '_blank');
+                    showToast('正在打开高德地图网页版...', 'success');
+                }
+            }, timeout);
+        }
+
+        // 按名称选择医院
+        function selectHospitalByName() {
+            const hospitalName = document.getElementById('hospitalNameFilter').value;
+            if (hospitalName) {
+                document.getElementById('hospitalSearch').value = hospitalName;
+                searchHospitals();
+                
+                // 在地图上定位到该医院
+                const hospitals = [
+                    { id: 1, name: '杭州宠物医院', lat: 30.2941, lng: 120.1751 },
+                    { id: 2, name: '协和宠物医院', lat: 30.2841, lng: 120.1551 },
+                    { id: 3, name: '爱心宠物医院', lat: 30.3041, lng: 120.1651 }
+                ];
+                const hospital = hospitals.find(h => h.name === hospitalName);
+                if (hospital) {
+                    focusHospital(hospital.lat, hospital.lng, hospital.id);
+                }
+            }
+        }
+
+        // 选择附近医院
+        function selectNearbyHospital(hospitalName) {
+            document.getElementById('hospitalNameFilter').value = hospitalName;
+            selectHospitalByName();
+        }
+
+        // 打开淘宝
+        function openTaobao() {
+            // 淘宝URL Scheme
+            const taobaoUrl = 'taobao://';
+            
+            // 淘宝Web版URL
+            const taobaoWebUrl = 'https://www.taobao.com';
+            
+            // 淘宝搜索宠物用品URL
+            const taobaoSearchUrl = 'https://s.taobao.com/search?q=猫咪用品';
+            
+            // 尝试打开APP，失败则打开搜索页面
+            const now = Date.now();
+            const timeout = 3000;
+            
+            window.location.href = taobaoUrl;
+            
+            setTimeout(() => {
+                const elapsed = Date.now() - now;
+                if (elapsed < timeout + 200) {
+                    // 如果3秒内没有跳转，说明APP未安装，打开搜索页面
+                    window.open(taobaoSearchUrl, '_blank');
+                    showToast('正在打开淘宝网页版...', 'success');
+                }
+            }, timeout);
+        }
+
+        // 选择商品分类
+        function selectCategory(category) {
+            document.getElementById('categoryFilter').value = category;
+            filterProducts();
+            
+            // 更新分类按钮状态
+            document.querySelectorAll('.category-btn').forEach(btn => {
+                btn.classList.remove('selected');
+            });
+            event.target.classList.add('selected');
+        }
+
+        // 显示淘宝分类
+        function showTaobaoCategory(category) {
+            // 构建淘宝搜索URL
+            const categoryMap = {
+                'catfood': '猫粮',
+                'cansnack': '猫罐头',
+                'toys': '猫玩具',
+                'healthcare': '猫咪保健品'
+            };
+            
+            const keyword = categoryMap[category] || '猫咪用品';
+            const taobaoUrl = `https://s.taobao.com/search?q=${encodeURIComponent(keyword)}`;
+            
+            window.open(taobaoUrl, '_blank');
+            showToast(`正在打开淘宝搜索"${keyword}"...`, 'success');
         }
 
         // 获取当前位置
@@ -3699,13 +4504,19 @@
             }
 
             grid.innerHTML = filteredProducts.map(product => `
-                <div class="product-card" onclick="showProductDetail(${product.id})">
-                    <img src="${product.image}" alt="${product.name}" class="product-image">
+                <div class="product-card" onclick="showProductDetail(${product.id})" title="Ctrl+点击跳转淘宝">
+                    <div style="position: relative;">
+                        <img src="${product.image}" alt="${product.name}" class="product-image">
+                        <div style="position: absolute; top: 8px; right: 8px; background: var(--apple-red); color: white; padding: 2px 6px; border-radius: 4px; font-size: 12px; font-weight: 600;">TB</div>
+                    </div>
                     <div class="product-info">
                         <h3 class="product-name">${product.name}</h3>
                         <div class="product-price">¥${product.price.toFixed(2)}</div>
                         <div class="product-description">${product.description}</div>
-                        <button class="btn" onclick="event.stopPropagation(); addToCartFromGrid(${product.id})">加入购物车</button>
+                        <div style="display: flex; gap: 8px; margin-top: 8px;">
+                            <button class="btn" onclick="event.stopPropagation(); addToCartFromGrid(${product.id})">🛒 加入购物车</button>
+                            <button class="btn btn-secondary" onclick="event.stopPropagation(); redirectToTaobao('${product.name}')" title="跳转淘宝搜索">🛍️ 淘宝</button>
+                        </div>
                     </div>
                 </div>
             `).join('');
@@ -4460,6 +5271,61 @@
                 event.target.classList.remove('active');
             }
         });
+
+        // 检测移动端
+        function isMobile() {
+            return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+        }
+
+        // 带位置打开高德地图
+        function openGaodeMapWithLocation(lat, lng) {
+            const gaodeUrl = `amapuri://viewmap?sourceApplication=金猫之家&lat=${lat}&lon=${lng}&dev=0`;
+            
+            try {
+                window.location.href = gaodeUrl;
+                setTimeout(() => {
+                    showToast('正在打开高德地图...', 'success');
+                }, 500);
+            } catch (error) {
+                // 如果无法打开APP，打开Web版
+                const webUrl = `https://www.amap.com/search?query=${lat},${lng}`;
+                window.open(webUrl, '_blank');
+                showToast('正在打开高德地图网页版...', 'success');
+            }
+        }
+
+        // 商品点击跳转淘宝
+        function redirectToTaobao(productName) {
+            const taobaoUrl = `taobao://search?q=${encodeURIComponent(productName || '猫咪用品')}`;
+            const taobaoWebUrl = `https://s.taobao.com/search?q=${encodeURIComponent(productName || '猫咪用品')}`;
+            
+            try {
+                window.location.href = taobaoUrl;
+                
+                // 3秒后检测是否成功跳转
+                setTimeout(() => {
+                    window.open(taobaoWebUrl, '_blank');
+                    showToast(`正在淘宝搜索"${productName || '猫咪用品'}"...`, 'success');
+                }, 3000);
+            } catch (error) {
+                window.open(taobaoWebUrl, '_blank');
+                showToast('正在打开淘宝网页版...', 'success');
+            }
+        }
+
+        // 增强商品卡片点击
+        function enhanceProductCards() {
+            document.querySelectorAll('.product-card').forEach(card => {
+                card.addEventListener('click', function(e) {
+                    if (e.ctrlKey || e.metaKey) {
+                        // Ctrl/Cmd + 点击 跳转淘宝
+                        e.preventDefault();
+                        const productName = this.querySelector('.product-name')?.textContent;
+                        redirectToTaobao(productName);
+                    }
+                });
+            });
+        }
     </script>
 </body>
 </html>
