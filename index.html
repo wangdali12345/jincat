@@ -642,6 +642,319 @@
             font-size: 14px;
         }
 
+        /* 小红书风格帖子详情 */
+        .post-detail {
+            background: white;
+            border-radius: var(--border-radius-lg);
+            overflow: hidden;
+            box-shadow: var(--shadow-light);
+            margin-bottom: var(--spacing-md);
+        }
+
+        .post-detail-header {
+            padding: var(--spacing-md);
+            border-bottom: 1px solid var(--apple-gray-light);
+        }
+
+        .post-detail-author {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-sm);
+            margin-bottom: var(--spacing-sm);
+        }
+
+        .author-avatar {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--apple-pink), var(--apple-orange));
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 18px;
+        }
+
+        .author-info {
+            flex: 1;
+        }
+
+        .author-name {
+            font-weight: 600;
+            font-size: 16px;
+            margin-bottom: 2px;
+        }
+
+        .author-time {
+            font-size: 12px;
+            color: var(--apple-gray-medium);
+        }
+
+        .post-detail-content {
+            padding: var(--spacing-md);
+        }
+
+        .post-detail-title {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: var(--spacing-md);
+            line-height: 1.3;
+        }
+
+        .post-detail-text {
+            font-size: 15px;
+            line-height: 1.6;
+            color: var(--apple-black);
+            margin-bottom: var(--spacing-md);
+        }
+
+        .post-detail-images {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: var(--spacing-sm);
+            margin-bottom: var(--spacing-md);
+            border-radius: var(--border-radius-md);
+            overflow: hidden;
+        }
+
+        .post-detail-images.single {
+            grid-template-columns: 1fr;
+        }
+
+        .post-detail-images img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .post-detail-images img:hover {
+            transform: scale(1.05);
+        }
+
+        .post-detail-actions {
+            display: flex;
+            align-items: center;
+            justify-content: space-around;
+            padding: var(--spacing-md) var(--spacing-md);
+            border-top: 1px solid var(--apple-gray-light);
+            border-bottom: 1px solid var(--apple-gray-light);
+        }
+
+        .action-btn {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-xs);
+            padding: var(--spacing-sm) var(--spacing-md);
+            border-radius: var(--border-radius-md);
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 14px;
+            color: var(--apple-gray-medium);
+        }
+
+        .action-btn:hover {
+            background: var(--apple-gray-light);
+            color: var(--apple-black);
+        }
+
+        .action-btn.liked {
+            color: var(--apple-red);
+        }
+
+        .action-btn i {
+            font-size: 16px;
+        }
+
+        /* 评论区样式 */
+        .comments-section {
+            background: white;
+            border-radius: var(--border-radius-lg);
+            padding: var(--spacing-md);
+            box-shadow: var(--shadow-light);
+        }
+
+        .comment-item {
+            display: flex;
+            gap: var(--spacing-sm);
+            padding: var(--spacing-md);
+            border-bottom: 1px solid var(--apple-gray-light);
+            transition: background 0.3s ease;
+        }
+
+        .comment-item:hover {
+            background: var(--apple-gray-light);
+            border-radius: var(--border-radius-md);
+        }
+
+        .comment-item:last-child {
+            border-bottom: none;
+        }
+
+        .comment-avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--apple-blue), var(--apple-purple));
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 14px;
+            flex-shrink: 0;
+        }
+
+        .comment-content {
+            flex: 1;
+        }
+
+        .comment-author {
+            font-weight: 600;
+            font-size: 14px;
+            margin-bottom: 4px;
+        }
+
+        .comment-text {
+            font-size: 14px;
+            line-height: 1.5;
+            color: var(--apple-black);
+            margin-bottom: 4px;
+        }
+
+        .comment-time {
+            font-size: 12px;
+            color: var(--apple-gray-medium);
+        }
+
+        .comment-actions {
+            display: flex;
+            gap: var(--spacing-md);
+            margin-top: var(--spacing-sm);
+        }
+
+        .comment-action {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            font-size: 12px;
+            color: var(--apple-gray-medium);
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+
+        .comment-action:hover {
+            color: var(--apple-blue);
+        }
+
+        .comment-action.liked {
+            color: var(--apple-red);
+        }
+
+        /* 表情按钮样式 */
+        .btn-icon {
+            background: none;
+            border: none;
+            font-size: 20px;
+            cursor: pointer;
+            padding: 4px;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+        }
+
+        .btn-icon:hover {
+            background: var(--apple-gray-light);
+            transform: scale(1.2);
+        }
+
+        /* 分享面板 */
+        .share-panel {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: white;
+            border-radius: var(--border-radius-lg) var(--border-radius-lg) 0 0;
+            padding: var(--spacing-lg);
+            box-shadow: 0 -4px 12px rgba(0,0,0,0.15);
+            z-index: 1001;
+            transform: translateY(100%);
+            transition: transform 0.3s ease;
+        }
+
+        .share-panel.active {
+            transform: translateY(0);
+        }
+
+        .share-options {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: var(--spacing-md);
+            margin-bottom: var(--spacing-lg);
+        }
+
+        .share-option {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: var(--spacing-xs);
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .share-option:hover {
+            transform: scale(1.1);
+        }
+
+        .share-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+        }
+
+        .share-icon.weixin {
+            background: #07c160;
+            color: white;
+        }
+
+        .share-icon.weibo {
+            background: #ff8200;
+            color: white;
+        }
+
+        .share-icon.qq {
+            background: #12b7f5;
+            color: white;
+        }
+
+        .share-icon.link {
+            background: var(--apple-gray-light);
+            color: var(--apple-gray-medium);
+        }
+
+        .share-text {
+            font-size: 12px;
+            color: var(--apple-gray-medium);
+        }
+
+        .cancel-share {
+            width: 100%;
+            padding: var(--spacing-md);
+            background: var(--apple-gray-light);
+            border: none;
+            border-radius: var(--border-radius-md);
+            cursor: pointer;
+            font-size: 16px;
+        }
+
         /* 商品卡片 */
         .product-card {
             background: white;
@@ -1290,10 +1603,11 @@
             border: 1px solid var(--apple-border);
             border-top: none;
             border-radius: 0 0 var(--border-radius-md) var(--border-radius-md);
-            max-height: 200px;
+            max-height: 300px;
             overflow-y: auto;
             z-index: 1000;
             display: none;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
         }
 
         .search-suggestions.active {
@@ -1301,11 +1615,21 @@
         }
 
         .suggestion-item {
-            padding: 10px 12px;
+            padding: 12px 16px;
             cursor: pointer;
             border-bottom: 1px solid var(--apple-gray-light);
             font-size: 14px;
-            transition: background 0.3s ease;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .suggestion-item:hover {
+            background: var(--apple-gray-light);
+            transform: translateX(4px);
+        }
+
+        .suggestion-item:last-child {
+            border-bottom: none;
         }
 
         .suggestion-item:hover {
@@ -2254,7 +2578,7 @@
             
             <!-- 搜索栏 -->
             <div class="search-bar">
-                <input type="text" class="form-control" id="hospitalSearch" placeholder="搜索医院名称..." oninput="showSearchSuggestions()">
+                <input type="text" class="form-control" id="hospitalSearch" placeholder="搜索医院名称..." oninput="showHospitalSuggestions()">
                 <select class="form-select form-control" id="hospitalFilter" onchange="updateHospitalList()">
                     <option value="">附近医院</option>
                     <option value="5">5公里内</option>
@@ -2262,16 +2586,8 @@
                     <option value="20">20公里内</option>
                     <option value="50">50公里内</option>
                 </select>
-                <select class="form-select form-control" id="hospitalNameFilter" onchange="filterHospitalsByName()" style="min-width: 140px;">
-                    <option value="">所有医院</option>
-                    <option value="杭州宠物医院">杭州宠物医院</option>
-                    <option value="协和宠物医院">协和宠物医院</option>
-                    <option value="爱心宠物医院">爱心宠物医院</option>
-                    <option value="宠康动物医院">宠康动物医院</option>
-                    <option value="宠爱动物医院">宠爱动物医院</option>
-                </select>
-                <select class="form-select form-control" id="hospitalNameFilter" onchange="selectHospitalByName()">
-                    <option value="">所有医院</option>
+                <select class="form-select form-control" id="hospitalNameFilter" onchange="selectHospitalByName()" style="min-width: 140px;">
+                    <option value="">快速跳转</option>
                     <option value="杭州宠物医院">杭州宠物医院</option>
                     <option value="协和宠物医院">协和宠物医院</option>
                     <option value="爱心宠物医院">爱心宠物医院</option>
@@ -2346,6 +2662,55 @@
 
             <!-- 帖子列表 -->
             <div id="forumPosts"></div>
+        </div>
+    </div>
+
+    <!-- 帖子详情页面 -->
+    <div id="postDetail" class="page">
+        <div class="container">
+            <button class="btn btn-secondary" onclick="navigateTo('forum')" style="margin-bottom: var(--spacing-md);">
+                ⬅️ 返回论坛
+            </button>
+            
+            <div id="postDetailContent">
+                <!-- 帖子详情将动态渲染到这里 -->
+            </div>
+
+            <!-- 评论区 -->
+            <div class="comments-section" style="margin-top: var(--spacing-lg);">
+                <h3 style="margin-bottom: var(--spacing-md);">💬 评论区</h3>
+                
+                <!-- 发表评论 -->
+                <div class="comment-input-container" style="background: white; padding: var(--spacing-md); border-radius: var(--border-radius-lg); margin-bottom: var(--spacing-md); box-shadow: var(--shadow-light);">
+                    <div style="display: flex; gap: var(--spacing-sm); align-items: flex-start;">
+                        <div class="comment-avatar" style="width: 40px; height: 40px; border-radius: 50%; background: var(--apple-blue); color: white; display: flex; align-items: center; justify-content: center; font-weight: 600;">
+                            ${(appData.currentUser?.username || '用户').charAt(0)}
+                        </div>
+                        <div style="flex: 1;">
+                            <textarea 
+                                id="commentInput" 
+                                placeholder="写下你的评论..." 
+                                style="width: 100%; min-height: 80px; padding: 12px; border: 1px solid var(--apple-border); border-radius: var(--border-radius-md); resize: vertical; font-family: inherit;"
+                            ></textarea>
+                            <div style="margin-top: var(--spacing-sm); display: flex; justify-content: space-between; align-items: center;">
+                                <div style="display: flex; gap: var(--spacing-sm);">
+                                    <button class="btn-icon" onclick="insertEmoji('😍')">😍</button>
+                                    <button class="btn-icon" onclick="insertEmoji('😂')">😂</button>
+                                    <button class="btn-icon" onclick="insertEmoji('👍')">👍</button>
+                                    <button class="btn-icon" onclick="insertEmoji('🐱')">🐱</button>
+                                    <button class="btn-icon" onclick="insertEmoji('❤️')">❤️</button>
+                                </div>
+                                <button class="btn" onclick="submitComment()">发表评论</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 评论列表 -->
+                <div id="commentsList">
+                    <!-- 评论将动态渲染到这里 -->
+                </div>
+            </div>
         </div>
     </div>
 
@@ -2776,6 +3141,7 @@
             cats: [],
             posts: [],
             comments: [],
+            comments: [],
             products: [],
             cart: [],
             orders: [],
@@ -2824,6 +3190,106 @@
 
         // 加载初始数据
         function loadInitialData() {
+            // 初始化论坛帖子数据
+            if (appData.posts.length === 0) {
+                appData.posts = [
+                    {
+                        id: 1,
+                        title: '🐱 分享我家猫咪的日常',
+                        content: '今天我家小花做了件特别可爱的事情！早上我正在工作，它突然跳到桌子上，用小爪子拍了拍我的手，好像在说"该休息了"。然后它就趴在我键盘旁边，安静地看着我工作，真的太治愈了！🥰 养猫真的是一件很幸福的事情，它们总是能用最简单的方式温暖我们的心。大家有什么养猫的温馨瞬间吗？欢迎在评论区分享～',
+                        author: '猫奴小王',
+                        likes: 23,
+                        comments: 8,
+                        views: 156,
+                        liked: false,
+                        bookmarked: false,
+                        images: [
+                            'https://picsum.photos/seed/cat-post1/400/300.jpg',
+                            'https://picsum.photos/seed/cat-post2/400/300.jpg'
+                        ],
+                        createdAt: new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString() // 2小时前
+                    },
+                    {
+                        id: 2,
+                        title: '求助：猫咪最近不爱吃饭怎么办？',
+                        content: '我家大橘最近三天都不怎么爱吃饭，平时最爱吃的罐头也只是闻一闻就走开了。精神状态还算正常，也没有呕吐腹泻的症状。刚带去宠物医院检查了，医生说没什么大问题，可能是天气变化导致的食欲不振。有经验的铲屎官能给我一些建议吗？要不要换一种猫粮试试？🙏',
+                        author: '担心大橘',
+                        likes: 15,
+                        comments: 12,
+                        views: 89,
+                        liked: false,
+                        bookmarked: false,
+                        images: [
+                            'https://picsum.photos/seed/cat-sick/400/300.jpg'
+                        ],
+                        createdAt: new Date(Date.now() - 5 * 60 * 60 * 1000).toISOString() // 5小时前
+                    },
+                    {
+                        id: 3,
+                        title: '🎾 自制猫咪玩具，成本低又好玩！',
+                        content: '今天给猫咪们做了几个简单的玩具，材料都是家里有的：纸箱、袜子、铃铛、猫薄荷。没想到它们超级喜欢！特别是那个用袜子和铃铛做的小老鼠，追着玩了一下午。看来不是非要买昂贵的玩具，简单的DIY就能让主子们很开心～ 分享给大家，有空也试试吧！制作过程很简单，有兴趣的可以问我详细步骤。',
+                        author: 'DIY达人',
+                        likes: 42,
+                        comments: 18,
+                        views: 234,
+                        liked: true,
+                        bookmarked: true,
+                        images: [
+                            'https://picsum.photos/seed/cat-toy1/400/300.jpg',
+                            'https://picsum.photos/seed/cat-toy2/400/300.jpg',
+                            'https://picsum.photos/seed/cat-toy3/400/300.jpg'
+                        ],
+                        createdAt: new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString() // 1天前
+                    },
+                    {
+                        id: 4,
+                        title: '新手养猫必看！这些坑我都踩过了😭',
+                        content: '作为一个养猫新手，这几个月真的是踩了不少坑。总结一下分享给大家：\n1️⃣ 不要急着给猫咪洗澡，它们其实很爱干净\n2️⃣ 猫砂盆要放在安静的地方，不要频繁移动\n3️⃣ 不要给猫咪吃人类的食物，特别是巧克力和洋葱\n4️⃣ 定期剪指甲很重要，不然会抓坏家具\n5️⃣ 疫苗和驱虫一定要按时做！\n希望新手铲屎官们少走弯路～',
+                        author: '铲屎官小李',
+                        likes: 67,
+                        comments: 25,
+                        views: 456,
+                        liked: false,
+                        bookmarked: true,
+                        images: [],
+                        createdAt: new Date(Date.now() - 48 * 60 * 60 * 1000).toISOString() // 2天前
+                    }
+                ];
+            }
+
+            // 初始化评论数据
+            if (appData.comments.length === 0) {
+                appData.comments = [
+                    {
+                        id: 1,
+                        postId: 1,
+                        author: '猫奴小王',
+                        content: '我家猫咪也是！每次我工作的时候都会在旁边陪着我，真的是最温暖的陪伴了～',
+                        likes: 5,
+                        liked: false,
+                        createdAt: new Date(Date.now() - 1 * 60 * 60 * 1000).toISOString()
+                    },
+                    {
+                        id: 2,
+                        postId: 1,
+                        author: '铲屎官小美',
+                        content: '太可爱了吧！猫咪真的是治愈系的小天使～🥰 我家猫咪也喜欢在我工作的时候监督我',
+                        likes: 3,
+                        liked: false,
+                        createdAt: new Date(Date.now() - 30 * 60 * 1000).toISOString()
+                    },
+                    {
+                        id: 3,
+                        postId: 2,
+                        author: '宠物医生小张',
+                        content: '如果精神状态正常，可以试试这些方法：\n1. 少食多餐，把一天的食物分成3-4次\n2. 加一点猫薄荷或者肉泥增加食欲\n3. 确保环境温度适宜\n4. 可以适当增加运动量\n如果超过3天还是不吃饭，建议再复查一下',
+                        likes: 12,
+                        liked: true,
+                        createdAt: new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString()
+                    }
+                ];
+            }
+
             // 初始化猫咪数据
             if (appData.cats.length === 0) {
                 appData.cats = [
@@ -3662,35 +4128,200 @@
                 return;
             }
 
-            // 模拟医院搜索建议
-            const hospitalSuggestions = [
-                { name: '杭州宠物医院', distance: '1.2km', rating: '4.8' },
-                { name: '杭州动物医院', distance: '2.5km', rating: '4.6' },
-                { name: '协和宠物医院', distance: '3.1km', rating: '4.9' },
-                { name: '爱心宠物医院', distance: '4.2km', rating: '4.5' },
-                { name: '宠康动物医院', distance: '5.8km', rating: '4.7' },
-                { name: '杭州农大宠物医院', distance: '6.3km', rating: '4.8' },
-                { name: '浙大动物医院', distance: '8.1km', rating: '4.9' },
-                { name: '宠爱动物医院', distance: '3.7km', rating: '4.6' }
-            ].filter(item => item.name.includes(searchInput));
+            // 使用实际的医院数据进行搜索建议
+            const allHospitals = [
+                {
+                    id: 1,
+                    name: '杭州宠物医院',
+                    address: '杭州市江干区钱江新城民心路88号',
+                    lat: 30.2941,
+                    lng: 120.1751,
+                    phone: '0571-11223344',
+                    distance: '1.2km',
+                    rating: 4.8,
+                    openTime: '08:00-20:00'
+                },
+                {
+                    id: 2,
+                    name: '协和宠物医院',
+                    address: '杭州市西湖区文三路128号',
+                    lat: 30.2841,
+                    lng: 120.1551,
+                    phone: '0571-55667788',
+                    distance: '2.5km',
+                    rating: 4.6,
+                    openTime: '09:00-21:00'
+                },
+                {
+                    id: 3,
+                    name: '爱心宠物医院',
+                    address: '杭州市拱墅区莫干山路200号',
+                    lat: 30.3041,
+                    lng: 120.1651,
+                    phone: '0571-99887766',
+                    distance: '3.1km',
+                    rating: 4.9,
+                    openTime: '08:30-20:30'
+                },
+                {
+                    id: 4,
+                    name: '宠康动物医院',
+                    address: '杭州市上城区解放路18号',
+                    lat: 30.2541,
+                    lng: 120.1851,
+                    phone: '0571-12345678',
+                    distance: '4.2km',
+                    rating: 4.5,
+                    openTime: '08:00-22:00'
+                },
+                {
+                    id: 5,
+                    name: '宠爱动物医院',
+                    address: '杭州市滨江区江南大道4288号',
+                    lat: 30.2141,
+                    lng: 120.1451,
+                    phone: '0571-87654321',
+                    distance: '5.8km',
+                    rating: 4.7,
+                    openTime: '07:30-21:30'
+                },
+                {
+                    id: 6,
+                    name: '杭州农大宠物医院',
+                    address: '杭州市余杭区文一西路1228号',
+                    lat: 30.2741,
+                    lng: 120.1351,
+                    phone: '0571-24681357',
+                    distance: '6.3km',
+                    rating: 4.8,
+                    openTime: '08:00-20:00'
+                },
+                {
+                    id: 7,
+                    name: '浙大动物医院',
+                    address: '杭州市西湖区余杭塘路866号',
+                    lat: 30.2641,
+                    lng: 120.1251,
+                    phone: '0571-98765432',
+                    distance: '8.1km',
+                    rating: 4.9,
+                    openTime: '07:00-22:00'
+                },
+                {
+                    id: 8,
+                    name: '杭州小动物医院',
+                    address: '杭州市下城区中山北路632号',
+                    lat: 30.2841,
+                    lng: 120.1751,
+                    phone: '0571-13579246',
+                    distance: '3.7km',
+                    rating: 4.6,
+                    openTime: '08:30-21:00'
+                }
+            ];
+
+            // 根据搜索输入过滤医院
+            const hospitalSuggestions = allHospitals.filter(hospital => 
+                hospital.name.toLowerCase().includes(searchInput.toLowerCase()) ||
+                hospital.address.toLowerCase().includes(searchInput.toLowerCase())
+            ).slice(0, 5); // 最多显示5个建议
 
             if (hospitalSuggestions.length > 0) {
                 suggestionsContainer.innerHTML = hospitalSuggestions.map(hospital => `
-                    <div class="suggestion-item" onclick="selectSuggestion('${hospital.name}')">
+                    <div class="suggestion-item" onclick="selectAndNavigateToHospital(${hospital.id}, '${hospital.name}', ${hospital.lat}, ${hospital.lng})">
                         <div style="display: flex; justify-content: space-between; align-items: center;">
-                            <span>${hospital.name}</span>
-                            <span style="color: var(--apple-green); font-size: 12px; font-weight: 600;">${hospital.distance}</span>
+                            <div>
+                                <div style="font-weight: 600; color: #333;">${hospital.name}</div>
+                                <div style="color: var(--apple-gray-medium); font-size: 12px; margin-top: 2px;">📍 ${hospital.address}</div>
+                                <div style="color: var(--apple-gray-medium); font-size: 11px; margin-top: 2px;">⏰ ${hospital.openTime} | 📞 ${hospital.phone}</div>
+                            </div>
+                            <div style="text-align: right; min-width: 80px;">
+                                <div style="color: var(--apple-green); font-size: 12px; font-weight: 600;">🗺️ ${hospital.distance}</div>
+                                <div style="color: #ff6b35; font-size: 11px; margin-top: 2px;">⭐ ${hospital.rating}</div>
+                                <div style="color: var(--apple-blue); font-size: 10px; margin-top: 4px; font-weight: 500;">点击导航</div>
+                            </div>
                         </div>
-                        <div style="color: var(--apple-gray-medium); font-size: 12px;">评分: ${hospital.rating}</div>
                     </div>
                 `).join('');
                 suggestionsContainer.classList.add('active');
             } else {
-                closeSearchSuggestions();
+                suggestionsContainer.innerHTML = `
+                    <div class="suggestion-item">
+                        <div style="text-align: center; color: var(--apple-gray-medium); padding: 20px;">
+                            <div>😔 未找到匹配的宠物医院</div>
+                            <div style="font-size: 12px; margin-top: 8px;">请尝试其他关键词</div>
+                        </div>
+                    </div>
+                `;
+                suggestionsContainer.classList.add('active');
             }
         }
 
-        // 选择搜索建议
+        // 选择搜索建议并直接跳转到高德地图
+        function selectAndNavigateToHospital(id, name, lat, lng) {
+            // 设置搜索框的值
+            document.getElementById('hospitalSearch').value = name;
+            closeSearchSuggestions();
+            
+            // 显示跳转提示
+            showToast(`正在跳转到 ${name}...`, 'success');
+            
+            // 延迟执行跳转，让用户看到提示
+            setTimeout(() => {
+                // 直接跳转到高德地图对应的具体地点
+                navigateToHospitalInAmap(name, lat, lng);
+            }, 500);
+        }
+
+        // 跳转到指定医院在高德地图
+        function navigateToHospitalInAmap(name, lat, lng) {
+            const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
+            
+            // 构建跳转到具体医院的URL
+            let appUrl;
+            if (isIOS) {
+                // iOS使用更精确的目的地名称
+                appUrl = `iosamap://path?sourceApplication=金猫之家&slat=${appData.currentLocation ? appData.currentLocation[1] : 30.2741}&slon=${appData.currentLocation ? appData.currentLocation[0] : 120.1551}&sname=当前位置&dlat=${lat}&dlon=${lng}&dname=${encodeURIComponent(name)}&dev=0&t=0`;
+            } else {
+                // Android使用原来的URI
+                appUrl = `amapuri://route/plan/?sourceApplication=金猫之家&slat=${appData.currentLocation ? appData.currentLocation[1] : 30.2741}&slon=${appData.currentLocation ? appData.currentLocation[0] : 120.1551}&sname=当前位置&dlat=${lat}&dlon=${lng}&dname=${encodeURIComponent(name)}&dev=0&t=0`;
+            }
+            
+            // 网页版备用URL，跳转到具体位置
+            const webUrl = `https://uri.amap.com/navigation?to=${lng},${lat},${encodeURIComponent(name)},${encodeURIComponent(name)}`;
+            
+            const startTime = Date.now();
+            
+            if (isIOS) {
+                const iframe = document.createElement('iframe');
+                iframe.style.display = 'none';
+                iframe.src = appUrl;
+                document.body.appendChild(iframe);
+                
+                setTimeout(() => {
+                    document.body.removeChild(iframe);
+                    if (Date.now() - startTime < 2000) {
+                        // 如果没有跳转，打开网页版
+                        if (confirm(`高德地图APP未安装，是否跳转到网页版查看${name}？`)) {
+                            window.open(webUrl, '_blank');
+                        }
+                    }
+                }, 2000);
+            } else {
+                window.location.href = appUrl;
+                
+                setTimeout(() => {
+                    if (Date.now() - startTime < 3000) {
+                        // 如果没有跳转，打开网页版
+                        if (confirm(`高德地图APP未安装，是否跳转到网页版查看${name}？`)) {
+                            window.open(webUrl, '_blank');
+                        }
+                    }
+                }, 3000);
+            }
+        }
+
+        // 保留原有的选择建议函数（兼容性）
         function selectSuggestion(name) {
             document.getElementById('hospitalSearch').value = name;
             closeSearchSuggestions();
@@ -4256,23 +4887,75 @@
             showToast('正在跳转高德地图...', 'success');
         }
 
-        // 按名称选择医院
+        // 按名称选择医院并直接跳转高德地图
         function selectHospitalByName() {
             const hospitalName = document.getElementById('hospitalNameFilter').value;
-            if (hospitalName) {
-                document.getElementById('hospitalSearch').value = hospitalName;
-                searchHospitals();
+            
+            if (!hospitalName) {
+                // 如果没有选择，则搜索附近医院
+                searchNearbyHospitals();
+                return;
+            }
+
+            // 完整的医院数据
+            const allHospitals = [
+                { id: 1, name: '杭州宠物医院', lat: 30.2941, lng: 120.1751 },
+                { id: 2, name: '协和宠物医院', lat: 30.2841, lng: 120.1551 },
+                { id: 3, name: '爱心宠物医院', lat: 30.3041, lng: 120.1651 },
+                { id: 4, name: '宠康动物医院', lat: 30.2541, lng: 120.1851 },
+                { id: 5, name: '宠爱动物医院', lat: 30.2141, lng: 120.1451 },
+                { id: 6, name: '杭州动物医院', lat: 30.2841, lng: 120.1751 },
+                { id: 7, name: '浙大动物医院', lat: 30.2641, lng: 120.1251 },
+                { id: 8, name: '杭州农大宠物医院', lat: 30.2741, lng: 120.1351 }
+            ];
+            
+            const hospital = allHospitals.find(h => h.name === hospitalName);
+            
+            if (hospital) {
+                // 直接跳转到该医院在高德地图
+                showToast(`正在跳转到 ${hospitalName}...`, 'success');
                 
-                // 在地图上定位到该医院
-                const hospitals = [
-                    { id: 1, name: '杭州宠物医院', lat: 30.2941, lng: 120.1751 },
-                    { id: 2, name: '协和宠物医院', lat: 30.2841, lng: 120.1551 },
-                    { id: 3, name: '爱心宠物医院', lat: 30.3041, lng: 120.1651 }
-                ];
-                const hospital = hospitals.find(h => h.name === hospitalName);
-                if (hospital) {
-                    focusHospital(hospital.lat, hospital.lng, hospital.id);
-                }
+                setTimeout(() => {
+                    navigateToHospitalInAmap(hospital.name, hospital.lat, hospital.lng);
+                    
+                    // 同时在地图上显示该医院位置（如果地图已加载）
+                    if (appData.map) {
+                        appData.map.setCenter([hospital.lng, hospital.lat]);
+                        appData.map.setZoom(16);
+                        
+                        // 添加临时标记
+                        const marker = new AMap.Marker({
+                            position: [hospital.lng, hospital.lat],
+                            title: hospital.name,
+                            animation: 'AMAP_ANIMATION_DROP'
+                        });
+                        appData.map.add(marker);
+                        
+                        // 显示信息窗口
+                        const infoWindow = new AMap.InfoWindow({
+                            content: `<div style="padding: 10px;">
+                                        <h4>${hospital.name}</h4>
+                                        <p>📍 已为您规划导航路线</p>
+                                        <p>📱 正在打开高德地图APP...</p>
+                                      </div>`,
+                            offset: new AMap.Pixel(0, -30)
+                        });
+                        marker.on('click', function() {
+                            infoWindow.open(appData.map, marker.getPosition());
+                        });
+                        
+                        // 3秒后自动显示信息窗口
+                        setTimeout(() => {
+                            infoWindow.open(appData.map, marker.getPosition());
+                        }, 1000);
+                    }
+                    
+                    // 清空搜索框
+                    document.getElementById('hospitalSearch').value = '';
+                }, 500);
+                
+            } else {
+                showToast('未找到该医院信息', 'error');
             }
         }
 
@@ -4535,7 +5218,7 @@
             }
 
             postsContainer.innerHTML = appData.posts.map(post => `
-                <div class="forum-post">
+                <div class="forum-post" onclick="viewPostDetail(${post.id})" style="cursor: pointer; transition: transform 0.3s ease, box-shadow 0.3s ease;">
                     <div class="forum-post-header">
                         <div class="forum-post-avatar">${post.author.charAt(0)}</div>
                         <div class="forum-post-info">
@@ -4543,22 +5226,36 @@
                             <div class="forum-post-time">${formatTime(post.createdAt)}</div>
                         </div>
                         ${appData.isAdmin ? `
-                            <button class="btn btn-danger" onclick="deletePost(${post.id})">删除</button>
+                            <button class="btn btn-danger" onclick="event.stopPropagation(); deletePost(${post.id})">删除</button>
                         ` : ''}
                     </div>
                     <div class="forum-post-title">${post.title}</div>
-                    <div class="forum-post-content">${post.content}</div>
+                    <div class="forum-post-content">${post.content.length > 150 ? post.content.substring(0, 150) + '...' : post.content}</div>
                     ${post.images && post.images.length > 0 ? `
-                        <div class="image-preview" style="margin-top: var(--spacing-sm);">
-                            ${post.images.map(img => `<img src="${img}" class="preview-image">`).join('')}
+                        <div class="image-preview" style="margin-top: var(--spacing-sm); display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px;">
+                            ${post.images.slice(0, 3).map(img => `<img src="${img}" class="preview-image" style="width: 100%; height: 80px; object-fit: cover; border-radius: 4px;">`).join('')}
+                            ${post.images.length > 3 ? `<div style="display: flex; align-items: center; justify-content: center; background: var(--apple-gray-light); border-radius: 4px; font-size: 14px; color: var(--apple-gray-medium);">+${post.images.length - 3}</div>` : ''}
                         </div>
                     ` : ''}
                     <div class="forum-post-stats">
-                        <span>❤️ ${post.likes} 赞</span>
-                        <span>💬 ${post.comments} 评论</span>
+                        <span>❤️ ${post.likes || 0} 赞</span>
+                        <span>💬 ${post.comments || 0} 评论</span>
+                        <span>👁️ ${post.views || 0} 浏览</span>
                     </div>
                 </div>
             `).join('');
+
+            // 添加悬停效果
+            document.querySelectorAll('.forum-post').forEach(post => {
+                post.addEventListener('mouseenter', function() {
+                    this.style.transform = 'translateY(-2px)';
+                    this.style.boxShadow = '0 4px 16px rgba(0,0,0,0.12)';
+                });
+                post.addEventListener('mouseleave', function() {
+                    this.style.transform = 'translateY(0)';
+                    this.style.boxShadow = 'var(--shadow-light)';
+                });
+            });
         }
 
         // 显示发表帖子模态框
@@ -4608,10 +5305,257 @@
 
             if (confirm('确定要删除这个帖子吗？')) {
                 appData.posts = appData.posts.filter(p => p.id !== postId);
+                appData.comments = appData.comments.filter(c => c.postId !== postId);
                 saveData();
                 renderForumPage();
                 showToast('帖子已删除', 'success');
             }
+        }
+
+        // 查看帖子详情
+        function viewPostDetail(postId) {
+            const post = appData.posts.find(p => p.id === postId);
+            if (!post) {
+                showToast('帖子不存在', 'error');
+                return;
+            }
+
+            // 增加浏览量
+            post.views = (post.views || 0) + 1;
+            saveData();
+
+            // 渲染帖子详情
+            const detailContainer = document.getElementById('postDetailContent');
+            detailContainer.innerHTML = `
+                <div class="post-detail">
+                    <div class="post-detail-header">
+                        <div class="post-detail-author">
+                            <div class="author-avatar">${post.author.charAt(0)}</div>
+                            <div class="author-info">
+                                <div class="author-name">${post.author}</div>
+                                <div class="author-time">${formatTime(post.createdAt)}</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="post-detail-content">
+                        <h2 class="post-detail-title">${post.title}</h2>
+                        <div class="post-detail-text">${post.content}</div>
+                        
+                        ${post.images && post.images.length > 0 ? `
+                            <div class="post-detail-images ${post.images.length === 1 ? 'single' : ''}">
+                                ${post.images.map((img, index) => `
+                                    <img src="${img}" alt="图片${index + 1}" onclick="viewImage('${img}')">
+                                `).join('')}
+                            </div>
+                        ` : ''}
+                    </div>
+                    
+                    <div class="post-detail-actions">
+                        <button class="action-btn ${post.liked ? 'liked' : ''}" onclick="toggleLike(${post.id})">
+                            <i>${post.liked ? '❤️' : '🤍'}</i>
+                            <span>${post.likes || 0}</span>
+                        </button>
+                        <button class="action-btn" onclick="focusCommentInput()">
+                            <i>💬</i>
+                            <span>${post.comments || 0}</span>
+                        </button>
+                        <button class="action-btn" onclick="sharePost(${post.id})">
+                            <i>📤</i>
+                            <span>分享</span>
+                        </button>
+                        <button class="action-btn" onclick="bookmarkPost(${post.id})">
+                            <i>${post.bookmarked ? '🔖' : '📌'}</i>
+                            <span>${post.bookmarked ? '已收藏' : '收藏'}</span>
+                        </button>
+                    </div>
+                </div>
+            `;
+
+            // 渲染评论
+            renderComments(postId);
+
+            // 导航到帖子详情页
+            navigateTo('postDetail');
+            
+            // 存储当前查看的帖子ID
+            appData.currentPostId = postId;
+        }
+
+        // 渲染评论
+        function renderComments(postId) {
+            const commentsContainer = document.getElementById('commentsList');
+            const postComments = appData.comments.filter(c => c.postId === postId);
+
+            if (postComments.length === 0) {
+                commentsContainer.innerHTML = '<div class="empty-state" style="text-align: center; padding: var(--spacing-lg); color: var(--apple-gray-medium);">暂无评论，来发表第一条评论吧！</div>';
+                return;
+            }
+
+            commentsContainer.innerHTML = postComments.map(comment => `
+                <div class="comment-item">
+                    <div class="comment-avatar">${comment.author.charAt(0)}</div>
+                    <div class="comment-content">
+                        <div class="comment-author">${comment.author}</div>
+                        <div class="comment-text">${comment.content}</div>
+                        <div class="comment-time">${formatTime(comment.createdAt)}</div>
+                        <div class="comment-actions">
+                            <div class="comment-action ${comment.liked ? 'liked' : ''}" onclick="toggleCommentLike(${comment.id})">
+                                <span>${comment.liked ? '❤️' : '🤍'}</span>
+                                <span>${comment.likes || 0}</span>
+                            </div>
+                            <div class="comment-action" onclick="replyToComment('${comment.author}')">
+                                <span>💬</span>
+                                <span>回复</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // 提交评论
+        function submitComment() {
+            const content = document.getElementById('commentInput').value.trim();
+            
+            if (!content) {
+                showToast('请输入评论内容', 'error');
+                return;
+            }
+
+            const comment = {
+                id: Date.now(),
+                postId: appData.currentPostId,
+                author: appData.currentUser?.username || '匿名用户',
+                content: content,
+                likes: 0,
+                liked: false,
+                createdAt: new Date().toISOString()
+            };
+
+            appData.comments.push(comment);
+            saveData();
+
+            // 更新帖子评论数
+            const post = appData.posts.find(p => p.id === appData.currentPostId);
+            if (post) {
+                post.comments = (post.comments || 0) + 1;
+                saveData();
+            }
+
+            // 清空评论框
+            document.getElementById('commentInput').value = '';
+            
+            // 重新渲染评论
+            renderComments(appData.currentPostId);
+            
+            showToast('评论发表成功', 'success');
+        }
+
+        // 点赞帖子
+        function toggleLike(postId) {
+            const post = appData.posts.find(p => p.id === postId);
+            if (post) {
+                post.liked = !post.liked;
+                post.likes = post.liked ? (post.likes || 0) + 1 : Math.max(0, (post.likes || 1) - 1);
+                saveData();
+                viewPostDetail(postId); // 重新渲染详情页
+                showToast(post.liked ? '已点赞' : '已取消点赞', 'success');
+            }
+        }
+
+        // 点赞评论
+        function toggleCommentLike(commentId) {
+            const comment = appData.comments.find(c => c.id === commentId);
+            if (comment) {
+                comment.liked = !comment.liked;
+                comment.likes = comment.liked ? (comment.likes || 0) + 1 : Math.max(0, (comment.likes || 1) - 1);
+                saveData();
+                renderComments(appData.currentPostId);
+            }
+        }
+
+        // 回复评论
+        function replyToComment(authorName) {
+            const commentInput = document.getElementById('commentInput');
+            commentInput.value = `@${authorName} `;
+            commentInput.focus();
+        }
+
+        // 聚焦评论框
+        function focusCommentInput() {
+            document.getElementById('commentInput').focus();
+        }
+
+        // 收藏帖子
+        function bookmarkPost(postId) {
+            const post = appData.posts.find(p => p.id === postId);
+            if (post) {
+                post.bookmarked = !post.bookmarked;
+                saveData();
+                viewPostDetail(postId); // 重新渲染
+                showToast(post.bookmarked ? '已收藏' : '已取消收藏', 'success');
+            }
+        }
+
+        // 分享帖子
+        function sharePost(postId) {
+            const post = appData.posts.find(p => p.id === postId);
+            if (post) {
+                appData.sharePostId = postId;
+                document.getElementById('sharePanel').classList.add('active');
+            }
+        }
+
+        // 关闭分享面板
+        function closeSharePanel() {
+            document.getElementById('sharePanel').classList.remove('active');
+        }
+
+        // 分享到社交媒体
+        function shareToSocial(platform) {
+            const post = appData.posts.find(p => p.id === appData.sharePostId);
+            if (!post) return;
+
+            const shareUrl = window.location.href;
+            const shareTitle = `金猫之家 - ${post.title}`;
+            const shareDesc = post.content.substring(0, 100);
+
+            switch(platform) {
+                case 'weixin':
+                    showToast('请使用微信扫一扫分享', 'success');
+                    break;
+                case 'weibo':
+                    window.open(`https://service.weibo.com/share/share.php?url=${encodeURIComponent(shareUrl)}&title=${encodeURIComponent(shareTitle)}`, '_blank');
+                    break;
+                case 'qq':
+                    window.open(`https://connect.qq.com/widget/shareqq/iframe_index.html?url=${encodeURIComponent(shareUrl)}&title=${encodeURIComponent(shareTitle)}`, '_blank');
+                    break;
+                case 'link':
+                    navigator.clipboard.writeText(shareUrl).then(() => {
+                        showToast('链接已复制到剪贴板', 'success');
+                    });
+                    break;
+            }
+            
+            closeSharePanel();
+        }
+
+        // 查看图片
+        function viewImage(imageSrc) {
+            window.open(imageSrc, '_blank');
+        }
+
+        // 插入表情
+        function insertEmoji(emoji) {
+            const commentInput = document.getElementById('commentInput');
+            const start = commentInput.selectionStart;
+            const end = commentInput.selectionEnd;
+            const text = commentInput.value;
+            
+            commentInput.value = text.substring(0, start) + emoji + text.substring(end);
+            commentInput.selectionStart = commentInput.selectionEnd = start + emoji.length;
+            commentInput.focus();
         }
 
         // 渲染商城页面
@@ -5516,5 +6460,29 @@
             });
         }
     </script>
+
+    <!-- 分享面板 -->
+    <div id="sharePanel" class="share-panel">
+        <h3 style="text-align: center; margin-bottom: var(--spacing-md);">分享到</h3>
+        <div class="share-options">
+            <div class="share-option" onclick="shareToSocial('weixin')">
+                <div class="share-icon weixin">💬</div>
+                <div class="share-text">微信</div>
+            </div>
+            <div class="share-option" onclick="shareToSocial('weibo')">
+                <div class="share-icon weibo">📱</div>
+                <div class="share-text">微博</div>
+            </div>
+            <div class="share-option" onclick="shareToSocial('qq')">
+                <div class="share-icon qq">🐧</div>
+                <div class="share-text">QQ</div>
+            </div>
+            <div class="share-option" onclick="shareToSocial('link')">
+                <div class="share-icon link">🔗</div>
+                <div class="share-text">复制链接</div>
+            </div>
+        </div>
+        <button class="cancel-share" onclick="closeSharePanel()">取消</button>
+    </div>
 </body>
 </html>
