@@ -3731,24 +3731,56 @@
 
         // 跳转高德地图APP
         function openAmapApp(lat, lng) {
-            // 构建高德地图URI
-            const url = `amapuri://route/plan/?sourceApplication=金猫之家&slat=${lat}&slon=${lng}&sname=当前位置&dlat=30.2741&dlon=120.1551&dname=金猫之家&dev=0&t=0`;
+            const name = '宠物医院';
+            const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
             
-            // 尝试打开高德地图APP
+            // iOS和Android使用不同的URI scheme
+            let appUrl;
+            if (isIOS) {
+                // iOS使用更通用的URL scheme
+                appUrl = `iosamap://path?sourceApplication=金猫之家&slat=${lat}&slon=${lng}&sname=当前位置&dlat=30.2741&dlon=120.1551&dname=金猫之家&dev=0&t=0`;
+            } else {
+                // Android使用原来的URI
+                appUrl = `amapuri://route/plan/?sourceApplication=金猫之家&slat=${lat}&slon=${lng}&sname=当前位置&dlat=30.2741&dlon=120.1551&dname=金猫之家&dev=0&t=0`;
+            }
+            
+            // 网页版备用URL
+            const webUrl = `https://uri.amap.com/navigation?to=${lng},${lat},${name},${name}`;
+            
+            // 尝试打开APP
             const startTime = Date.now();
             
-            // 打开高德地图APP
-            window.location.href = url;
+            // 创建一个隐藏的iframe来触发URL scheme（iOS推荐方法）
+            if (isIOS) {
+                const iframe = document.createElement('iframe');
+                iframe.style.display = 'none';
+                iframe.src = appUrl;
+                document.body.appendChild(iframe);
+                
+                // 2秒后检查是否成功
+                setTimeout(() => {
+                    document.body.removeChild(iframe);
+                    if (Date.now() - startTime < 2000) {
+                        // 如果没有跳转，打开网页版
+                        if (confirm('是否跳转到高德地图网页版？')) {
+                            window.open(webUrl, '_blank');
+                        }
+                    }
+                }, 2000);
+            } else {
+                // Android直接跳转
+                window.location.href = appUrl;
+                
+                setTimeout(() => {
+                    if (Date.now() - startTime < 3000) {
+                        if (confirm('是否跳转到高德地图网页版？')) {
+                            window.open(webUrl, '_blank');
+                        }
+                    }
+                }, 3000);
+            }
             
-            // 3秒后如果没有跳转，提示用户
-            setTimeout(() => {
-                if (Date.now() - startTime < 3000) {
-                    showToast('请安装高德地图APP', 'warning');
-                    // 备用方案：跳转网页版
-                    const webUrl = `https://uri.amap.com/navigation?to=${lng},${lat},${name},${name}`;
-                    window.open(webUrl, '_blank');
-                }
-            }, 3000);
+            showToast('正在跳转高德地图...', 'success');
         }
 
         // 跳转淘宝
@@ -3756,27 +3788,107 @@
             const product = appData.products.find(p => p.id === productId);
             if (!product) return;
 
-            // 构建淘宝搜索URL
-            const taobaoUrl = `https://s.taobao.com/search?q=${encodeURIComponent(product.name)}`;
+            const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
+            const searchQuery = encodeURIComponent(product.name);
             
-            // 尝试打开淘宝APP
-            const taobaoAppUrl = `taobao://s.taobao.com/search?q=${encodeURIComponent(product.name)}`;
+            // 网页版URL
+            const taobaoUrl = `https://s.taobao.com/search?q=${searchQuery}`;
             
-            // 先尝试打开APP，如果失败则打开网页版
-            window.location.href = taobaoAppUrl;
+            // iOS和Android使用不同的淘宝URL scheme
+            let appUrl;
+            if (isIOS) {
+                // iOS使用淘宝的通用URL scheme
+                appUrl = `taobao://item?id=${productId}&q=${searchQuery}`;
+                // 备用iOS scheme
+                if (!productId) {
+                    appUrl = `taobao://s.taobao.com/search?q=${searchQuery}`;
+                }
+            } else {
+                // Android使用taobao://
+                appUrl = `taobao://s.taobao.com/search?q=${searchQuery}`;
+            }
             
-            setTimeout(() => {
-                window.open(taobaoUrl, '_blank');
-            }, 1000);
+            const startTime = Date.now();
+            
+            // iOS使用iframe方法
+            if (isIOS) {
+                const iframe = document.createElement('iframe');
+                iframe.style.display = 'none';
+                iframe.src = appUrl;
+                document.body.appendChild(iframe);
+                
+                // 2秒后检查是否成功
+                setTimeout(() => {
+                    document.body.removeChild(iframe);
+                    if (Date.now() - startTime < 2000) {
+                        // 如果没有跳转，打开网页版
+                        if (confirm('是否跳转到淘宝网页版？')) {
+                            window.open(taobaoUrl, '_blank');
+                        }
+                    }
+                }, 2000);
+            } else {
+                // Android直接跳转
+                window.location.href = appUrl;
+                
+                setTimeout(() => {
+                    if (Date.now() - startTime < 3000) {
+                        if (confirm('是否跳转到淘宝网页版？')) {
+                            window.open(taobaoUrl, '_blank');
+                        }
+                    }
+                }, 3000);
+            }
             
             showToast('正在跳转到淘宝...', 'success');
         }
 
         // 跳转淘宝搜索
         function redirectToTaobao(productName) {
-            const taobaoUrl = `https://s.taobao.com/search?q=${encodeURIComponent(productName)}`;
-            window.open(taobaoUrl, '_blank');
-            showToast('跳转到淘宝搜索', 'success');
+            const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
+            const searchQuery = encodeURIComponent(productName || '猫咪用品');
+            
+            // 网页版URL
+            const taobaoUrl = `https://s.taobao.com/search?q=${searchQuery}`;
+            
+            // iOS和Android使用不同的URL scheme
+            let appUrl;
+            if (isIOS) {
+                appUrl = `taobao://s.taobao.com/search?q=${searchQuery}`;
+            } else {
+                appUrl = `taobao://s.taobao.com/search?q=${searchQuery}`;
+            }
+            
+            const startTime = Date.now();
+            
+            // iOS使用iframe方法
+            if (isIOS) {
+                const iframe = document.createElement('iframe');
+                iframe.style.display = 'none';
+                iframe.src = appUrl;
+                document.body.appendChild(iframe);
+                
+                setTimeout(() => {
+                    document.body.removeChild(iframe);
+                    if (Date.now() - startTime < 2000) {
+                        if (confirm('是否跳转到淘宝网页版？')) {
+                            window.open(taobaoUrl, '_blank');
+                        }
+                    }
+                }, 2000);
+            } else {
+                window.location.href = appUrl;
+                
+                setTimeout(() => {
+                    if (Date.now() - startTime < 3000) {
+                        if (confirm('是否跳转到淘宝网页版？')) {
+                            window.open(taobaoUrl, '_blank');
+                        }
+                    }
+                }, 3000);
+            }
+            
+            showToast('正在跳转到淘宝搜索...', 'success');
         }
 
         // 分享商品
@@ -4100,26 +4212,48 @@
 
         // 打开高德地图
         function openGaodeMap() {
-            // 高德地图URL Scheme
-            const gaodeUrl = 'amapuri://route/plan/?sourceApplication=金猫之家';
+            const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
+            
+            // iOS和Android使用不同的高德地图URL Scheme
+            let gaodeUrl;
+            if (isIOS) {
+                gaodeUrl = 'iosamap://path?sourceApplication=金猫之家';
+            } else {
+                gaodeUrl = 'amapuri://route/plan/?sourceApplication=金猫之家';
+            }
             
             // 高德地图Web版URL
             const gaodeWebUrl = 'https://www.amap.com/search?query=宠物医院';
             
-            // 尝试打开APP，失败则打开Web版
-            const now = Date.now();
-            const timeout = 3000;
+            const startTime = Date.now();
             
-            window.location.href = gaodeUrl;
+            if (isIOS) {
+                const iframe = document.createElement('iframe');
+                iframe.style.display = 'none';
+                iframe.src = gaodeUrl;
+                document.body.appendChild(iframe);
+                
+                setTimeout(() => {
+                    document.body.removeChild(iframe);
+                    if (Date.now() - startTime < 2000) {
+                        if (confirm('是否跳转到高德地图网页版？')) {
+                            window.open(gaodeWebUrl, '_blank');
+                        }
+                    }
+                }, 2000);
+            } else {
+                window.location.href = gaodeUrl;
+                
+                setTimeout(() => {
+                    if (Date.now() - startTime < 3000) {
+                        if (confirm('是否跳转到高德地图网页版？')) {
+                            window.open(gaodeWebUrl, '_blank');
+                        }
+                    }
+                }, 3000);
+            }
             
-            setTimeout(() => {
-                const elapsed = Date.now() - now;
-                if (elapsed < timeout + 200) {
-                    // 如果3秒内没有跳转，说明APP未安装，打开Web版
-                    window.open(gaodeWebUrl, '_blank');
-                    showToast('正在打开高德地图网页版...', 'success');
-                }
-            }, timeout);
+            showToast('正在跳转高德地图...', 'success');
         }
 
         // 按名称选择医院
@@ -5279,38 +5413,93 @@
 
         // 带位置打开高德地图
         function openGaodeMapWithLocation(lat, lng) {
-            const gaodeUrl = `amapuri://viewmap?sourceApplication=金猫之家&lat=${lat}&lon=${lng}&dev=0`;
+            const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
             
-            try {
-                window.location.href = gaodeUrl;
-                setTimeout(() => {
-                    showToast('正在打开高德地图...', 'success');
-                }, 500);
-            } catch (error) {
-                // 如果无法打开APP，打开Web版
-                const webUrl = `https://www.amap.com/search?query=${lat},${lng}`;
-                window.open(webUrl, '_blank');
-                showToast('正在打开高德地图网页版...', 'success');
+            // iOS和Android使用不同的高德地图URL Scheme
+            let gaodeUrl;
+            if (isIOS) {
+                gaodeUrl = `iosamap://viewMap?sourceApplication=金猫之家&lat=${lat}&lon=${lng}&dev=0`;
+            } else {
+                gaodeUrl = `amapuri://viewmap?sourceApplication=金猫之家&lat=${lat}&lon=${lng}&dev=0`;
             }
+            
+            const webUrl = `https://www.amap.com/search?query=${lat},${lng}`;
+            const startTime = Date.now();
+            
+            if (isIOS) {
+                const iframe = document.createElement('iframe');
+                iframe.style.display = 'none';
+                iframe.src = gaodeUrl;
+                document.body.appendChild(iframe);
+                
+                setTimeout(() => {
+                    document.body.removeChild(iframe);
+                    if (Date.now() - startTime < 2000) {
+                        if (confirm('是否跳转到高德地图网页版？')) {
+                            window.open(webUrl, '_blank');
+                        }
+                    }
+                }, 2000);
+            } else {
+                window.location.href = gaodeUrl;
+                
+                setTimeout(() => {
+                    if (Date.now() - startTime < 3000) {
+                        if (confirm('是否跳转到高德地图网页版？')) {
+                            window.open(webUrl, '_blank');
+                        }
+                    }
+                }, 3000);
+            }
+            
+            showToast('正在跳转高德地图...', 'success');
         }
 
         // 商品点击跳转淘宝
         function redirectToTaobao(productName) {
-            const taobaoUrl = `taobao://search?q=${encodeURIComponent(productName || '猫咪用品')}`;
-            const taobaoWebUrl = `https://s.taobao.com/search?q=${encodeURIComponent(productName || '猫咪用品')}`;
+            const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
+            const searchQuery = encodeURIComponent(productName || '猫咪用品');
             
-            try {
+            // 网页版URL
+            const taobaoWebUrl = `https://s.taobao.com/search?q=${searchQuery}`;
+            
+            // iOS和Android使用不同的URL scheme
+            let taobaoUrl;
+            if (isIOS) {
+                taobaoUrl = `taobao://s.taobao.com/search?q=${searchQuery}`;
+            } else {
+                taobaoUrl = `taobao://search?q=${searchQuery}`;
+            }
+            
+            const startTime = Date.now();
+            
+            if (isIOS) {
+                const iframe = document.createElement('iframe');
+                iframe.style.display = 'none';
+                iframe.src = taobaoUrl;
+                document.body.appendChild(iframe);
+                
+                setTimeout(() => {
+                    document.body.removeChild(iframe);
+                    if (Date.now() - startTime < 2000) {
+                        if (confirm('是否跳转到淘宝网页版？')) {
+                            window.open(taobaoWebUrl, '_blank');
+                        }
+                    }
+                }, 2000);
+            } else {
                 window.location.href = taobaoUrl;
                 
-                // 3秒后检测是否成功跳转
                 setTimeout(() => {
-                    window.open(taobaoWebUrl, '_blank');
-                    showToast(`正在淘宝搜索"${productName || '猫咪用品'}"...`, 'success');
+                    if (Date.now() - startTime < 3000) {
+                        if (confirm('是否跳转到淘宝网页版？')) {
+                            window.open(taobaoWebUrl, '_blank');
+                        }
+                    }
                 }, 3000);
-            } catch (error) {
-                window.open(taobaoWebUrl, '_blank');
-                showToast('正在打开淘宝网页版...', 'success');
             }
+            
+            showToast(`正在淘宝搜索"${productName || '猫咪用品'}"...`, 'success');
         }
 
         // 增强商品卡片点击
