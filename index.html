@@ -389,6 +389,289 @@
         @keyframes spin {
             to { transform: rotate(360deg); }
         }
+
+        /* 论坛样式 - 小红书风格 */
+        .post-card {
+            background: white;
+            border-radius: var(--border-radius-md);
+            box-shadow: var(--shadow-light);
+            margin-bottom: var(--spacing-md);
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .post-card:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-medium);
+        }
+
+        .post-header {
+            display: flex;
+            align-items: center;
+            padding: var(--spacing-sm);
+            border-bottom: 1px solid var(--apple-border);
+        }
+
+        .post-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--apple-blue), var(--apple-purple));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+            margin-right: var(--spacing-sm);
+        }
+
+        .post-info {
+            flex: 1;
+        }
+
+        .post-author {
+            font-weight: 600;
+            color: var(--apple-black);
+            font-size: 14px;
+        }
+
+        .post-time {
+            color: var(--apple-gray-medium);
+            font-size: 12px;
+        }
+
+        .post-content {
+            padding: var(--spacing-md);
+        }
+
+        .post-images {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+            gap: var(--spacing-xs);
+            margin-top: var(--spacing-sm);
+            margin-bottom: var(--spacing-sm);
+        }
+
+        .post-image {
+            width: 100%;
+            height: 100px;
+            object-fit: cover;
+            border-radius: var(--border-radius-sm);
+        }
+
+        .post-actions {
+            display: flex;
+            justify-content: space-around;
+            padding: var(--spacing-sm);
+            border-top: 1px solid var(--apple-border);
+        }
+
+        .post-action-btn {
+            background: none;
+            border: none;
+            color: var(--apple-gray-medium);
+            cursor: pointer;
+            font-size: 14px;
+            padding: var(--spacing-xs);
+            border-radius: var(--border-radius-sm);
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .post-action-btn:hover {
+            background: var(--apple-gray-light);
+            color: var(--apple-black);
+        }
+
+        .post-action-btn.liked {
+            color: var(--apple-red);
+        }
+
+        /* 商城分类样式 */
+        .category-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: var(--spacing-md);
+            margin-bottom: var(--spacing-lg);
+        }
+
+        .category-card {
+            background: white;
+            border-radius: var(--border-radius-md);
+            padding: var(--spacing-md);
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: var(--shadow-light);
+        }
+
+        .category-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-medium);
+        }
+
+        .category-icon {
+            font-size: 48px;
+            margin-bottom: var(--spacing-sm);
+        }
+
+        /* 右下角浮动按钮 */
+        .fab {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            background: var(--apple-blue);
+            color: white;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            box-shadow: var(--shadow-heavy);
+            z-index: 999;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .fab:hover {
+            background: var(--apple-blue-hover);
+            transform: scale(1.1);
+        }
+
+        /* 地图样式 */
+        .map-container {
+            height: 400px;
+            background: var(--apple-gray-light);
+            border-radius: var(--border-radius-md);
+            margin-bottom: var(--spacing-md);
+            position: relative;
+        }
+
+        .hospital-card {
+            background: white;
+            border-radius: var(--border-radius-md);
+            box-shadow: var(--shadow-light);
+            margin-bottom: var(--spacing-sm);
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .hospital-card:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-medium);
+        }
+
+        .hospital-header {
+            padding: var(--spacing-md);
+            border-bottom: 1px solid var(--apple-border);
+        }
+
+        .hospital-name {
+            font-weight: 600;
+            font-size: 18px;
+            margin-bottom: var(--spacing-xs);
+            color: var(--apple-black);
+        }
+
+        .hospital-info {
+            color: var(--apple-gray-dark);
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        .hospital-rating {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-xs);
+            margin-top: var(--spacing-xs);
+        }
+
+        .rating-stars {
+            color: var(--apple-orange);
+        }
+
+        .hospital-actions {
+            padding: var(--spacing-sm);
+            display: flex;
+            gap: var(--spacing-sm);
+        }
+
+        .btn-small {
+            padding: 8px 16px;
+            font-size: 14px;
+        }
+
+        /* 折叠评论样式 */
+        .comments-section {
+            max-height: 200px;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+        }
+
+        .comments-section.expanded {
+            max-height: none;
+        }
+
+        .comment-item {
+            padding: var(--spacing-sm);
+            border-bottom: 1px solid var(--apple-border);
+        }
+
+        .comment-author {
+            font-weight: 600;
+            font-size: 14px;
+            margin-bottom: 4px;
+        }
+
+        .comment-content {
+            color: var(--apple-gray-dark);
+            font-size: 14px;
+            margin-bottom: 4px;
+        }
+
+        .comment-time {
+            color: var(--apple-gray-medium);
+            font-size: 12px;
+        }
+
+        .expand-comments {
+            text-align: center;
+            padding: var(--spacing-sm);
+            background: var(--apple-gray-light);
+            cursor: pointer;
+            font-size: 14px;
+            color: var(--apple-blue);
+            transition: background 0.3s ease;
+        }
+
+        .expand-comments:hover {
+            background: var(--apple-gray-medium);
+            color: white;
+        }
+
+        /* 模态框增强 */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            display: none;
+            backdrop-filter: blur(10px);
+        }
+
+        .modal-overlay.active {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
     </style>
 </head>
 <body>
@@ -494,21 +777,63 @@
     <!-- 宠物医院页面 -->
     <div id="hospital" class="page">
         <div class="container">
-            <h2>🏥 宠物医院</h2>
-            <div class="form-group">
-                <input type="text" class="input" placeholder="搜索医院名称或地址..." id="hospitalSearch">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--spacing-md);">
+                <h2>🏥 宠物医院</h2>
+                <div style="display: flex; gap: var(--spacing-sm);">
+                    <button class="btn btn-primary" onclick="getCurrentLocation()">📍 定位</button>
+                    <button class="btn btn-secondary" onclick="refreshHospitals()">🔄 刷新</button>
+                </div>
             </div>
-            <button class="btn btn-primary" onclick="searchHospital()">搜索</button>
-            <div id="hospitalList" class="grid grid-2" style="margin-top: var(--spacing-md);">
-                <div class="card">
-                    <div style="padding: var(--spacing-md);">
-                        <h3>杭州宠物医院</h3>
-                        <p>📍 杭州市江干区钱江新城民心路88号</p>
-                        <p>📞 0571-11223344</p>
-                        <p>⭐ 4.8分</p>
-                        <button class="btn btn-primary">导航</button>
+            
+            <!-- 地图容器 -->
+            <div class="map-container" id="mapContainer">
+                <div style="display: flex; align-items: center; justify-content: center; height: 100%; color: var(--apple-gray-medium);">
+                    <div style="text-align: center;">
+                        <div style="font-size: 48px; margin-bottom: var(--spacing-sm);">🗺️</div>
+                        <p>地图加载中...</p>
                     </div>
                 </div>
+            </div>
+
+            <!-- 搜索栏 -->
+            <div style="margin-bottom: var(--spacing-md);">
+                <input type="text" class="input" placeholder="搜索医院名称或地址..." id="hospitalSearch">
+            </div>
+            
+            <!-- 医院列表 -->
+            <div id="hospitalList">
+                <!-- 医院卡片将在这里动态生成 -->
+            </div>
+        </div>
+    </div>
+
+    <!-- 医院评论模态框 -->
+    <div id="hospitalReviewModal" class="modal-overlay">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>医院评价</h3>
+                <button class="btn btn-secondary" onclick="closeHospitalReviewModal()">×</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>评分</label>
+                    <div id="ratingStars" style="display: flex; gap: var(--spacing-xs); font-size: 24px;">
+                        <span class="star" data-rating="1">⭐</span>
+                        <span class="star" data-rating="2">⭐</span>
+                        <span class="star" data-rating="3">⭐</span>
+                        <span class="star" data-rating="4">⭐</span>
+                        <span class="star" data-rating="5">⭐</span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>评论内容</label>
+                    <textarea class="input" id="reviewContent" rows="4" placeholder="分享您的就诊体验..."></textarea>
+                </div>
+                <input type="hidden" id="reviewHospitalId">
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeHospitalReviewModal()">取消</button>
+                <button class="btn btn-primary" onclick="submitReview()">提交评价</button>
             </div>
         </div>
     </div>
@@ -529,19 +854,41 @@
     <!-- 论坛交流页面 -->
     <div id="forum" class="page">
         <div class="container">
-            <h2>💬 论坛交流</h2>
-            <div style="margin-bottom: var(--spacing-md);">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--spacing-md);">
+                <h2>💬 论坛交流</h2>
                 <button class="btn btn-primary" onclick="createPost()">+ 发表帖子</button>
             </div>
-            <div id="postList" class="grid grid-2">
-                <div class="card">
-                    <div style="padding: var(--spacing-md);">
-                        <h3>欢迎来到金猫论坛</h3>
-                        <p style="color: var(--apple-gray-medium); font-size: 14px;">作者: 管理员</p>
-                        <p>欢迎大家在这里分享养猫经验...</p>
-                        <button class="btn btn-secondary">查看详情</button>
-                    </div>
+            
+            <div id="postList">
+                <!-- 帖子列表将在这里动态生成 -->
+            </div>
+        </div>
+    </div>
+
+    <!-- 发帖模态框 -->
+    <div id="createPostModal" class="modal-overlay">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>发表帖子</h3>
+                <button class="btn btn-secondary" onclick="closeCreatePostModal()">×</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>标题</label>
+                    <input type="text" class="input" id="postTitle" placeholder="给帖子起个标题...">
                 </div>
+                <div class="form-group">
+                    <label>内容</label>
+                    <textarea class="input" id="postContent" rows="6" placeholder="分享你的养猫经验..."></textarea>
+                </div>
+                <div class="form-group">
+                    <label>图片URL (可选)</label>
+                    <input type="text" class="input" id="postImages" placeholder="图片地址，多个用逗号分隔">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeCreatePostModal()">取消</button>
+                <button class="btn btn-primary" onclick="submitPost()">发表</button>
             </div>
         </div>
     </div>
@@ -550,29 +897,66 @@
     <div id="shop" class="page">
         <div class="container">
             <h2>🛍️ 宠物商城</h2>
-            <div class="grid grid-3">
-                <div class="card">
+            
+            <!-- 商品分类 -->
+            <div class="category-grid">
+                <div class="category-card" onclick="openTaobaoCategory('猫粮')">
+                    <div class="category-icon">🥫</div>
+                    <h4>猫粮</h4>
+                    <p style="color: var(--apple-gray-medium); font-size: 14px;">主食、零食、营养品</p>
+                </div>
+                <div class="category-card" onclick="openTaobaoCategory('猫玩具')">
+                    <div class="category-icon">🧶</div>
+                    <h4>猫玩具</h4>
+                    <p style="color: var(--apple-gray-medium); font-size: 14px;">逗猫棒、毛线球、益智玩具</p>
+                </div>
+                <div class="category-card" onclick="openTaobaoCategory('猫砂')">
+                    <div class="category-icon">🧼</div>
+                    <h4>猫砂</h4>
+                    <p style="color: var(--apple-gray-medium); font-size: 14px;">膨润砂、豆腐砂、水晶砂</p>
+                </div>
+                <div class="category-card" onclick="openTaobaoCategory('猫窝')">
+                    <div class="category-icon">🏠</div>
+                    <h4>猫窝</h4>
+                    <p style="color: var(--apple-gray-medium); font-size: 14px;">猫床、猫帐篷、猫爬架</p>
+                </div>
+                <div class="category-card" onclick="openTaobaoCategory('猫护理')">
+                    <div class="category-icon">🧴</div>
+                    <h4>猫护理</h4>
+                    <p style="color: var(--apple-gray-medium); font-size: 14px;">沐浴露、梳子、指甲剪</p>
+                </div>
+                <div class="category-card" onclick="openTaobaoCategory('猫保健品')">
+                    <div class="category-icon">💊</div>
+                    <h4>猫保健品</h4>
+                    <p style="color: var(--apple-gray-medium); font-size: 14px;">维生素、益生菌、驱虫药</p>
+                </div>
+            </div>
+
+            <!-- 推荐商品 -->
+            <h3 style="margin-bottom: var(--spacing-md);">🔥 热门推荐</h3>
+            <div class="grid grid-3" id="recommendedProducts">
+                <div class="card" onclick="openTaobaoProduct('猫粮')">
                     <div style="padding: var(--spacing-md); text-align: center;">
                         <div style="font-size: 48px; margin-bottom: var(--spacing-sm);">🥫</div>
-                        <h3>猫粮</h3>
+                        <h3>进口猫粮</h3>
                         <p style="color: var(--apple-orange); font-weight: 600;">¥89</p>
-                        <button class="btn btn-primary">购买</button>
+                        <button class="btn btn-primary">🛒 淘宝购买</button>
                     </div>
                 </div>
-                <div class="card">
+                <div class="card" onclick="openTaobaoProduct('猫玩具')">
                     <div style="padding: var(--spacing-md); text-align: center;">
                         <div style="font-size: 48px; margin-bottom: var(--spacing-sm);">🧶</div>
-                        <h3>猫玩具</h3>
+                        <h3>逗猫棒套装</h3>
                         <p style="color: var(--apple-orange); font-weight: 600;">¥29</p>
-                        <button class="btn btn-primary">购买</button>
+                        <button class="btn btn-primary">🛒 淘宝购买</button>
                     </div>
                 </div>
-                <div class="card">
+                <div class="card" onclick="openTaobaoProduct('猫砂')">
                     <div style="padding: var(--spacing-md); text-align: center;">
                         <div style="font-size: 48px; margin-bottom: var(--spacing-sm);">🧼</div>
-                        <h3>猫砂</h3>
+                        <h3>豆腐猫砂</h3>
                         <p style="color: var(--apple-orange); font-weight: 600;">¥45</p>
-                        <button class="btn btn-primary">购买</button>
+                        <button class="btn btn-primary">🛒 淘宝购买</button>
                     </div>
                 </div>
             </div>
@@ -582,13 +966,39 @@
     <!-- Toast通知容器 -->
     <div id="toast" class="toast"></div>
 
+    <!-- 右下角私信按钮 -->
+    <button class="fab" onclick="openMessageModal()">✉️</button>
+
+    <!-- 私信模态框 -->
+    <div id="messageModal" class="modal-overlay">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>发送私信给管理员</h3>
+                <button class="btn btn-secondary" onclick="closeMessageModal()">×</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>消息内容</label>
+                    <textarea class="input" id="messageContent" rows="6" placeholder="请输入您想对管理员说的话..."></textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeMessageModal()">取消</button>
+                <button class="btn btn-primary" onclick="sendMessage()">发送</button>
+            </div>
+        </div>
+    </div>
+
     <script>
         // 应用数据
         const appData = {
             cats: [],
             hospitals: [],
             posts: [],
-            products: []
+            products: [],
+            reviews: {},
+            messages: [],
+            currentLocation: null
         };
 
         // 页面切换函数 - 核心功能
@@ -664,7 +1074,58 @@
                 showToast('请输入搜索关键词', 'error');
                 return;
             }
-            showToast('搜索功能开发中...', 'info');
+            filterHospitals(searchTerm);
+        }
+
+        // 打开淘宝分类
+        function openTaobaoCategory(category) {
+            const taobaoUrl = `https://s.taobao.com/search?q=${encodeURIComponent(category + ' 宠物用品')}`;
+            showToast('正在跳转到淘宝...', 'info');
+            setTimeout(() => {
+                window.open(taobaoUrl, '_blank');
+            }, 500);
+        }
+
+        // 打开淘宝商品
+        function openTaobaoProduct(product) {
+            const taobaoUrl = `https://s.taobao.com/search?q=${encodeURIComponent(product)}`;
+            showToast('正在跳转到淘宝...', 'info');
+            setTimeout(() => {
+                window.open(taobaoUrl, '_blank');
+            }, 500);
+        }
+
+        // 打开私信模态框
+        function openMessageModal() {
+            document.getElementById('messageModal').classList.add('active');
+            document.getElementById('messageContent').value = '';
+        }
+
+        // 关闭私信模态框
+        function closeMessageModal() {
+            document.getElementById('messageModal').classList.remove('active');
+        }
+
+        // 发送私信
+        function sendMessage() {
+            const content = document.getElementById('messageContent').value.trim();
+            if (!content) {
+                showToast('请输入消息内容', 'error');
+                return;
+            }
+
+            const message = {
+                id: Date.now(),
+                content: content,
+                time: new Date().toLocaleString(),
+                from: '用户' + Math.floor(Math.random() * 1000)
+            };
+
+            appData.messages.push(message);
+            closeMessageModal();
+            showToast('消息已发送给管理员！', 'success');
+            
+            console.log('发送的消息:', message);
         }
 
         // 物流查询
@@ -679,8 +1140,504 @@
 
         // 发表帖子
         function createPost() {
-            showToast('发表帖子功能开发中...', 'info');
+            document.getElementById('createPostModal').classList.add('active');
+            // 清空表单
+            document.getElementById('postTitle').value = '';
+            document.getElementById('postContent').value = '';
+            document.getElementById('postImages').value = '';
         }
+
+        // 关闭发帖模态框
+        function closeCreatePostModal() {
+            document.getElementById('createPostModal').classList.remove('active');
+        }
+
+        // 提交帖子
+        function submitPost() {
+            const title = document.getElementById('postTitle').value.trim();
+            const content = document.getElementById('postContent').value.trim();
+            const images = document.getElementById('postImages').value.trim();
+
+            if (!title || !content) {
+                showToast('请填写标题和内容', 'error');
+                return;
+            }
+
+            const post = {
+                id: Date.now(),
+                title: title,
+                content: content,
+                author: '用户' + Math.floor(Math.random() * 1000),
+                avatar: '👤',
+                time: '刚刚',
+                images: images ? images.split(',').map(url => url.trim()).filter(url => url) : [],
+                likes: 0,
+                comments: [],
+                liked: false
+            };
+
+            appData.posts.unshift(post);
+            renderPosts();
+            closeCreatePostModal();
+            showToast('发表成功！', 'success');
+        }
+
+        // 渲染帖子列表
+        function renderPosts() {
+            const postList = document.getElementById('postList');
+            
+            if (appData.posts.length === 0) {
+                // 显示示例帖子
+                postList.innerHTML = `
+                    <div class="post-card">
+                        <div class="post-header">
+                            <div class="post-avatar">管</div>
+                            <div class="post-info">
+                                <div class="post-author">管理员</div>
+                                <div class="post-time">2小时前</div>
+                            </div>
+                        </div>
+                        <div class="post-content">
+                            <h3 style="margin-bottom: var(--spacing-sm);">欢迎来到金猫论坛！</h3>
+                            <p>欢迎大家在这里分享养猫经验，交流养猫心得。无论是猫咪的日常护理、健康问题，还是有趣的猫咪故事，都可以在这里和大家分享。</p>
+                            <p style="margin-top: var(--spacing-sm);">让我们一起来创造一个温暖的猫咪社区吧！ 🐱💕</p>
+                        </div>
+                        <div class="post-actions">
+                            <button class="post-action-btn" onclick="likePost(${Date.now()}, this)">
+                                <span>❤️</span>
+                                <span>128</span>
+                            </button>
+                            <button class="post-action-btn" onclick="showComments(${Date.now()})">
+                                <span>💬</span>
+                                <span>32</span>
+                            </button>
+                            <button class="post-action-btn" onclick="sharePost(${Date.now()})">
+                                <span>📤</span>
+                                <span>分享</span>
+                            </button>
+                        </div>
+                    </div>
+                `;
+                return;
+            }
+
+            postList.innerHTML = appData.posts.map(post => `
+                <div class="post-card">
+                    <div class="post-header">
+                        <div class="post-avatar">${post.avatar}</div>
+                        <div class="post-info">
+                            <div class="post-author">${post.author}</div>
+                            <div class="post-time">${post.time}</div>
+                        </div>
+                    </div>
+                    <div class="post-content">
+                        <h3 style="margin-bottom: var(--spacing-sm);">${post.title}</h3>
+                        <p>${post.content}</p>
+                        ${post.images.length > 0 ? `
+                            <div class="post-images">
+                                ${post.images.map(image => `<img src="${image}" class="post-image" alt="帖子图片">`).join('')}
+                            </div>
+                        ` : ''}
+                    </div>
+                    <div class="post-actions">
+                        <button class="post-action-btn ${post.liked ? 'liked' : ''}" onclick="likePost(${post.id}, this)">
+                            <span>${post.liked ? '❤️' : '🤍'}</span>
+                            <span>${post.likes}</span>
+                        </button>
+                        <button class="post-action-btn" onclick="showComments(${post.id})">
+                            <span>💬</span>
+                            <span>${post.comments.length}</span>
+                        </button>
+                        <button class="post-action-btn" onclick="sharePost(${post.id})">
+                            <span>📤</span>
+                            <span>分享</span>
+                        </button>
+                    </div>
+                    <div class="comments-section" id="comments-${post.id}">
+                        ${post.comments.map(comment => `
+                            <div class="comment-item">
+                                <div class="comment-author">${comment.author}</div>
+                                <div class="comment-content">${comment.content}</div>
+                                <div class="comment-time">${comment.time}</div>
+                            </div>
+                        `).join('')}
+                        <div class="comment-item">
+                            <div class="form-group" style="margin: 0;">
+                                <input type="text" class="input" placeholder="写下你的评论..." onkeypress="if(event.key==='Enter') addComment(${post.id}, this.value, this)">
+                            </div>
+                        </div>
+                    </div>
+                    ${post.comments.length > 0 ? `
+                        <div class="expand-comments" onclick="toggleComments(${post.id})">
+                            <span id="expand-text-${post.id}">展开所有评论 ▼</span>
+                        </div>
+                    ` : ''}
+                </div>
+            `).join('');
+        }
+
+        // 点赞帖子
+        function likePost(postId, button) {
+            const post = appData.posts.find(p => p.id === postId);
+            if (post) {
+                post.liked = !post.liked;
+                post.likes += post.liked ? 1 : -1;
+                
+                const btn = button.querySelector('span:first-child');
+                const count = button.querySelector('span:last-child');
+                
+                btn.textContent = post.liked ? '❤️' : '🤍';
+                button.classList.toggle('liked', post.liked);
+                count.textContent = post.likes;
+                
+                showToast(post.liked ? '已点赞' : '已取消点赞', 'success');
+            }
+        }
+
+        // 显示评论
+        function showComments(postId) {
+            const commentsSection = document.getElementById(`comments-${postId}`);
+            if (commentsSection) {
+                commentsSection.classList.add('expanded');
+            }
+        }
+
+        // 切换评论展开/收起
+        function toggleComments(postId) {
+            const commentsSection = document.getElementById(`comments-${postId}`);
+            const expandText = document.getElementById(`expand-text-${postId}`);
+            
+            if (commentsSection.classList.contains('expanded')) {
+                commentsSection.classList.remove('expanded');
+                expandText.textContent = '展开所有评论 ▼';
+            } else {
+                commentsSection.classList.add('expanded');
+                expandText.textContent = '收起评论 ▲';
+            }
+        }
+
+        // 添加评论
+        function addComment(postId, content, input) {
+            if (!content.trim()) return;
+            
+            const post = appData.posts.find(p => p.id === postId);
+            if (post) {
+                const comment = {
+                    author: '用户' + Math.floor(Math.random() * 1000),
+                    content: content.trim(),
+                    time: '刚刚'
+                };
+                post.comments.push(comment);
+                renderPosts();
+                showToast('评论成功', 'success');
+            }
+        }
+
+        // 分享帖子
+        function sharePost(postId) {
+            showToast('分享功能开发中...', 'info');
+        }
+
+        // 获取当前位置
+        function getCurrentLocation() {
+            if (!navigator.geolocation) {
+                showToast('您的浏览器不支持定位功能', 'error');
+                return;
+            }
+
+            showToast('正在获取位置信息...', 'info');
+            
+            navigator.geolocation.getCurrentPosition(
+                (position) => {
+                    appData.currentLocation = {
+                        lat: position.coords.latitude,
+                        lng: position.coords.longitude
+                    };
+                    showToast('定位成功！', 'success');
+                    initMap();
+                    loadNearbyHospitals();
+                },
+                (error) => {
+                    console.error('定位失败:', error);
+                    showToast('定位失败，请检查定位权限', 'error');
+                    // 使用默认位置（杭州市中心）
+                    appData.currentLocation = {
+                        lat: 30.2741,
+                        lng: 120.1551
+                    };
+                    initMap();
+                    loadNearbyHospitals();
+                }
+            );
+        }
+
+        // 初始化地图
+        function initMap() {
+            const mapContainer = document.getElementById('mapContainer');
+            
+            // 简化的地图显示（实际项目中使用高德地图API）
+            mapContainer.innerHTML = `
+                <div style="display: flex; align-items: center; justify-content: center; height: 100%; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+                    <div style="text-align: center; color: white;">
+                        <div style="font-size: 48px; margin-bottom: var(--spacing-sm);">🗺️</div>
+                        <p>高德地图加载中...</p>
+                        <p style="font-size: 14px; margin-top: var(--spacing-sm);">当前位置: ${appData.currentLocation.lat.toFixed(4)}, ${appData.currentLocation.lng.toFixed(4)}</p>
+                    </div>
+                </div>
+            `;
+
+            // 模拟地图初始化
+            setTimeout(() => {
+                mapContainer.innerHTML = `
+                    <div style="height: 100%; background: linear-gradient(to bottom, #e8f5e8, #f0f8f0); position: relative;">
+                        <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 48px;">📍</div>
+                        <div style="position: absolute; top: 20px; left: 10px; background: white; padding: 10px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+                            <div style="font-weight: 600;">🗺️ 高德地图</div>
+                            <div style="font-size: 12px; color: #666;">${appData.hospitals.length} 家附近医院</div>
+                        </div>
+                        ${appData.hospitals.slice(0, 3).map((hospital, index) => {
+                            const positions = [
+                                { top: '30%', left: '20%' },
+                                { top: '60%', left: '70%' },
+                                { top: '40%', left: '40%' }
+                            ];
+                            return `
+                                <div style="position: absolute; ${positions[index].top}; ${positions[index].left}; transform: translate(-50%, -50%); cursor: pointer;" onclick="selectHospital(${hospital.id})">
+                                    <div style="font-size: 24px;">🏥</div>
+                                    <div style="background: white; padding: 4px 8px; border-radius: 4px; font-size: 12px; white-space: nowrap; box-shadow: 0 2px 4px rgba(0,0,0,0.2);">
+                                        ${hospital.name}
+                                    </div>
+                                </div>
+                            `;
+                        }).join('')}
+                    </div>
+                `;
+            }, 1000);
+        }
+
+        // 加载附近医院
+        function loadNearbyHospitals() {
+            // 模拟医院数据
+            appData.hospitals = [
+                {
+                    id: 1,
+                    name: '杭州宠物医院',
+                    address: '杭州市江干区钱江新城民心路88号',
+                    phone: '0571-11223344',
+                    distance: '1.2km',
+                    rating: 4.8,
+                    reviews: [
+                        { author: '猫主人', content: '医生很专业，服务态度很好', time: '2天前', rating: 5 },
+                        { author: '爱猫人士', content: '价格合理，环境干净', time: '1周前', rating: 4 }
+                    ]
+                },
+                {
+                    id: 2,
+                    name: '协和宠物医院',
+                    address: '杭州市西湖区文三路199号',
+                    phone: '0571-22334455',
+                    distance: '2.5km',
+                    rating: 4.6,
+                    reviews: [
+                        { author: '宠物家长', content: '急诊很快，设备先进', time: '3天前', rating: 5 },
+                        { author: '猫奴', content: '医生很耐心，解答详细', time: '2周前', rating: 4 }
+                    ]
+                },
+                {
+                    id: 3,
+                    name: '爱心宠物医院',
+                    address: '杭州市拱墅区莫干山路123号',
+                    phone: '0571-33445566',
+                    distance: '3.8km',
+                    rating: 4.9,
+                    reviews: [
+                        { author: '铲屎官', content: '服务一流，推荐！', time: '1天前', rating: 5 }
+                    ]
+                }
+            ];
+
+            renderHospitals();
+        }
+
+        // 渲染医院列表
+        function renderHospitals() {
+            const hospitalList = document.getElementById('hospitalList');
+            hospitalList.innerHTML = appData.hospitals.map(hospital => `
+                <div class="hospital-card">
+                    <div class="hospital-header">
+                        <div class="hospital-name">${hospital.name}</div>
+                        <div class="hospital-info">
+                            <div>📍 ${hospital.address}</div>
+                            <div>📞 ${hospital.phone}</div>
+                            <div>🚶 距离 ${hospital.distance}</div>
+                        </div>
+                        <div class="hospital-rating">
+                            <span class="rating-stars">${'⭐'.repeat(Math.floor(hospital.rating))}</span>
+                            <span>${hospital.rating} 分</span>
+                            <span style="color: var(--apple-gray-medium);">(${hospital.reviews.length} 条评价)</span>
+                        </div>
+                    </div>
+                    <div class="hospital-actions">
+                        <button class="btn btn-primary btn-small" onclick="selectHospital(${hospital.id})">🧭 导航</button>
+                        <button class="btn btn-secondary btn-small" onclick="openGaodeMap(${hospital.id})">🗺️ 高德</button>
+                        <button class="btn btn-secondary btn-small" onclick="openHospitalReviewModal(${hospital.id})">⭐ 评价</button>
+                    </div>
+                    <div class="comments-section" id="hospital-comments-${hospital.id}">
+                        ${hospital.reviews.map(review => `
+                            <div class="comment-item">
+                                <div class="comment-author">${review.author} ${'⭐'.repeat(review.rating)}</div>
+                                <div class="comment-content">${review.content}</div>
+                                <div class="comment-time">${review.time}</div>
+                            </div>
+                        `).join('')}
+                    </div>
+                    ${hospital.reviews.length > 0 ? `
+                        <div class="expand-comments" onclick="toggleHospitalComments(${hospital.id})">
+                            <span id="hospital-expand-${hospital.id}">展开评价 ▼</span>
+                        </div>
+                    ` : ''}
+                </div>
+            `).join('');
+        }
+
+        // 切换医院评论展开/收起
+        function toggleHospitalComments(hospitalId) {
+            const commentsSection = document.getElementById(`hospital-comments-${hospitalId}`);
+            const expandText = document.getElementById(`hospital-expand-${hospitalId}`);
+            
+            if (commentsSection.classList.contains('expanded')) {
+                commentsSection.classList.remove('expanded');
+                expandText.textContent = '展开评价 ▼';
+            } else {
+                commentsSection.classList.add('expanded');
+                expandText.textContent = '收起评价 ▲';
+            }
+        }
+
+        // 选择医院
+        function selectHospital(hospitalId) {
+            const hospital = appData.hospitals.find(h => h.id === hospitalId);
+            if (hospital) {
+                showToast(`已选择 ${hospital.name}`, 'success');
+                // 自动打开高德地图导航
+                openGaodeMap(hospitalId);
+            }
+        }
+
+        // 打开高德地图
+        function openGaodeMap(hospitalId) {
+            const hospital = appData.hospitals.find(h => h.id === hospitalId);
+            if (hospital) {
+                const gaodeUrl = `https://uri.amap.com/navigation?to=${encodeURIComponent(hospital.address)},${hospital.name}&mode=car&coordinate=120.1551,30.2741`;
+                showToast('正在打开高德地图...', 'info');
+                setTimeout(() => {
+                    window.open(gaodeUrl, '_blank');
+                }, 500);
+            }
+        }
+
+        // 打开医院评价模态框
+        function openHospitalReviewModal(hospitalId) {
+            document.getElementById('hospitalReviewModal').classList.add('active');
+            document.getElementById('reviewHospitalId').value = hospitalId;
+            document.getElementById('reviewContent').value = '';
+            // 重置星级选择
+            document.querySelectorAll('.star').forEach(star => star.style.opacity = '0.3');
+        }
+
+        // 关闭医院评价模态框
+        function closeHospitalReviewModal() {
+            document.getElementById('hospitalReviewModal').classList.remove('active');
+        }
+
+        // 提交医院评价
+        function submitReview() {
+            const hospitalId = parseInt(document.getElementById('reviewHospitalId').value);
+            const content = document.getElementById('reviewContent').value.trim();
+            const selectedRating = parseInt(document.querySelector('.star[style*="opacity: 1"]')?.dataset.rating || 0);
+
+            if (selectedRating === 0) {
+                showToast('请选择评分', 'error');
+                return;
+            }
+
+            if (!content) {
+                showToast('请填写评价内容', 'error');
+                return;
+            }
+
+            const hospital = appData.hospitals.find(h => h.id === hospitalId);
+            if (hospital) {
+                const review = {
+                    author: '用户' + Math.floor(Math.random() * 1000),
+                    content: content,
+                    time: '刚刚',
+                    rating: selectedRating
+                };
+
+                hospital.reviews.push(review);
+                // 重新计算平均评分
+                const totalRating = hospital.reviews.reduce((sum, r) => sum + r.rating, 0);
+                hospital.rating = (totalRating / hospital.reviews.length).toFixed(1);
+
+                renderHospitals();
+                closeHospitalReviewModal();
+                showToast('评价提交成功！', 'success');
+            }
+        }
+
+        // 刷新医院列表
+        function refreshHospitals() {
+            showToast('正在刷新医院信息...', 'info');
+            loadNearbyHospitals();
+            setTimeout(() => {
+                showToast('刷新完成！', 'success');
+            }, 1000);
+        }
+
+        // 过滤医院
+        function filterHospitals(searchTerm) {
+            const filtered = appData.hospitals.filter(hospital => 
+                hospital.name.includes(searchTerm) || 
+                hospital.address.includes(searchTerm)
+            );
+            
+            const hospitalList = document.getElementById('hospitalList');
+            if (filtered.length === 0) {
+                hospitalList.innerHTML = '<div style="text-align: center; padding: 40px; color: var(--apple-gray-medium);">没有找到匹配的医院</div>';
+            } else {
+                const tempHospitals = appData.hospitals;
+                appData.hospitals = filtered;
+                renderHospitals();
+                appData.hospitals = tempHospitals;
+            }
+        }
+
+        // 星级评分交互
+        document.addEventListener('DOMContentLoaded', function() {
+            document.querySelectorAll('.star').forEach(star => {
+                star.addEventListener('click', function() {
+                    const rating = parseInt(this.dataset.rating);
+                    document.querySelectorAll('.star').forEach((s, index) => {
+                        s.style.opacity = (index < rating) ? '1' : '0.3';
+                    });
+                });
+
+                star.addEventListener('mouseenter', function() {
+                    const rating = parseInt(this.dataset.rating);
+                    document.querySelectorAll('.star').forEach((s, index) => {
+                        s.style.opacity = (index < rating) ? '1' : '0.3';
+                    });
+                });
+            });
+
+            document.getElementById('ratingStars')?.addEventListener('mouseleave', function() {
+                const selectedRating = parseInt(document.querySelector('.star[style*="opacity: 1"]')?.dataset.rating || 0);
+                document.querySelectorAll('.star').forEach((s, index) => {
+                    s.style.opacity = (index < selectedRating) ? '1' : '0.3';
+                });
+            });
+        });
 
         // 初始化
         document.addEventListener('DOMContentLoaded', function() {
@@ -693,6 +1650,12 @@
                     homePage.classList.add('active');
                     console.log('✅ 首页已激活');
                 }
+                
+                // 初始化论坛帖子
+                renderPosts();
+                
+                // 初始化医院数据
+                loadNearbyHospitals();
                 
                 // 检查所有onclick功能
                 document.querySelectorAll('[onclick]').forEach(element => {
