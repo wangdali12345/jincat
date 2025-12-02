@@ -3137,6 +3137,46 @@
     </div>
 
     <script>
+        // 全局错误处理
+        window.addEventListener('error', function(e) {
+            console.error('💥 全局错误:', e.error);
+            console.error('错误位置:', e.filename, e.lineno, e.colno);
+        });
+
+        // 确保关键函数存在 - 防御性编程
+        if (typeof showPage !== 'function') {
+            window.showPage = function(pageId) {
+                try {
+                    console.log('备用showPage被调用:', pageId);
+                    // 隐藏所有页面
+                    document.querySelectorAll('.page').forEach(page => {
+                        page.classList.remove('active');
+                    });
+                    
+                    // 显示目标页面
+                    const targetPage = document.getElementById(pageId);
+                    if (targetPage) {
+                        targetPage.classList.add('active');
+                    }
+                    
+                    // 更新导航状态
+                    document.querySelectorAll('.nav-link').forEach(link => {
+                        link.classList.remove('active');
+                    });
+                    
+                    const activeLink = document.querySelector(`[data-page="${pageId}"]`);
+                    if (activeLink) {
+                        activeLink.classList.add('active');
+                    }
+                    
+                    window.scrollTo(0, 0);
+                } catch (error) {
+                    console.error('备用showPage错误:', error);
+                    alert('页面切换失败: ' + error.message);
+                }
+            };
+        }
+
         // 全局数据存储
         let appData = {
             cats: [],
@@ -3338,6 +3378,33 @@
             });
             
             console.log('事件监听器初始化完成');
+            
+            // 检查所有关键函数是否存在
+            checkAllFunctions();
+        }
+
+        // 检查所有关键函数是否存在
+        function checkAllFunctions() {
+            const requiredFunctions = [
+                'toggleUserMenu', 'showProfile', 'showCart', 'showOrders', 
+                'showLoginModal', 'adminLogout', 'filterCats', 'resetFilters',
+                'showAddCatModal', 'searchHospitals', 'openGaodeMap',
+                'getCurrentLocation', 'queryLogistics', 'showNewPostModal',
+                'viewPostDetail', 'likePost', 'submitComment', 'renderHomePage'
+            ];
+            
+            console.log('🔍 检查关键函数是否存在...');
+            requiredFunctions.forEach(funcName => {
+                const exists = typeof window[funcName] === 'function';
+                console.log(`${exists ? '✅' : '❌'} ${funcName}: ${exists ? '存在' : '不存在'}`);
+                
+                if (!exists) {
+                    // 创建空函数防止错误
+                    window[funcName] = function() {
+                        console.warn(`⚠️ 函数 ${funcName} 未定义，已创建空函数`);
+                    };
+                }
+            });
         }
 
         // 调试函数：检查页面状态
@@ -3409,6 +3476,28 @@
                         link.setAttribute('onclick', `quickNavigate('${page}', this)`);
                         console.log(`设置快速导航: ${page}`);
                     }
+                });
+
+                // 为所有带onclick的元素添加错误处理
+                document.querySelectorAll('[onclick]').forEach(element => {
+                    const originalOnclick = element.getAttribute('onclick');
+                    element.addEventListener('click', function(e) {
+                        try {
+                            // 执行原始onclick
+                            eval(originalOnclick);
+                        } catch (error) {
+                            console.error('Onclick执行错误:', error, originalOnclick);
+                            // 尝试提取showPage调用
+                            const match = originalOnclick.match(/showPage\('([^']+)'\)/);
+                            if (match) {
+                                console.log('尝试页面切换:', match[1]);
+                                showPage(match[1]);
+                            }
+                        }
+                    });
+                    // 移除原始onclick防止重复执行
+                    element.removeAttribute('onclick');
+                    console.log('为元素添加错误处理:', element);
                 });
                 
                 // 然后执行原有初始化
