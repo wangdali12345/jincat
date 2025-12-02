@@ -81,7 +81,7 @@
             top: 0;
             left: 0;
             right: 0;
-            z-index: 1000;
+            z-index: 1001;
             box-shadow: var(--shadow-light);
         }
 
@@ -785,7 +785,7 @@
                 </div>
 
                 <div style="display: flex; align-items: center; gap: var(--spacing-sm);">
-                    <button class="btn btn-secondary" onclick="toggleLogin()" id="loginBtn" style="padding: 8px 16px; font-size: 14px;">登录</button>
+                    <button class="btn btn-secondary" onclick="toggleLogin()" id="loginBtn" style="padding: 8px 16px; font-size: 14px; position: relative; z-index: 1002;">管理员登录</button>
                     <button class="mobile-nav-toggle" onclick="toggleMobileMenu()">☰</button>
                 </div>
             </div>
@@ -989,20 +989,20 @@
             
             <!-- 快捷入口 -->
             <div class="grid grid-2" style="margin-bottom: var(--spacing-lg);">
-                <div class="card" onclick="openCainiaoApp()">
-                    <div style="padding: var(--spacing-md); text-align: center;">
-                        <div style="font-size: 48px; margin-bottom: var(--spacing-sm);">📱</div>
-                        <h3>菜鸟裹裹</h3>
-                        <p>一键打开菜鸟裹裹APP查询物流</p>
-                        <button class="btn btn-primary">打开应用</button>
-                    </div>
-                </div>
                 <div class="card" onclick="focusTrackingInput()">
                     <div style="padding: var(--spacing-md); text-align: center;">
                         <div style="font-size: 48px; margin-bottom: var(--spacing-sm);">🔍</div>
                         <h3>运单查询</h3>
-                        <p>手动输入运单号查询</p>
-                        <button class="btn btn-secondary">开始查询</button>
+                        <p>输入运单号查询物流信息</p>
+                        <button class="btn btn-primary">开始查询</button>
+                    </div>
+                </div>
+                <div class="card" onclick="showTrackingHistory()">
+                    <div style="padding: var(--spacing-md); text-align: center;">
+                        <div style="font-size: 48px; margin-bottom: var(--spacing-sm);">📋</div>
+                        <h3>查询历史</h3>
+                        <p>查看历史查询记录</p>
+                        <button class="btn btn-secondary">查看历史</button>
                     </div>
                 </div>
             </div>
@@ -1022,25 +1022,25 @@
             <!-- 常用快递公司 -->
             <h3 style="margin-bottom: var(--spacing-md);">🚚 常用快递</h3>
             <div class="grid grid-3">
-                <div class="card" onclick="openCainiaoExpress('顺丰')">
+                <div class="card">
                     <div style="padding: var(--spacing-md); text-align: center;">
                         <div style="font-size: 32px; margin-bottom: var(--spacing-sm);">📦</div>
                         <h4>顺丰速运</h4>
-                        <button class="btn btn-small btn-secondary">查询</button>
+                        <p style="color: var(--apple-gray-medium); font-size: 14px;">请输入运单号查询</p>
                     </div>
                 </div>
-                <div class="card" onclick="openCainiaoExpress('中通')">
+                <div class="card">
                     <div style="padding: var(--spacing-md); text-align: center;">
                         <div style="font-size: 32px; margin-bottom: var(--spacing-sm);">📦</div>
                         <h4>中通快递</h4>
-                        <button class="btn btn-small btn-secondary">查询</button>
+                        <p style="color: var(--apple-gray-medium); font-size: 14px;">请输入运单号查询</p>
                     </div>
                 </div>
-                <div class="card" onclick="openCainiaoExpress('圆通')">
+                <div class="card">
                     <div style="padding: var(--spacing-md); text-align: center;">
                         <div style="font-size: 32px; margin-bottom: var(--spacing-sm);">📦</div>
                         <h4>圆通快递</h4>
-                        <button class="btn btn-small btn-secondary">查询</button>
+                        <p style="color: var(--apple-gray-medium); font-size: 14px;">请输入运单号查询</p>
                     </div>
                 </div>
             </div>
@@ -1391,9 +1391,17 @@
 
         // 登录相关功能
         function toggleLogin() {
-            document.getElementById('loginModal').classList.add('active');
-            document.getElementById('username').value = '';
-            document.getElementById('password').value = '';
+            console.log('Toggle login clicked'); // 调试信息
+            const modal = document.getElementById('loginModal');
+            if (modal) {
+                modal.classList.add('active');
+                document.getElementById('username').value = '';
+                document.getElementById('password').value = '';
+                // 聚焦到用户名输入框
+                setTimeout(() => {
+                    document.getElementById('username').focus();
+                }, 100);
+            }
         }
 
         function closeLoginModal() {
@@ -1488,26 +1496,44 @@
         }
 
         // 物流相关功能
-        function openCainiaoApp() {
-            const cainiaoUrl = 'cainiao://';
-            showToast('正在尝试打开菜鸟裹裹...', 'info');
-            
-            // 尝试打开APP
-            window.location.href = cainiaoUrl;
-            
-            // 如果APP打开失败，2秒后跳转到APP下载页面
-            setTimeout(() => {
-                window.open('https://mobile.yangkeduo.com/app_download.html?package_id=com.cainiao.wireless', '_blank');
-            }, 2000);
-        }
-
-        function openCainiaoExpress(company) {
-            const searchUrl = `https://www.cainiao.com/?searchText=${encodeURIComponent(company)}`;
-            window.open(searchUrl, '_blank');
-        }
-
         function focusTrackingInput() {
             document.getElementById('trackingNumber').focus();
+        }
+
+        // 显示查询历史
+        function showTrackingHistory() {
+            const history = JSON.parse(localStorage.getItem('trackingHistory') || '[]');
+            const trackingResult = document.getElementById('trackingResult');
+            
+            if (history.length === 0) {
+                trackingResult.innerHTML = `
+                    <div class="card">
+                        <div style="padding: var(--spacing-md); text-align: center;">
+                            <p style="color: var(--apple-gray-medium);">暂无查询历史</p>
+                        </div>
+                    </div>
+                `;
+            } else {
+                trackingResult.innerHTML = `
+                    <div class="card">
+                        <div style="padding: var(--spacing-md);">
+                            <h4>📋 查询历史</h4>
+                            <div style="margin-top: var(--spacing-md);">
+                                ${history.map((item, index) => `
+                                    <div style="padding: var(--spacing-sm); border-bottom: 1px solid var(--apple-border); display: flex; justify-content: space-between; align-items: center;">
+                                        <div>
+                                            <strong>${item.number}</strong>
+                                            <span style="color: var(--apple-gray-medium); font-size: 12px; margin-left: var(--spacing-sm);">${item.time}</span>
+                                        </div>
+                                        <button class="btn btn-small btn-secondary" onclick="retrackPackage('${item.number}')">重新查询</button>
+                                    </div>
+                                `).join('')}
+                            </div>
+                            ${history.length > 0 ? `<button class="btn btn-secondary" onclick="clearTrackingHistory()" style="margin-top: var(--spacing-md);">清空历史</button>` : ''}
+                        </div>
+                    </div>
+                `;
+            }
         }
 
         // 物流查询
@@ -1518,47 +1544,99 @@
                 return;
             }
 
-            // 构建菜鸟裹裹APP查询链接
-            const cainiaoTrackUrl = `cainiao://detail?mailNo=${encodeURIComponent(trackingNumber)}`;
-            
-            showToast('正在打开菜鸟裹裹查询...', 'info');
-            
-            // 尝试打开菜鸟裹裹APP进行查询
-            window.location.href = cainiaoTrackUrl;
-            
-            // 如果APP打开失败，2秒后跳转到网页版查询
-            setTimeout(() => {
-                const webTrackUrl = `https://www.cainiao.com/detail.htm?mailNo=${encodeURIComponent(trackingNumber)}`;
-                window.open(webTrackUrl, '_blank');
-            }, 2000);
+            // 保存查询历史
+            saveTrackingHistory(trackingNumber);
 
-            // 同时在页面显示查询状态
+            // 模拟物流查询结果
             const trackingResult = document.getElementById('trackingResult');
+            const mockData = generateMockTrackingInfo(trackingNumber);
+            
             trackingResult.innerHTML = `
                 <div class="card">
                     <div style="padding: var(--spacing-md);">
-                        <h4>📦 运单查询</h4>
+                        <h4>📦 运单查询结果</h4>
                         <p><strong>运单号：</strong>${trackingNumber}</p>
-                        <p><strong>状态：</strong><span style="color: var(--apple-blue);">正在跳转菜鸟裹裹查询...</span></p>
-                        <div style="margin-top: var(--spacing-sm);">
-                            <button class="btn btn-primary" onclick="trackInCainiao('${trackingNumber}')">📱 打开菜鸟裹裹</button>
-                            <button class="btn btn-secondary" onclick="trackOnWeb('${trackingNumber}')">🌐 网页查询</button>
+                        <p><strong>状态：</strong><span style="color: ${mockData.statusColor};">${mockData.status}</span></p>
+                        <p><strong>最新更新：</strong>${mockData.lastUpdate}</p>
+                        
+                        <div style="margin-top: var(--spacing-md);">
+                            <h5 style="margin-bottom: var(--spacing-sm);">物流轨迹</h5>
+                            ${mockData.timeline.map(item => `
+                                <div style="padding: var(--spacing-sm); border-left: 2px solid var(--apple-blue); margin-left: 8px; position: relative;">
+                                    <div style="position: absolute; left: -10px; top: var(--spacing-sm); width: 8px; height: 8px; background: var(--apple-blue); border-radius: 50%;"></div>
+                                    <div style="font-size: 14px; color: var(--apple-gray-dark);">${item.time}</div>
+                                    <div style="margin-top: 4px;">${item.location}</div>
+                                </div>
+                            `).join('')}
+                        </div>
+                        
+                        <div style="margin-top: var(--spacing-md);">
+                            <button class="btn btn-secondary" onclick="document.getElementById('trackingNumber').focus()">重新查询</button>
                         </div>
                     </div>
                 </div>
             `;
+            
+            showToast('查询成功！', 'success');
         }
 
-        // 在菜鸟裹裹中查询
-        function trackInCainiao(trackingNumber) {
-            const cainiaoTrackUrl = `cainiao://detail?mailNo=${encodeURIComponent(trackingNumber)}`;
-            window.location.href = cainiaoTrackUrl;
+        // 生成模拟物流信息
+        function generateMockTrackingInfo(trackingNumber) {
+            const hash = trackingNumber.length % 3;
+            const statusMap = [
+                { status: '已签收', color: 'var(--apple-green)' },
+                { status: '派送中', color: 'var(--apple-blue)' },
+                { status: '运输中', color: 'var(--apple-orange)' }
+            ];
+            
+            const currentStatus = statusMap[hash];
+            
+            return {
+                status: currentStatus.status,
+                statusColor: currentStatus.color,
+                lastUpdate: new Date().toLocaleString(),
+                timeline: [
+                    { time: '2024-01-20 10:30', location: '【杭州市】已揽收' },
+                    { time: '2024-01-20 14:15', location: '【杭州市】已发出' },
+                    { time: '2024-01-20 18:45', location: '【上海市】到达分拣中心' },
+                    { time: '2024-01-21 06:20', location: '【北京市】到达分拣中心' },
+                    { time: '2024-01-21 09:15', location: currentStatus.status === '已签收' ? '【北京市】已签收，签收人：本人' : '【北京市】正在派送' }
+                ]
+            };
         }
 
-        // 在网页中查询
-        function trackOnWeb(trackingNumber) {
-            const webTrackUrl = `https://www.cainiao.com/detail.htm?mailNo=${encodeURIComponent(trackingNumber)}`;
-            window.open(webTrackUrl, '_blank');
+        // 保存查询历史
+        function saveTrackingHistory(trackingNumber) {
+            let history = JSON.parse(localStorage.getItem('trackingHistory') || '[]');
+            
+            // 检查是否已存在
+            history = history.filter(item => item.number !== trackingNumber);
+            
+            // 添加到开头
+            history.unshift({
+                number: trackingNumber,
+                time: new Date().toLocaleString()
+            });
+            
+            // 只保留最近10条
+            history = history.slice(0, 10);
+            
+            localStorage.setItem('trackingHistory', JSON.stringify(history));
+        }
+
+        // 重新查询
+        function retrackPackage(trackingNumber) {
+            document.getElementById('trackingNumber').value = trackingNumber;
+            trackPackage();
+        }
+
+        // 清空历史
+        function clearTrackingHistory() {
+            if (confirm('确定要清空查询历史吗？')) {
+                localStorage.removeItem('trackingHistory');
+                showTrackingHistory();
+                showToast('历史已清空', 'success');
+            }
         }
 
         // 移动端菜单相关
@@ -2127,71 +2205,42 @@
                 };
             }
 
-            // 模拟医院数据，包含真实坐标用于计算距离
-            const hospitalData = [
-                {
-                    id: 1,
-                    name: '杭州宠物医院',
-                    address: '杭州市江干区钱江新城民心路88号',
-                    phone: '0571-11223344',
-                    lat: 30.2841,
-                    lng: 120.1651,
-                    rating: 4.8,
-                    reviews: [
-                        { author: '猫主人', content: '医生很专业，服务态度很好', time: '2天前', rating: 5 },
-                        { author: '爱猫人士', content: '价格合理，环境干净', time: '1周前', rating: 4 }
-                    ]
-                },
-                {
-                    id: 2,
-                    name: '协和宠物医院',
-                    address: '杭州市西湖区文三路199号',
-                    phone: '0571-22334455',
-                    lat: 30.2641,
-                    lng: 120.1451,
-                    rating: 4.6,
-                    reviews: [
-                        { author: '宠物家长', content: '急诊很快，设备先进', time: '3天前', rating: 5 },
-                        { author: '猫奴', content: '医生很耐心，解答详细', time: '2周前', rating: 4 }
-                    ]
-                },
-                {
-                    id: 3,
-                    name: '爱心宠物医院',
-                    address: '杭州市拱墅区莫干山路123号',
-                    phone: '0571-33445566',
-                    lat: 30.2741,
-                    lng: 120.1351,
-                    rating: 4.9,
-                    reviews: [
-                        { author: '铲屎官', content: '服务一流，推荐！', time: '1天前', rating: 5 }
-                    ]
-                },
-                {
-                    id: 4,
-                    name: '萌宠宠物医院',
-                    address: '杭州市滨江区江南大道588号',
-                    phone: '0571-44556677',
-                    lat: 30.2541,
-                    lng: 120.1851,
-                    rating: 4.7,
-                    reviews: [
-                        { author: '宠物爱好者', content: '环境很好，医生专业', time: '4天前', rating: 4 }
-                    ]
-                },
-                {
-                    id: 5,
-                    name: '宠物之家医院',
-                    address: '杭州市上城区解放路168号',
-                    phone: '0571-55667788',
-                    lat: 30.2941,
-                    lng: 120.1751,
-                    rating: 4.5,
-                    reviews: [
-                        { author: '养猫达人', content: '价格实惠，服务态度好', time: '5天前', rating: 4 }
-                    ]
-                }
+            // 根据当前位置动态生成医院数据
+            const hospitalTemplates = [
+                { prefix: '爱心', suffix: '宠物医院', baseRating: 4.8 },
+                { prefix: '协和', suffix: '宠物医院', baseRating: 4.6 },
+                { prefix: '萌宠', suffix: '医院', baseRating: 4.7 },
+                { prefix: '宠物之家', suffix: '医院', baseRating: 4.5 },
+                { prefix: '守护', suffix: '宠物医院', baseRating: 4.9 },
+                { prefix: '阳光', suffix: '宠物医院', baseRating: 4.4 },
+                { prefix: '蓝天', suffix: '宠物诊所', baseRating: 4.7 }
             ];
+
+            // 基于当前位置生成医院数据
+            const hospitalData = hospitalTemplates.map((template, index) => {
+                // 在用户位置周围随机分布医院
+                const angle = (Math.PI * 2 * index) / hospitalTemplates.length;
+                const distance = 0.5 + Math.random() * 5; // 0.5km - 5.5km 范围内
+                
+                const lat = appData.currentLocation.lat + distance * Math.sin(angle) / 111;
+                const lng = appData.currentLocation.lng + distance * Math.cos(angle) / (111 * Math.cos(appData.currentLocation.lat * Math.PI / 180));
+                
+                // 生成地址
+                const districts = ['江干区', '西湖区', '拱墅区', '滨江区', '上城区', '下城区', '余杭区', '萧山区'];
+                const roads = ['路', '街', '大道', '巷', '广场', '中心'];
+                const numbers = Math.floor(Math.random() * 999) + 1;
+                
+                return {
+                    id: index + 1,
+                    name: template.prefix + template.suffix,
+                    address: `杭州市${districts[index % districts.length]}${roads[index % roads.length]}${numbers}号`,
+                    phone: `0571-${Math.floor(Math.random() * 90000000) + 10000000}`,
+                    lat: lat,
+                    lng: lng,
+                    rating: parseFloat((template.baseRating + (Math.random() - 0.5)).toFixed(1)),
+                    reviews: generateMockReviews()
+                };
+            });
 
             // 计算距离并排序
             appData.hospitals = hospitalData.map(hospital => {
@@ -2211,6 +2260,32 @@
 
             renderHospitals();
             showToast(`找到 ${appData.hospitals.length} 家附近医院`, 'info');
+        }
+
+        // 生成模拟评论
+        function generateMockReviews() {
+            const reviewTemplates = [
+                { author: '猫主人', content: '医生很专业，服务态度很好', rating: 5 },
+                { author: '爱猫人士', content: '价格合理，环境干净', rating: 4 },
+                { author: '宠物家长', content: '急诊很快，设备先进', rating: 5 },
+                { author: '猫奴', content: '医生很耐心，解答详细', rating: 4 },
+                { author: '铲屎官', content: '服务一流，推荐！', rating: 5 },
+                { author: '宠物爱好者', content: '环境很好，医生专业', rating: 4 },
+                { author: '养猫达人', content: '价格实惠，服务态度好', rating: 4 }
+            ];
+            
+            const numReviews = Math.floor(Math.random() * 3) + 1; // 1-3条评论
+            const selectedReviews = [];
+            
+            for (let i = 0; i < numReviews; i++) {
+                const template = reviewTemplates[Math.floor(Math.random() * reviewTemplates.length)];
+                selectedReviews.push({
+                    ...template,
+                    time: [`${Math.floor(Math.random() * 7) + 1}天前`, '1周前', '2周前'][Math.floor(Math.random() * 3)]
+                });
+            }
+            
+            return selectedReviews;
         }
 
         // 计算两点之间距离（使用Haversine公式）
