@@ -120,6 +120,7 @@
             display: none;
             padding: var(--spacing-lg) 0;
             min-height: calc(100vh - 60px);
+            margin-top: 60px;
         }
 
         .page.active {
@@ -676,7 +677,7 @@
 </head>
 <body>
     <!-- 导航栏 -->
-    <nav class="nav">
+    <nav class="nav" style="position: fixed; top: 0; left: 0; right: 0; z-index: 1000;">
         <div class="container">
             <div class="nav-content">
                 <div style="display: flex; align-items: center; gap: var(--spacing-sm);">
@@ -693,7 +694,10 @@
                     <a href="#" class="nav-link" data-page="shop" onclick="showPage('shop', this)">宠物商城</a>
                 </div>
 
-                <button class="mobile-nav-toggle">☰</button>
+                <div style="display: flex; align-items: center; gap: var(--spacing-sm);">
+                    <button class="btn btn-secondary" onclick="toggleLogin()" id="loginBtn" style="padding: 8px 16px; font-size: 14px;">登录</button>
+                    <button class="mobile-nav-toggle">☰</button>
+                </div>
             </div>
         </div>
     </nav>
@@ -842,11 +846,65 @@
     <div id="logistics" class="page">
         <div class="container">
             <h2>📦 物流查询</h2>
-            <div class="form-group">
-                <label>运单号</label>
-                <input type="text" class="input" placeholder="请输入运单号..." id="trackingNumber">
+            
+            <!-- 快捷入口 -->
+            <div class="grid grid-2" style="margin-bottom: var(--spacing-lg);">
+                <div class="card" onclick="openCainiaoApp()">
+                    <div style="padding: var(--spacing-md); text-align: center;">
+                        <div style="font-size: 48px; margin-bottom: var(--spacing-sm);">📱</div>
+                        <h3>菜鸟裹裹</h3>
+                        <p>一键打开菜鸟裹裹APP查询物流</p>
+                        <button class="btn btn-primary">打开应用</button>
+                    </div>
+                </div>
+                <div class="card" onclick="focusTrackingInput()">
+                    <div style="padding: var(--spacing-md); text-align: center;">
+                        <div style="font-size: 48px; margin-bottom: var(--spacing-sm);">🔍</div>
+                        <h3>运单查询</h3>
+                        <p>手动输入运单号查询</p>
+                        <button class="btn btn-secondary">开始查询</button>
+                    </div>
+                </div>
             </div>
-            <button class="btn btn-primary" onclick="trackPackage()">查询</button>
+
+            <!-- 查询表单 -->
+            <div class="card" style="margin-bottom: var(--spacing-lg);">
+                <div style="padding: var(--spacing-md);">
+                    <h3 style="margin-bottom: var(--spacing-md);">运单号查询</h3>
+                    <div class="form-group">
+                        <label>运单号</label>
+                        <input type="text" class="input" placeholder="请输入运单号..." id="trackingNumber" onkeypress="if(event.key==='Enter') trackPackage()">
+                    </div>
+                    <button class="btn btn-primary" onclick="trackPackage()">查询物流</button>
+                </div>
+            </div>
+
+            <!-- 常用快递公司 -->
+            <h3 style="margin-bottom: var(--spacing-md);">🚚 常用快递</h3>
+            <div class="grid grid-3">
+                <div class="card" onclick="openCainiaoExpress('顺丰')">
+                    <div style="padding: var(--spacing-md); text-align: center;">
+                        <div style="font-size: 32px; margin-bottom: var(--spacing-sm);">📦</div>
+                        <h4>顺丰速运</h4>
+                        <button class="btn btn-small btn-secondary">查询</button>
+                    </div>
+                </div>
+                <div class="card" onclick="openCainiaoExpress('中通')">
+                    <div style="padding: var(--spacing-md); text-align: center;">
+                        <div style="font-size: 32px; margin-bottom: var(--spacing-sm);">📦</div>
+                        <h4>中通快递</h4>
+                        <button class="btn btn-small btn-secondary">查询</button>
+                    </div>
+                </div>
+                <div class="card" onclick="openCainiaoExpress('圆通')">
+                    <div style="padding: var(--spacing-md); text-align: center;">
+                        <div style="font-size: 32px; margin-bottom: var(--spacing-sm);">📦</div>
+                        <h4>圆通快递</h4>
+                        <button class="btn btn-small btn-secondary">查询</button>
+                    </div>
+                </div>
+            </div>
+
             <div id="trackingResult" style="margin-top: var(--spacing-md);"></div>
         </div>
     </div>
@@ -989,6 +1047,30 @@
         </div>
     </div>
 
+    <!-- 登录模态框 -->
+    <div id="loginModal" class="modal-overlay">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="loginTitle">用户登录</h3>
+                <button class="btn btn-secondary" onclick="closeLoginModal()">×</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>账号</label>
+                    <input type="text" class="input" id="username" placeholder="请输入账号...">
+                </div>
+                <div class="form-group">
+                    <label>密码</label>
+                    <input type="password" class="input" id="password" placeholder="请输入密码...">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeLoginModal()">取消</button>
+                <button class="btn btn-primary" onclick="handleLogin()">登录</button>
+            </div>
+        </div>
+    </div>
+
     <script>
         // 应用数据
         const appData = {
@@ -998,7 +1080,16 @@
             products: [],
             reviews: {},
             messages: [],
-            currentLocation: null
+            currentLocation: null,
+            currentUser: null,
+            isLoggedIn: false,
+            isAdmin: false
+        };
+
+        // 管理员账号信息
+        const ADMIN_CREDENTIALS = {
+            username: 'abc123',
+            password: 'abc123'
         };
 
         // 页面切换函数 - 核心功能
@@ -1118,7 +1209,7 @@
                 id: Date.now(),
                 content: content,
                 time: new Date().toLocaleString(),
-                from: '用户' + Math.floor(Math.random() * 1000)
+                from: appData.currentUser ? appData.currentUser : '游客'
             };
 
             appData.messages.push(message);
@@ -1126,6 +1217,115 @@
             showToast('消息已发送给管理员！', 'success');
             
             console.log('发送的消息:', message);
+        }
+
+        // 登录相关功能
+        function toggleLogin() {
+            document.getElementById('loginModal').classList.add('active');
+            document.getElementById('username').value = '';
+            document.getElementById('password').value = '';
+        }
+
+        function closeLoginModal() {
+            document.getElementById('loginModal').classList.remove('active');
+        }
+
+        function handleLogin() {
+            const username = document.getElementById('username').value.trim();
+            const password = document.getElementById('password').value.trim();
+
+            if (!username || !password) {
+                showToast('请输入账号和密码', 'error');
+                return;
+            }
+
+            // 检查管理员账号
+            if (username === ADMIN_CREDENTIALS.username && password === ADMIN_CREDENTIALS.password) {
+                appData.currentUser = username;
+                appData.isLoggedIn = true;
+                appData.isAdmin = true;
+                
+                closeLoginModal();
+                updateLoginButton();
+                showToast('管理员登录成功！', 'success');
+                enableAdminFeatures();
+            } else {
+                // 普通用户登录（这里简化处理，实际项目需要注册系统）
+                appData.currentUser = username;
+                appData.isLoggedIn = true;
+                appData.isAdmin = false;
+                
+                closeLoginModal();
+                updateLoginButton();
+                showToast('登录成功！', 'success');
+            }
+        }
+
+        function logout() {
+            appData.currentUser = null;
+            appData.isLoggedIn = false;
+            appData.isAdmin = false;
+            
+            updateLoginButton();
+            disableAdminFeatures();
+            showToast('已退出登录', 'info');
+        }
+
+        function updateLoginButton() {
+            const loginBtn = document.getElementById('loginBtn');
+            if (appData.isLoggedIn) {
+                if (appData.isAdmin) {
+                    loginBtn.textContent = '管理员';
+                    loginBtn.className = 'btn btn-primary';
+                    loginBtn.onclick = showAdminPanel;
+                } else {
+                    loginBtn.textContent = '用户';
+                    loginBtn.className = 'btn btn-secondary';
+                    loginBtn.onclick = logout;
+                }
+            } else {
+                loginBtn.textContent = '登录';
+                loginBtn.className = 'btn btn-secondary';
+                loginBtn.onclick = toggleLogin;
+            }
+        }
+
+        function enableAdminFeatures() {
+            // 管理员可以修改的元素添加编辑功能
+            console.log('管理员功能已启用');
+        }
+
+        function disableAdminFeatures() {
+            // 禁用管理员功能
+            console.log('管理员功能已禁用');
+        }
+
+        function showAdminPanel() {
+            // 显示管理员面板
+            showToast('管理员面板开发中...', 'info');
+        }
+
+        // 物流相关功能
+        function openCainiaoApp() {
+            const cainiaoUrl = 'cainiao://';
+            showToast('正在尝试打开菜鸟裹裹...', 'info');
+            
+            // 尝试打开APP
+            window.location.href = cainiaoUrl;
+            
+            // 如果APP打开失败，3秒后跳转到网页版
+            setTimeout(() => {
+                window.open('https://www.cainiao.com', '_blank');
+            }, 3000);
+        }
+
+        function openCainiaoExpress(company) {
+            const searchUrl = `https://www.cainiao.com/?searchText=${encodeURIComponent(company)}`;
+            window.open(searchUrl, '_blank');
+        }
+
+        function focusTrackingInput() {
+            document.getElementById('trackingNumber').focus();
         }
 
         // 物流查询
@@ -1375,44 +1575,96 @@
         function initMap() {
             const mapContainer = document.getElementById('mapContainer');
             
-            // 简化的地图显示（实际项目中使用高德地图API）
+            // 检查高德地图API是否加载成功
+            if (typeof AMap !== 'undefined') {
+                // 使用真正的高德地图
+                try {
+                    const map = new AMap.Map('mapContainer', {
+                        zoom: 13,
+                        center: [appData.currentLocation.lng, appData.currentLocation.lat]
+                    });
+
+                    // 添加当前位置标记
+                    const currentMarker = new AMap.Marker({
+                        position: [appData.currentLocation.lng, appData.currentLocation.lat],
+                        title: '当前位置'
+                    });
+
+                    map.add(currentMarker);
+
+                    // 添加医院标记
+                    appData.hospitals.forEach((hospital, index) => {
+                        // 模拟医院位置（实际项目中需要真实坐标）
+                        const hospitalPositions = [
+                            [appData.currentLocation.lng + 0.01, appData.currentLocation.lat + 0.01],
+                            [appData.currentLocation.lng - 0.015, appData.currentLocation.lat + 0.008],
+                            [appData.currentLocation.lng + 0.008, appData.currentLocation.lat - 0.012]
+                        ];
+                        
+                        const marker = new AMap.Marker({
+                            position: hospitalPositions[index] || [appData.currentLocation.lng + 0.01, appData.currentLocation.lat],
+                            title: hospital.name,
+                            content: '<div style="font-size: 20px;">🏥</div>'
+                        });
+
+                        marker.on('click', function() {
+                            selectHospital(hospital.id);
+                        });
+
+                        map.add(marker);
+                    });
+
+                    showToast('地图加载成功！', 'success');
+                    
+                } catch (error) {
+                    console.error('地图初始化失败:', error);
+                    showFallbackMap();
+                }
+            } else {
+                // 高德API未加载，显示备用地图
+                showFallbackMap();
+            }
+        }
+
+        // 备用地图显示
+        function showFallbackMap() {
+            const mapContainer = document.getElementById('mapContainer');
+            
             mapContainer.innerHTML = `
-                <div style="display: flex; align-items: center; justify-content: center; height: 100%; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
-                    <div style="text-align: center; color: white;">
-                        <div style="font-size: 48px; margin-bottom: var(--spacing-sm);">🗺️</div>
-                        <p>高德地图加载中...</p>
-                        <p style="font-size: 14px; margin-top: var(--spacing-sm);">当前位置: ${appData.currentLocation.lat.toFixed(4)}, ${appData.currentLocation.lng.toFixed(4)}</p>
+                <div style="height: 100%; background: linear-gradient(to bottom, #e8f5e8, #f0f8f0); position: relative; cursor: move;" onclick="openExternalMap()">
+                    <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 48px;">📍</div>
+                    <div style="position: absolute; top: 20px; left: 10px; background: white; padding: 10px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+                        <div style="font-weight: 600;">🗺️ 地图视图</div>
+                        <div style="font-size: 12px; color: #666;">${appData.hospitals.length} 家附近医院</div>
+                        <div style="font-size: 10px; color: #999; margin-top: 4px;">点击打开外部地图</div>
                     </div>
+                    ${appData.hospitals.slice(0, 3).map((hospital, index) => {
+                        const positions = [
+                            { top: '30%', left: '20%' },
+                            { top: '60%', left: '70%' },
+                            { top: '40%', left: '40%' }
+                        ];
+                        return `
+                            <div style="position: absolute; ${positions[index].top}; ${positions[index].left}; transform: translate(-50%, -50%); cursor: pointer;" onclick="event.stopPropagation(); selectHospital(${hospital.id})">
+                                <div style="font-size: 24px;">🏥</div>
+                                <div style="background: white; padding: 4px 8px; border-radius: 4px; font-size: 12px; white-space: nowrap; box-shadow: 0 2px 4px rgba(0,0,0,0.2);">
+                                    ${hospital.name}
+                                </div>
+                            </div>
+                        `;
+                    }).join('')}
                 </div>
             `;
+            
+            showToast('地图已加载（点击地图可打开外部地图）', 'info');
+        }
 
-            // 模拟地图初始化
-            setTimeout(() => {
-                mapContainer.innerHTML = `
-                    <div style="height: 100%; background: linear-gradient(to bottom, #e8f5e8, #f0f8f0); position: relative;">
-                        <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 48px;">📍</div>
-                        <div style="position: absolute; top: 20px; left: 10px; background: white; padding: 10px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
-                            <div style="font-weight: 600;">🗺️ 高德地图</div>
-                            <div style="font-size: 12px; color: #666;">${appData.hospitals.length} 家附近医院</div>
-                        </div>
-                        ${appData.hospitals.slice(0, 3).map((hospital, index) => {
-                            const positions = [
-                                { top: '30%', left: '20%' },
-                                { top: '60%', left: '70%' },
-                                { top: '40%', left: '40%' }
-                            ];
-                            return `
-                                <div style="position: absolute; ${positions[index].top}; ${positions[index].left}; transform: translate(-50%, -50%); cursor: pointer;" onclick="selectHospital(${hospital.id})">
-                                    <div style="font-size: 24px;">🏥</div>
-                                    <div style="background: white; padding: 4px 8px; border-radius: 4px; font-size: 12px; white-space: nowrap; box-shadow: 0 2px 4px rgba(0,0,0,0.2);">
-                                        ${hospital.name}
-                                    </div>
-                                </div>
-                            `;
-                        }).join('')}
-                    </div>
-                `;
-            }, 1000);
+        // 打开外部地图
+        function openExternalMap() {
+            if (appData.currentLocation) {
+                const mapUrl = `https://uri.amap.com/navigation?to=${appData.currentLocation.lng},${appData.currentLocation.lat},当前位置&mode=car`;
+                window.open(mapUrl, '_blank');
+            }
         }
 
         // 加载附近医院
@@ -1657,10 +1909,21 @@
                 // 初始化医院数据
                 loadNearbyHospitals();
                 
+                // 初始化登录按钮
+                updateLoginButton();
+                
                 // 检查所有onclick功能
                 document.querySelectorAll('[onclick]').forEach(element => {
                     console.log('✅ 检查onclick元素:', element);
                 });
+                
+                // 检查高德地图API加载状态
+                if (typeof AMap !== 'undefined') {
+                    console.log('✅ 高德地图API加载成功');
+                    showToast('高德地图已就绪', 'success');
+                } else {
+                    console.log('⚠️ 高德地图API未加载，将使用备用地图');
+                }
                 
                 // 显示欢迎消息
                 setTimeout(() => {
