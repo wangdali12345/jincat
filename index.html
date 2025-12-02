@@ -1,0 +1,725 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>杭州自家小猫咪-李先生 - 宠物社区平台</title>
+    
+    <!-- 地图API -->
+    <script type="text/javascript" src="https://webapi.amap.com/maps?v=1.4.15&key=0d3b3b8f6e6e4f7b9a6e6e6e6e6e6e6&plugin=AMap.Geolocation,AMap.PlaceSearch,AMap.Geocoder,AMap.ToolBar,AMap.Autocomplete,AMap.Driving"></script>
+    
+    <style>
+        /* 苹果风格全局样式 */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            /* 苹果风格配色 */
+            --apple-black: #1d1d1f;
+            --apple-gray-light: #f5f5f7;
+            --apple-gray-medium: #86868b;
+            --apple-gray-dark: #6e6e73;
+            --apple-blue: #0071e3;
+            --apple-blue-hover: #0051d5;
+            --apple-green: #34c759;
+            --apple-orange: #ff9500;
+            --apple-red: #ff3b30;
+            --apple-purple: #af52de;
+            --apple-white: #fbfbfd;
+            --apple-border: #d2d2d7;
+            
+            /* 字体系统 */
+            --font-family: "SF Pro Display", "SF Pro Text", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            
+            /* 间距系统 */
+            --spacing-xs: 8px;
+            --spacing-sm: 16px;
+            --spacing-md: 32px;
+            --spacing-lg: 48px;
+            --spacing-xl: 64px;
+            --spacing-xxl: 96px;
+            
+            /* 圆角 */
+            --border-radius-sm: 6px;
+            --border-radius-md: 12px;
+            --border-radius-lg: 18px;
+            
+            /* 阴影 */
+            --shadow-light: 0 4px 20px rgba(0, 0, 0, 0.05);
+            --shadow-medium: 0 8px 30px rgba(0, 0, 0, 0.12);
+            --shadow-heavy: 0 20px 60px rgba(0, 0, 0, 0.15);
+        }
+
+        body {
+            font-family: var(--font-family);
+            background: linear-gradient(135deg, #FFF8E1 0%, #FFE0B2 100%);
+            color: var(--apple-black);
+            line-height: 1.47059;
+            font-weight: 400;
+            letter-spacing: -0.022em;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            min-height: 100vh;
+        }
+
+        /* 容器 */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 var(--spacing-sm);
+        }
+
+        /* 导航栏 */
+        .nav {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--apple-border);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .nav-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 60px;
+        }
+
+        .nav-menu {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+        }
+
+        .nav-link {
+            text-decoration: none;
+            color: var(--apple-black);
+            font-weight: 500;
+            padding: var(--spacing-xs) var(--spacing-sm);
+            border-radius: var(--border-radius-sm);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .nav-link:hover {
+            background: var(--apple-gray-light);
+            color: var(--apple-blue);
+        }
+
+        .nav-link.active {
+            color: var(--apple-blue);
+            background: rgba(0, 113, 227, 0.1);
+        }
+
+        /* 页面容器 */
+        .page {
+            display: none;
+            padding: var(--spacing-lg) 0;
+            min-height: calc(100vh - 60px);
+        }
+
+        .page.active {
+            display: block;
+        }
+
+        /* 卡片样式 */
+        .card {
+            background: white;
+            border-radius: var(--border-radius-md);
+            box-shadow: var(--shadow-light);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            overflow: hidden;
+        }
+
+        .card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-medium);
+        }
+
+        .card h3 {
+            color: var(--apple-black);
+            margin-bottom: var(--spacing-xs);
+        }
+
+        /* 网格布局 */
+        .grid {
+            display: grid;
+            gap: var(--spacing-md);
+            margin-top: var(--spacing-md);
+        }
+
+        .grid-2 {
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        }
+
+        .grid-3 {
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        }
+
+        /* 按钮样式 */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 12px 24px;
+            border: none;
+            border-radius: var(--border-radius-sm);
+            font-weight: 600;
+            text-decoration: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 16px;
+            min-height: 44px;
+        }
+
+        .btn-primary {
+            background: var(--apple-blue);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: var(--apple-blue-hover);
+            transform: translateY(-1px);
+        }
+
+        .btn-secondary {
+            background: var(--apple-gray-light);
+            color: var(--apple-black);
+        }
+
+        .btn-secondary:hover {
+            background: var(--apple-gray-medium);
+            color: white;
+        }
+
+        /* 输入框样式 */
+        .input {
+            width: 100%;
+            padding: 12px 16px;
+            border: 1px solid var(--apple-border);
+            border-radius: var(--border-radius-sm);
+            font-size: 16px;
+            background: white;
+            transition: all 0.3s ease;
+            min-height: 44px;
+        }
+
+        .input:focus {
+            outline: none;
+            border-color: var(--apple-blue);
+            box-shadow: 0 0 0 3px rgba(0, 113, 227, 0.1);
+        }
+
+        /* 表单组 */
+        .form-group {
+            margin-bottom: var(--spacing-md);
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: var(--spacing-xs);
+            font-weight: 600;
+            color: var(--apple-black);
+        }
+
+        /* 模态框 */
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            display: none;
+            z-index: 1000;
+            backdrop-filter: blur(10px);
+        }
+
+        .modal.active {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: var(--border-radius-lg);
+            max-width: 600px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: var(--shadow-heavy);
+        }
+
+        .modal-header {
+            padding: var(--spacing-md);
+            border-bottom: 1px solid var(--apple-border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-body {
+            padding: var(--spacing-md);
+        }
+
+        .modal-footer {
+            padding: var(--spacing-md);
+            border-top: 1px solid var(--apple-border);
+            display: flex;
+            justify-content: flex-end;
+            gap: var(--spacing-sm);
+        }
+
+        /* Toast通知 */
+        .toast {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 16px 24px;
+            border-radius: var(--border-radius-sm);
+            color: white;
+            font-weight: 600;
+            z-index: 2000;
+            opacity: 0;
+            transform: translateY(-20px);
+            transition: all 0.3s ease;
+            box-shadow: var(--shadow-medium);
+        }
+
+        .toast.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .toast.success {
+            background: var(--apple-green);
+        }
+
+        .toast.error {
+            background: var(--apple-red);
+        }
+
+        .toast.info {
+            background: var(--apple-blue);
+        }
+
+        /* 响应式 */
+        @media (max-width: 768px) {
+            .nav-menu {
+                display: none;
+            }
+
+            .mobile-nav-toggle {
+                display: block;
+                background: none;
+                border: none;
+                font-size: 24px;
+                cursor: pointer;
+                color: var(--apple-black);
+            }
+
+            .grid-3 {
+                grid-template-columns: 1fr;
+            }
+
+            .container {
+                padding: 0 12px;
+            }
+        }
+
+        .mobile-nav-toggle {
+            display: none;
+        }
+
+        /* 标题样式 */
+        h1 {
+            font-size: 48px;
+            font-weight: 700;
+            margin-bottom: var(--spacing-md);
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-align: center;
+        }
+
+        h2 {
+            font-size: 32px;
+            font-weight: 600;
+            margin-bottom: var(--spacing-md);
+            color: var(--apple-black);
+        }
+
+        h3 {
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: var(--spacing-sm);
+            color: var(--apple-black);
+        }
+
+        /* 段落 */
+        p {
+            margin-bottom: var(--spacing-sm);
+            color: var(--apple-gray-dark);
+            line-height: 1.6;
+        }
+
+        /* 加载动画 */
+        .loading {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 200px;
+        }
+
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 3px solid var(--apple-border);
+            border-top-color: var(--apple-blue);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <!-- 导航栏 -->
+    <nav class="nav">
+        <div class="container">
+            <div class="nav-content">
+                <div style="display: flex; align-items: center; gap: var(--spacing-sm);">
+                    <span style="font-size: 24px;">🐱</span>
+                    <span style="font-weight: 700; font-size: 18px;">金猫之家</span>
+                </div>
+                
+                <div class="nav-menu">
+                    <a href="#" class="nav-link active" data-page="home" onclick="showPage('home', this)">首页</a>
+                    <a href="#" class="nav-link" data-page="cats" onclick="showPage('cats', this)">猫咪管理</a>
+                    <a href="#" class="nav-link" data-page="hospital" onclick="showPage('hospital', this)">宠物医院</a>
+                    <a href="#" class="nav-link" data-page="logistics" onclick="showPage('logistics', this)">物流查询</a>
+                    <a href="#" class="nav-link" data-page="forum" onclick="showPage('forum', this)">论坛交流</a>
+                    <a href="#" class="nav-link" data-page="shop" onclick="showPage('shop', this)">宠物商城</a>
+                </div>
+
+                <button class="mobile-nav-toggle">☰</button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 首页 -->
+    <div id="home" class="page active">
+        <div class="container">
+            <h1>🐱 金猫之家</h1>
+            <p style="text-align: center; font-size: 18px; margin-bottom: var(--spacing-lg);">
+                杭州自家小猫咪-李先生的宠物社区平台
+            </p>
+            
+            <!-- 功能网格 -->
+            <div class="grid grid-3">
+                <div class="card" onclick="showPage('cats')">
+                    <div style="padding: var(--spacing-md); text-align: center;">
+                        <div style="font-size: 48px; margin-bottom: var(--spacing-sm);">🐱</div>
+                        <h3>猫咪管理</h3>
+                        <p>管理您的猫咪信息、健康记录和日常护理</p>
+                    </div>
+                </div>
+                
+                <div class="card" onclick="showPage('hospital')">
+                    <div style="padding: var(--spacing-md); text-align: center;">
+                        <div style="font-size: 48px; margin-bottom: var(--spacing-sm);">🏥</div>
+                        <h3>宠物医院</h3>
+                        <p>查找附近的宠物医院和医疗服务</p>
+                    </div>
+                </div>
+                
+                <div class="card" onclick="showPage('logistics')">
+                    <div style="padding: var(--spacing-md); text-align: center;">
+                        <div style="font-size: 48px; margin-bottom: var(--spacing-sm);">📦</div>
+                        <h3>物流查询</h3>
+                        <p>查询宠物用品物流信息</p>
+                    </div>
+                </div>
+                
+                <div class="card" onclick="showPage('forum')">
+                    <div style="padding: var(--spacing-md); text-align: center;">
+                        <div style="font-size: 48px; margin-bottom: var(--spacing-sm);">💬</div>
+                        <h3>论坛交流</h3>
+                        <p>与其他宠物主人交流经验</p>
+                    </div>
+                </div>
+                
+                <div class="card" onclick="showPage('shop')">
+                    <div style="padding: var(--spacing-md); text-align: center;">
+                        <div style="font-size: 48px; margin-bottom: var(--spacing-sm);">🛍️</div>
+                        <h3>宠物商城</h3>
+                        <p>购买宠物用品和服务</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 猫咪管理页面 -->
+    <div id="cats" class="page">
+        <div class="container">
+            <h2>🐱 猫咪管理</h2>
+            <div style="margin-bottom: var(--spacing-md);">
+                <button class="btn btn-primary" onclick="addCat()">+ 添加猫咪</button>
+            </div>
+            <div id="catList" class="grid grid-2">
+                <div class="card">
+                    <div style="padding: var(--spacing-md);">
+                        <h3>示例猫咪</h3>
+                        <p>品种：英短</p>
+                        <p>年龄：2岁</p>
+                        <div style="margin-top: var(--spacing-sm);">
+                            <button class="btn btn-secondary">编辑</button>
+                            <button class="btn btn-secondary">删除</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 宠物医院页面 -->
+    <div id="hospital" class="page">
+        <div class="container">
+            <h2>🏥 宠物医院</h2>
+            <div class="form-group">
+                <input type="text" class="input" placeholder="搜索医院名称或地址..." id="hospitalSearch">
+            </div>
+            <button class="btn btn-primary" onclick="searchHospital()">搜索</button>
+            <div id="hospitalList" class="grid grid-2" style="margin-top: var(--spacing-md);">
+                <div class="card">
+                    <div style="padding: var(--spacing-md);">
+                        <h3>杭州宠物医院</h3>
+                        <p>📍 杭州市江干区钱江新城民心路88号</p>
+                        <p>📞 0571-11223344</p>
+                        <p>⭐ 4.8分</p>
+                        <button class="btn btn-primary">导航</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 物流查询页面 -->
+    <div id="logistics" class="page">
+        <div class="container">
+            <h2>📦 物流查询</h2>
+            <div class="form-group">
+                <label>运单号</label>
+                <input type="text" class="input" placeholder="请输入运单号..." id="trackingNumber">
+            </div>
+            <button class="btn btn-primary" onclick="trackPackage()">查询</button>
+            <div id="trackingResult" style="margin-top: var(--spacing-md);"></div>
+        </div>
+    </div>
+
+    <!-- 论坛交流页面 -->
+    <div id="forum" class="page">
+        <div class="container">
+            <h2>💬 论坛交流</h2>
+            <div style="margin-bottom: var(--spacing-md);">
+                <button class="btn btn-primary" onclick="createPost()">+ 发表帖子</button>
+            </div>
+            <div id="postList" class="grid grid-2">
+                <div class="card">
+                    <div style="padding: var(--spacing-md);">
+                        <h3>欢迎来到金猫论坛</h3>
+                        <p style="color: var(--apple-gray-medium); font-size: 14px;">作者: 管理员</p>
+                        <p>欢迎大家在这里分享养猫经验...</p>
+                        <button class="btn btn-secondary">查看详情</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 宠物商城页面 -->
+    <div id="shop" class="page">
+        <div class="container">
+            <h2>🛍️ 宠物商城</h2>
+            <div class="grid grid-3">
+                <div class="card">
+                    <div style="padding: var(--spacing-md); text-align: center;">
+                        <div style="font-size: 48px; margin-bottom: var(--spacing-sm);">🥫</div>
+                        <h3>猫粮</h3>
+                        <p style="color: var(--apple-orange); font-weight: 600;">¥89</p>
+                        <button class="btn btn-primary">购买</button>
+                    </div>
+                </div>
+                <div class="card">
+                    <div style="padding: var(--spacing-md); text-align: center;">
+                        <div style="font-size: 48px; margin-bottom: var(--spacing-sm);">🧶</div>
+                        <h3>猫玩具</h3>
+                        <p style="color: var(--apple-orange); font-weight: 600;">¥29</p>
+                        <button class="btn btn-primary">购买</button>
+                    </div>
+                </div>
+                <div class="card">
+                    <div style="padding: var(--spacing-md); text-align: center;">
+                        <div style="font-size: 48px; margin-bottom: var(--spacing-sm);">🧼</div>
+                        <h3>猫砂</h3>
+                        <p style="color: var(--apple-orange); font-weight: 600;">¥45</p>
+                        <button class="btn btn-primary">购买</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast通知容器 -->
+    <div id="toast" class="toast"></div>
+
+    <script>
+        // 应用数据
+        const appData = {
+            cats: [],
+            hospitals: [],
+            posts: [],
+            products: []
+        };
+
+        // 页面切换函数 - 核心功能
+        function showPage(pageId, element) {
+            try {
+                console.log('🔄 切换到页面:', pageId);
+                
+                // 1. 隐藏所有页面
+                document.querySelectorAll('.page').forEach(page => {
+                    page.classList.remove('active');
+                });
+                
+                // 2. 显示目标页面
+                const targetPage = document.getElementById(pageId);
+                if (targetPage) {
+                    targetPage.classList.add('active');
+                    console.log('✅ 页面显示成功:', pageId);
+                } else {
+                    console.error('❌ 页面不存在:', pageId);
+                    showToast('页面不存在: ' + pageId, 'error');
+                    return;
+                }
+                
+                // 3. 更新导航状态
+                document.querySelectorAll('.nav-link').forEach(link => {
+                    link.classList.remove('active');
+                });
+                
+                if (element && element.classList) {
+                    element.classList.add('active');
+                } else {
+                    // 如果没有传入element，尝试通过data-page找到对应导航
+                    const navLink = document.querySelector(`[data-page="${pageId}"]`);
+                    if (navLink) {
+                        navLink.classList.add('active');
+                    }
+                }
+                
+                // 4. 滚动到顶部
+                window.scrollTo(0, 0);
+                
+                // 5. 显示成功提示
+                console.log('✅ 页面切换完成:', pageId);
+                
+            } catch (error) {
+                console.error('❌ 页面切换错误:', error);
+                showToast('页面切换失败: ' + error.message, 'error');
+            }
+        }
+
+        // Toast通知函数
+        function showToast(message, type = 'info') {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.className = 'toast ' + type;
+            
+            toast.classList.add('show');
+            
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3000);
+        }
+
+        // 添加猫咪
+        function addCat() {
+            showToast('添加猫咪功能开发中...', 'info');
+        }
+
+        // 搜索医院
+        function searchHospital() {
+            const searchTerm = document.getElementById('hospitalSearch').value;
+            if (!searchTerm) {
+                showToast('请输入搜索关键词', 'error');
+                return;
+            }
+            showToast('搜索功能开发中...', 'info');
+        }
+
+        // 物流查询
+        function trackPackage() {
+            const trackingNumber = document.getElementById('trackingNumber').value;
+            if (!trackingNumber) {
+                showToast('请输入运单号', 'error');
+                return;
+            }
+            showToast('物流查询功能开发中...', 'info');
+        }
+
+        // 发表帖子
+        function createPost() {
+            showToast('发表帖子功能开发中...', 'info');
+        }
+
+        // 初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('🚀 金猫之家加载完成');
+            
+            try {
+                // 确保首页显示
+                const homePage = document.getElementById('home');
+                if (homePage) {
+                    homePage.classList.add('active');
+                    console.log('✅ 首页已激活');
+                }
+                
+                // 检查所有onclick功能
+                document.querySelectorAll('[onclick]').forEach(element => {
+                    console.log('✅ 检查onclick元素:', element);
+                });
+                
+                // 显示欢迎消息
+                setTimeout(() => {
+                    showToast('🎉 欢迎来到金猫之家！', 'success');
+                }, 500);
+                
+            } catch (error) {
+                console.error('❌ 初始化错误:', error);
+                showToast('页面加载完成', 'success');
+            }
+        });
+
+        // 错误处理
+        window.addEventListener('error', function(e) {
+            console.error('全局错误:', e.error);
+        });
+
+        // 移动端导航切换
+        document.querySelector('.mobile-nav-toggle')?.addEventListener('click', function() {
+            const navMenu = document.querySelector('.nav-menu');
+            navMenu.style.display = navMenu.style.display === 'flex' ? 'none' : 'flex';
+        });
+    </script>
+</body>
+</html>
