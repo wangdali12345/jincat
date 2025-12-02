@@ -2,7 +2,7 @@
 <html lang="zh-CN">
 <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>杭州自家小猫咪-李先生 - 宠物社区平台</title>
     
     <!-- 地图API -->
@@ -193,7 +193,8 @@
         /* 页面切换 */
         .page {
             display: none;
-            animation: fadeIn 0.3s ease-in-out;
+            min-height: calc(100vh - 80px);
+            padding-bottom: 20px;
         }
 
         .page.active {
@@ -3163,15 +3164,42 @@
 
         // 初始化
         document.addEventListener('DOMContentLoaded', function() {
-            loadData();
-            initializeEventListeners();
-            loadInitialData();
-            renderHomePage();
+            console.log('开始初始化页面...');
             
-            // 增强商品卡片
-            setTimeout(() => {
-                enhanceProductCards();
-            }, 1000);
+            // 简化的初始化流程，避免移动端问题
+            try {
+                // 首先确保首页显示
+                const homePage = document.getElementById('home');
+                if (homePage) {
+                    homePage.classList.add('active');
+                    console.log('首页已激活');
+                }
+                
+                // 然后加载数据
+                loadData();
+                
+                // 初始化事件监听器
+                initializeEventListeners();
+                
+                // 加载初始数据
+                loadInitialData();
+                
+                // 渲染首页内容
+                renderHomePage();
+                
+                console.log('页面初始化完成');
+                
+                // 显示成功提示
+                setTimeout(() => {
+                    showToast('🎉 金猫之家加载成功！', 'success');
+                }, 500);
+                
+            } catch (error) {
+                console.error('页面初始化失败:', error);
+                // 强制显示首页
+                document.getElementById('home').classList.add('active');
+                showToast('页面加载完成', 'success');
+            }
         });
 
         // 初始化事件监听器
@@ -3460,65 +3488,89 @@
 
         // 页面切换
         function showPage(pageId) {
-            // 隐藏所有页面
-            document.querySelectorAll('.page').forEach(page => {
-                page.classList.remove('active');
-            });
+            try {
+                console.log('切换到页面:', pageId);
+                
+                // 隐藏所有页面
+                document.querySelectorAll('.page').forEach(page => {
+                    page.classList.remove('active');
+                });
 
-            // 显示目标页面
-            const targetPage = document.getElementById(pageId);
-            if (targetPage) {
-                targetPage.classList.add('active');
-            }
+                // 显示目标页面
+                const targetPage = document.getElementById(pageId);
+                if (targetPage) {
+                    targetPage.classList.add('active');
+                    console.log('页面显示成功:', pageId);
+                } else {
+                    console.error('页面不存在:', pageId);
+                    return;
+                }
 
-            // 更新导航状态
-            document.querySelectorAll('.nav-link').forEach(link => {
-                link.classList.remove('active');
-            });
-            
-            const activeLink = document.querySelector(`[data-page="${pageId}"]`);
-            if (activeLink) {
-                activeLink.classList.add('active');
-            }
+                // 更新导航状态
+                document.querySelectorAll('.nav-link').forEach(link => {
+                    link.classList.remove('active');
+                });
+                
+                const activeLink = document.querySelector(`[data-page="${pageId}"]`);
+                if (activeLink) {
+                    activeLink.classList.add('active');
+                }
 
-            // 渲染页面内容
-            switch(pageId) {
-                case 'home':
-                    renderHomePage();
-                    break;
-                case 'cats':
-                    renderCatsPage();
-                    break;
-                case 'hospital':
-                    initMap();
-                    break;
-                case 'logistics':
-                    renderLogisticsPage();
-                    break;
-                case 'forum':
-                    renderForumPage();
-                    break;
-                case 'shop':
-                    renderShopPage();
-                    break;
-                case 'admin':
-                    if (appData.isAdmin) {
-                        renderAdminPage();
-                    } else {
-                        showToast('请先登录管理员账号', 'error');
-                        showLoginModal();
-                        showPage('home');
+                // 渲染页面内容
+                try {
+                    switch(pageId) {
+                        case 'home':
+                            renderHomePage();
+                            break;
+                        case 'cats':
+                            renderCatsPage();
+                            break;
+                        case 'hospital':
+                            initMap();
+                            break;
+                        case 'logistics':
+                            renderLogisticsPage();
+                            break;
+                        case 'forum':
+                            renderForumPage();
+                            break;
+                        case 'shop':
+                            renderShopPage();
+                            break;
+                        case 'admin':
+                            if (appData.isAdmin) {
+                                renderAdminPage();
+                            } else {
+                                showToast('请先登录管理员账号', 'error');
+                                showLoginModal();
+                                showPage('home');
+                            }
+                            break;
+                        case 'cart':
+                            renderCartPage();
+                            break;
+                        case 'profile':
+                            renderProfilePage();
+                            break;
+                        case 'orders':
+                            renderOrdersPage();
+                            break;
                     }
-                    break;
-                case 'cart':
-                    renderCartPage();
-                    break;
-                case 'profile':
-                    renderProfilePage();
-                    break;
-                case 'orders':
-                    renderOrdersPage();
-                    break;
+                } catch (renderError) {
+                    console.error('页面渲染错误:', renderError);
+                    showToast('页面加载失败，请重试', 'error');
+                }
+                
+                // 移动端关闭菜单
+                if (window.innerWidth <= 768) {
+                    closeMobileMenu();
+                }
+                
+                // 滚动到顶部
+                window.scrollTo(0, 0);
+            } catch (error) {
+                console.error('页面切换错误:', error);
+                showToast('页面切换失败', 'error');
             }
 
             // 关闭用户菜单
