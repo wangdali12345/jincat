@@ -3166,44 +3166,46 @@
         document.addEventListener('DOMContentLoaded', function() {
             console.log('开始初始化页面...');
             
-            // 简化的初始化流程，避免移动端问题
+            // 简化的初始化流程，优先确保导航正常工作
             try {
-                // 首先确保所有页面都不显示
+                // 1. 首先设置事件监听器（最重要）
+                initializeEventListeners();
+                
+                // 2. 然后加载数据
+                loadData();
+                
+                // 3. 加载初始数据
+                loadInitialData();
+                
+                // 4. 确保首页显示
                 document.querySelectorAll('.page').forEach(page => {
                     page.classList.remove('active');
                 });
                 
-                // 然后加载数据
-                loadData();
-                
-                // 初始化事件监听器
-                initializeEventListeners();
-                
-                // 加载初始数据
-                loadInitialData();
-                
-                // 确保首页显示
                 const homePage = document.getElementById('home');
                 if (homePage) {
                     homePage.classList.add('active');
                     console.log('首页已激活');
                 }
                 
-                // 渲染首页内容
+                // 5. 渲染首页内容
                 renderHomePage();
                 
-                // 设置导航状态
+                // 6. 设置导航状态
                 document.querySelectorAll('.nav-link').forEach(link => {
                     link.classList.remove('active');
                 });
                 
-                // 激活首页导航
+                // 7. 激活首页导航
                 const homeNav = document.querySelector('[data-page="home"]');
                 if (homeNav) {
                     homeNav.classList.add('active');
                 }
                 
                 console.log('页面初始化完成');
+                
+                // 调试页面状态
+                debugPageStatus();
                 
                 // 显示成功提示
                 setTimeout(() => {
@@ -3220,10 +3222,17 @@
 
         // 初始化事件监听器
         function initializeEventListeners() {
+            console.log('正在初始化事件监听器...');
+            
             // 导航点击事件 - 处理data-page和onclick两种方式
-            document.querySelectorAll('.nav-link').forEach(link => {
+            document.querySelectorAll('.nav-link').forEach((link, index) => {
+                console.log(`绑定导航链接 ${index}:`, link.textContent, link.getAttribute('data-page'));
+                
                 link.addEventListener('click', function(e) {
                     e.preventDefault();
+                    e.stopPropagation();
+                    
+                    console.log('导航链接被点击:', this.textContent, this);
                     
                     // 优先使用data-page属性
                     let page = this.getAttribute('data-page');
@@ -3240,27 +3249,50 @@
                     }
                     
                     if (page) {
-                        console.log('导航点击:', page);
+                        console.log('导航点击成功，切换到页面:', page);
                         showPage(page);
                     } else {
-                        console.warn('无法获取页面ID', this);
+                        console.warn('无法获取页面ID:', this);
+                        showToast('页面跳转失败', 'error');
                     }
                 });
             });
 
             // 处理卡片点击事件
-            document.querySelectorAll('.card[onclick]').forEach(card => {
+            document.querySelectorAll('.card[onclick]').forEach((card, index) => {
+                console.log(`绑定卡片点击事件 ${index}:`, card);
+                
                 card.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    
                     const onclickAttr = this.getAttribute('onclick');
                     if (onclickAttr && onclickAttr.includes("showPage('")) {
                         const match = onclickAttr.match(/showPage\('([^']+)'\)/);
                         if (match) {
-                            e.preventDefault();
+                            console.log('卡片点击，切换到页面:', match[1]);
                             showPage(match[1]);
                         }
                     }
                 });
             });
+            
+            console.log('事件监听器初始化完成');
+        }
+        
+        // 调试函数：检查页面状态
+        function debugPageStatus() {
+            console.log('=== 页面状态调试信息 ===');
+            const pages = document.querySelectorAll('.page');
+            pages.forEach(page => {
+                console.log(`页面 ${page.id}:`, page.classList.contains('active') ? '显示' : '隐藏');
+            });
+            
+            const navLinks = document.querySelectorAll('.nav-link');
+            navLinks.forEach(link => {
+                console.log(`导航 ${link.textContent}:`, link.classList.contains('active') ? '激活' : '未激活', link.getAttribute('data-page'));
+            });
+            console.log('=== 调试信息结束 ===');
         }
 
         // 加载初始数据
@@ -3630,100 +3662,118 @@
         // 页面切换
         function showPage(pageId) {
             try {
-                console.log('切换到页面:', pageId);
+                console.log('=== 开始切换到页面:', pageId, '===');
                 
-                // 隐藏所有页面
-                document.querySelectorAll('.page').forEach(page => {
+                // 1. 隐藏所有页面
+                const allPages = document.querySelectorAll('.page');
+                console.log('找到页面数量:', allPages.length);
+                allPages.forEach(page => {
                     page.classList.remove('active');
                 });
 
-                // 显示目标页面
+                // 2. 显示目标页面
                 const targetPage = document.getElementById(pageId);
                 if (targetPage) {
                     targetPage.classList.add('active');
-                    console.log('页面显示成功:', pageId);
+                    console.log('✅ 页面显示成功:', pageId);
                 } else {
-                    console.error('页面不存在:', pageId);
+                    console.error('❌ 页面不存在:', pageId);
+                    showToast('页面不存在: ' + pageId, 'error');
                     return;
                 }
 
-                // 更新导航状态
-                document.querySelectorAll('.nav-link').forEach(link => {
+                // 3. 更新导航状态
+                const allNavLinks = document.querySelectorAll('.nav-link');
+                console.log('找到导航链接数量:', allNavLinks.length);
+                allNavLinks.forEach(link => {
                     link.classList.remove('active');
                 });
                 
-                // 尝试多种方式找到导航链接
+                // 4. 尝试多种方式找到并激活导航链接
                 let activeLink = document.querySelector(`[data-page="${pageId}"]`);
+                console.log('通过data-page找到的链接:', activeLink);
+                
                 if (!activeLink) {
                     // 尝试通过onclick属性查找
                     activeLink = Array.from(document.querySelectorAll('.nav-link')).find(link => {
                         const onclick = link.getAttribute('onclick');
                         return onclick && onclick.includes(`showPage('${pageId}')`);
                     });
+                    console.log('通过onclick找到的链接:', activeLink);
                 }
                 
                 if (activeLink) {
                     activeLink.classList.add('active');
+                    console.log('✅ 导航状态更新成功:', pageId);
+                } else {
+                    console.warn('⚠️ 未找到对应的导航链接:', pageId);
                 }
 
-                // 渲染页面内容
+                // 5. 渲染页面内容
                 try {
+                    console.log('开始渲染页面内容:', pageId);
                     switch(pageId) {
                         case 'home':
-                            renderHomePage();
+                            if (typeof renderHomePage === 'function') renderHomePage();
                             break;
                         case 'cats':
-                            renderCatsPage();
+                            if (typeof renderCatsPage === 'function') renderCatsPage();
                             break;
                         case 'hospital':
-                            initMap();
+                            if (typeof initMap === 'function') initMap();
                             break;
                         case 'logistics':
-                            renderLogisticsPage();
+                            if (typeof renderLogisticsPage === 'function') renderLogisticsPage();
                             break;
                         case 'forum':
-                            renderForumPage();
+                            if (typeof renderForumPage === 'function') renderForumPage();
                             break;
                         case 'shop':
-                            renderShopPage();
+                            if (typeof renderShopPage === 'function') renderShopPage();
                             break;
                         case 'admin':
                             if (appData.isAdmin) {
-                                renderAdminPage();
+                                if (typeof renderAdminPage === 'function') renderAdminPage();
                             } else {
                                 showToast('请先登录管理员账号', 'error');
                                 showLoginModal();
                                 showPage('home');
+                                return;
                             }
                             break;
                         case 'cart':
-                            renderCartPage();
+                            if (typeof renderCartPage === 'function') renderCartPage();
                             break;
                         case 'profile':
-                            renderProfilePage();
+                            if (typeof renderProfilePage === 'function') renderProfilePage();
                             break;
                         case 'orders':
-                            renderOrdersPage();
+                            if (typeof renderOrdersPage === 'function') renderOrdersPage();
                             break;
                         case 'postDetail':
                             // 帖子详情页不需要额外渲染，已在viewPostDetail中处理
                             break;
+                        default:
+                            console.warn('未处理的页面类型:', pageId);
                     }
+                    console.log('✅ 页面内容渲染完成:', pageId);
                 } catch (renderError) {
-                    console.error('页面渲染错误:', renderError);
+                    console.error('❌ 页面渲染错误:', renderError);
                     showToast('页面加载失败，请重试', 'error');
                 }
                 
-                // 移动端关闭菜单
+                // 6. 移动端关闭菜单
                 if (window.innerWidth <= 768) {
-                    closeMobileMenu();
+                    if (typeof closeMobileMenu === 'function') closeMobileMenu();
                 }
                 
-                // 滚动到顶部
+                // 7. 滚动到顶部
                 window.scrollTo(0, 0);
+                
+                console.log('✅=== 页面切换完成:', pageId, '===');
             } catch (error) {
-                console.error('页面切换错误:', error);
-                showToast('页面切换失败', 'error');
+                console.error('❌=== 页面切换错误:', error, '===');
+                showToast('页面切换失败: ' + error.message, 'error');
             }
 
             // 关闭用户菜单
