@@ -313,7 +313,23 @@
         /* 响应式 */
         @media (max-width: 768px) {
             .nav-menu {
-                display: none;
+                position: fixed;
+                top: 60px;
+                left: 0;
+                right: 0;
+                background: white;
+                flex-direction: column;
+                padding: var(--spacing-md);
+                box-shadow: var(--shadow-medium);
+                transform: translateY(-100%);
+                transition: transform 0.3s ease;
+                z-index: 999;
+                gap: var(--spacing-sm);
+            }
+
+            .nav-menu.active {
+                transform: translateY(0);
+                display: flex !important;
             }
 
             .mobile-nav-toggle {
@@ -329,13 +345,47 @@
                 grid-template-columns: 1fr;
             }
 
+            .grid-2 {
+                grid-template-columns: 1fr;
+            }
+
+            .category-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
             .container {
                 padding: 0 12px;
+            }
+
+            .nav-content {
+                padding: 0 var(--spacing-sm);
+            }
+
+            .modal-content {
+                width: 95%;
+                max-height: 90vh;
+                margin: 20px auto;
             }
         }
 
         .mobile-nav-toggle {
             display: none;
+        }
+
+        /* 移动端导航遮罩 */
+        .mobile-nav-overlay {
+            position: fixed;
+            top: 60px;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            display: none;
+            z-index: 998;
+        }
+
+        .mobile-nav-overlay.active {
+            display: block;
         }
 
         /* 标题样式 */
@@ -685,22 +735,25 @@
                     <span style="font-weight: 700; font-size: 18px;">金猫之家</span>
                 </div>
                 
-                <div class="nav-menu">
-                    <a href="#" class="nav-link active" data-page="home" onclick="showPage('home', this)">首页</a>
-                    <a href="#" class="nav-link" data-page="cats" onclick="showPage('cats', this)">猫咪管理</a>
-                    <a href="#" class="nav-link" data-page="hospital" onclick="showPage('hospital', this)">宠物医院</a>
-                    <a href="#" class="nav-link" data-page="logistics" onclick="showPage('logistics', this)">物流查询</a>
-                    <a href="#" class="nav-link" data-page="forum" onclick="showPage('forum', this)">论坛交流</a>
-                    <a href="#" class="nav-link" data-page="shop" onclick="showPage('shop', this)">宠物商城</a>
+                <div class="nav-menu" id="navMenu">
+                    <a href="#" class="nav-link active" data-page="home" onclick="showPageAndCloseMenu('home', this)">首页</a>
+                    <a href="#" class="nav-link" data-page="cats" onclick="showPageAndCloseMenu('cats', this)">猫咪管理</a>
+                    <a href="#" class="nav-link" data-page="hospital" onclick="showPageAndCloseMenu('hospital', this)">宠物医院</a>
+                    <a href="#" class="nav-link" data-page="logistics" onclick="showPageAndCloseMenu('logistics', this)">物流查询</a>
+                    <a href="#" class="nav-link" data-page="forum" onclick="showPageAndCloseMenu('forum', this)">论坛交流</a>
+                    <a href="#" class="nav-link" data-page="shop" onclick="showPageAndCloseMenu('shop', this)">宠物商城</a>
                 </div>
 
                 <div style="display: flex; align-items: center; gap: var(--spacing-sm);">
                     <button class="btn btn-secondary" onclick="toggleLogin()" id="loginBtn" style="padding: 8px 16px; font-size: 14px;">登录</button>
-                    <button class="mobile-nav-toggle">☰</button>
+                    <button class="mobile-nav-toggle" onclick="toggleMobileMenu()">☰</button>
                 </div>
             </div>
         </div>
     </nav>
+
+    <!-- 移动端导航遮罩 -->
+    <div class="mobile-nav-overlay" id="mobileNavOverlay" onclick="closeMobileMenu()"></div>
 
     <!-- 首页 -->
     <div id="home" class="page active">
@@ -758,22 +811,69 @@
     <!-- 猫咪管理页面 -->
     <div id="cats" class="page">
         <div class="container">
-            <h2>🐱 猫咪管理</h2>
-            <div style="margin-bottom: var(--spacing-md);">
-                <button class="btn btn-primary" onclick="addCat()">+ 添加猫咪</button>
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--spacing-md);">
+                <h2>🐱 猫咪管理</h2>
+                <div id="catManagementButtons" style="display: none;">
+                    <button class="btn btn-primary" onclick="addCat()">+ 添加猫咪</button>
+                </div>
+                <div id="catUserHint" style="color: var(--apple-gray-medium); font-size: 14px;">
+                    普通用户只能查看猫咪信息
+                </div>
             </div>
             <div id="catList" class="grid grid-2">
-                <div class="card">
-                    <div style="padding: var(--spacing-md);">
-                        <h3>示例猫咪</h3>
-                        <p>品种：英短</p>
-                        <p>年龄：2岁</p>
-                        <div style="margin-top: var(--spacing-sm);">
-                            <button class="btn btn-secondary">编辑</button>
-                            <button class="btn btn-secondary">删除</button>
-                        </div>
-                    </div>
+                <!-- 猫咪列表将在这里动态生成 -->
+            </div>
+        </div>
+    </div>
+
+    <!-- 添加猫咪模态框 -->
+    <div id="addCatModal" class="modal-overlay">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>添加猫咪</h3>
+                <button class="btn btn-secondary" onclick="closeAddCatModal()">×</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>猫咪名字</label>
+                    <input type="text" class="input" id="catName" placeholder="请输入猫咪名字...">
                 </div>
+                <div class="form-group">
+                    <label>品种</label>
+                    <select class="input" id="catBreed">
+                        <option value="">请选择品种</option>
+                        <option value="英短">英短</option>
+                        <option value="美短">美短</option>
+                        <option value="布偶猫">布偶猫</option>
+                        <option value="暹罗猫">暹罗猫</option>
+                        <option value="加菲猫">加菲猫</option>
+                        <option value="中华田园猫">中华田园猫</option>
+                        <option value="其他">其他</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>年龄</label>
+                    <input type="number" class="input" id="catAge" placeholder="请输入年龄（岁）" min="0" max="30">
+                </div>
+                <div class="form-group">
+                    <label>性别</label>
+                    <select class="input" id="catGender">
+                        <option value="公">公</option>
+                        <option value="母">母</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>照片URL（可选）</label>
+                    <input type="text" class="input" id="catPhoto" placeholder="请输入照片链接...">
+                </div>
+                <div class="form-group">
+                    <label>简介</label>
+                    <textarea class="input" id="catDescription" rows="3" placeholder="介绍一下这只可爱的猫咪..."></textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeAddCatModal()">取消</button>
+                <button class="btn btn-primary" onclick="submitCat()">添加</button>
             </div>
         </div>
     </div>
@@ -1288,6 +1388,24 @@
                 loginBtn.className = 'btn btn-secondary';
                 loginBtn.onclick = toggleLogin;
             }
+            
+            // 更新猫咪管理页面权限
+            updateCatManagementButtons();
+        }
+
+        function updateCatManagementButtons() {
+            const managementButtons = document.getElementById('catManagementButtons');
+            const userHint = document.getElementById('catUserHint');
+            
+            if (managementButtons && userHint) {
+                if (appData.isAdmin) {
+                    managementButtons.style.display = 'block';
+                    userHint.style.display = 'none';
+                } else {
+                    managementButtons.style.display = 'none';
+                    userHint.style.display = 'block';
+                }
+            }
         }
 
         function enableAdminFeatures() {
@@ -1313,10 +1431,10 @@
             // 尝试打开APP
             window.location.href = cainiaoUrl;
             
-            // 如果APP打开失败，3秒后跳转到网页版
+            // 如果APP打开失败，2秒后跳转到APP下载页面
             setTimeout(() => {
-                window.open('https://www.cainiao.com', '_blank');
-            }, 3000);
+                window.open('https://mobile.yangkeduo.com/app_download.html?package_id=com.cainiao.wireless', '_blank');
+            }, 2000);
         }
 
         function openCainiaoExpress(company) {
@@ -1330,12 +1448,266 @@
 
         // 物流查询
         function trackPackage() {
-            const trackingNumber = document.getElementById('trackingNumber').value;
+            const trackingNumber = document.getElementById('trackingNumber').value.trim();
             if (!trackingNumber) {
                 showToast('请输入运单号', 'error');
                 return;
             }
-            showToast('物流查询功能开发中...', 'info');
+
+            // 构建菜鸟裹裹APP查询链接
+            const cainiaoTrackUrl = `cainiao://detail?mailNo=${encodeURIComponent(trackingNumber)}`;
+            
+            showToast('正在打开菜鸟裹裹查询...', 'info');
+            
+            // 尝试打开菜鸟裹裹APP进行查询
+            window.location.href = cainiaoTrackUrl;
+            
+            // 如果APP打开失败，2秒后跳转到网页版查询
+            setTimeout(() => {
+                const webTrackUrl = `https://www.cainiao.com/detail.htm?mailNo=${encodeURIComponent(trackingNumber)}`;
+                window.open(webTrackUrl, '_blank');
+            }, 2000);
+
+            // 同时在页面显示查询状态
+            const trackingResult = document.getElementById('trackingResult');
+            trackingResult.innerHTML = `
+                <div class="card">
+                    <div style="padding: var(--spacing-md);">
+                        <h4>📦 运单查询</h4>
+                        <p><strong>运单号：</strong>${trackingNumber}</p>
+                        <p><strong>状态：</strong><span style="color: var(--apple-blue);">正在跳转菜鸟裹裹查询...</span></p>
+                        <div style="margin-top: var(--spacing-sm);">
+                            <button class="btn btn-primary" onclick="trackInCainiao('${trackingNumber}')">📱 打开菜鸟裹裹</button>
+                            <button class="btn btn-secondary" onclick="trackOnWeb('${trackingNumber}')">🌐 网页查询</button>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // 在菜鸟裹裹中查询
+        function trackInCainiao(trackingNumber) {
+            const cainiaoTrackUrl = `cainiao://detail?mailNo=${encodeURIComponent(trackingNumber)}`;
+            window.location.href = cainiaoTrackUrl;
+        }
+
+        // 在网页中查询
+        function trackOnWeb(trackingNumber) {
+            const webTrackUrl = `https://www.cainiao.com/detail.htm?mailNo=${encodeURIComponent(trackingNumber)}`;
+            window.open(webTrackUrl, '_blank');
+        }
+
+        // 移动端菜单相关
+        function toggleMobileMenu() {
+            const navMenu = document.getElementById('navMenu');
+            const overlay = document.getElementById('mobileNavOverlay');
+            
+            navMenu.classList.toggle('active');
+            overlay.classList.toggle('active');
+        }
+
+        function closeMobileMenu() {
+            const navMenu = document.getElementById('navMenu');
+            const overlay = document.getElementById('mobileNavOverlay');
+            
+            navMenu.classList.remove('active');
+            overlay.classList.remove('active');
+        }
+
+        function showPageAndCloseMenu(pageId, element) {
+            showPage(pageId, element);
+            closeMobileMenu();
+        }
+
+        // 猫咪管理相关
+        function addCat() {
+            if (!appData.isAdmin) {
+                showToast('只有管理员才能添加猫咪', 'error');
+                return;
+            }
+            document.getElementById('addCatModal').classList.add('active');
+            // 清空表单
+            document.getElementById('catName').value = '';
+            document.getElementById('catBreed').value = '';
+            document.getElementById('catAge').value = '';
+            document.getElementById('catGender').value = '公';
+            document.getElementById('catPhoto').value = '';
+            document.getElementById('catDescription').value = '';
+        }
+
+        function closeAddCatModal() {
+            document.getElementById('addCatModal').classList.remove('active');
+        }
+
+        function submitCat() {
+            const name = document.getElementById('catName').value.trim();
+            const breed = document.getElementById('catBreed').value;
+            const age = document.getElementById('catAge').value;
+            const gender = document.getElementById('catGender').value;
+            const photo = document.getElementById('catPhoto').value.trim();
+            const description = document.getElementById('catDescription').value.trim();
+
+            if (!name || !breed || !age) {
+                showToast('请填写必要信息', 'error');
+                return;
+            }
+
+            const cat = {
+                id: Date.now(),
+                name: name,
+                breed: breed,
+                age: parseInt(age),
+                gender: gender,
+                photo: photo || 'https://picsum.photos/300/200?random=' + Date.now(),
+                description: description || `这是一只可爱的${breed}`,
+                addedBy: appData.currentUser,
+                addedTime: new Date().toLocaleString(),
+                likes: 0,
+                comments: [],
+                liked: false
+            };
+
+            appData.cats.unshift(cat);
+            renderCats();
+            closeAddCatModal();
+            showToast('猫咪添加成功！', 'success');
+        }
+
+        function renderCats() {
+            const catList = document.getElementById('catList');
+            
+            if (appData.cats.length === 0) {
+                // 显示示例猫咪
+                catList.innerHTML = `
+                    <div class="card">
+                        <div style="padding: var(--spacing-md);">
+                            <img src="https://picsum.photos/300/200?cat" style="width: 100%; height: 200px; object-fit: cover; border-radius: var(--border-radius-sm); margin-bottom: var(--spacing-sm);">
+                            <h3>示例猫咪</h3>
+                            <p>品种：英短</p>
+                            <p>年龄：2岁</p>
+                            <p>性别：公</p>
+                            <div style="margin-top: var(--spacing-sm);">
+                                <button class="post-action-btn ${appData.cats[0]?.liked ? 'liked' : ''}" onclick="likeCat(0, this)">
+                                    <span>${appData.cats[0]?.liked ? '❤️' : '🤍'}</span>
+                                    <span>128</span>
+                                </button>
+                                <button class="post-action-btn" onclick="commentCat(0)">
+                                    <span>💬</span>
+                                    <span>评论</span>
+                                </button>
+                                ${appData.isAdmin ? `
+                                    <button class="btn btn-secondary btn-small">编辑</button>
+                                    <button class="btn btn-secondary btn-small">删除</button>
+                                ` : ''}
+                            </div>
+                        </div>
+                    </div>
+                `;
+                return;
+            }
+
+            catList.innerHTML = appData.cats.map(cat => `
+                <div class="card">
+                    <div style="padding: var(--spacing-md);">
+                        <img src="${cat.photo}" style="width: 100%; height: 200px; object-fit: cover; border-radius: var(--border-radius-sm); margin-bottom: var(--spacing-sm);" onerror="this.src='https://picsum.photos/300/200?fallback'">
+                        <h3>${cat.name}</h3>
+                        <p>品种：${cat.breed}</p>
+                        <p>年龄：${cat.age}岁</p>
+                        <p>性别：${cat.gender}</p>
+                        ${cat.description ? `<p style="color: var(--apple-gray-dark); margin-top: var(--spacing-sm);">${cat.description}</p>` : ''}
+                        <p style="color: var(--apple-gray-medium); font-size: 12px;">添加时间：${cat.addedTime}</p>
+                        <div style="margin-top: var(--spacing-sm);">
+                            <button class="post-action-btn ${cat.liked ? 'liked' : ''}" onclick="likeCat(${cat.id}, this)">
+                                <span>${cat.liked ? '❤️' : '🤍'}</span>
+                                <span>${cat.likes}</span>
+                            </button>
+                            <button class="post-action-btn" onclick="commentCat(${cat.id})">
+                                <span>💬</span>
+                                <span>${cat.comments.length}</span>
+                            </button>
+                            ${appData.isAdmin ? `
+                                <button class="btn btn-secondary btn-small" onclick="editCat(${cat.id})">编辑</button>
+                                <button class="btn btn-secondary btn-small" onclick="deleteCat(${cat.id})">删除</button>
+                            ` : ''}
+                        </div>
+                        ${cat.comments.length > 0 ? `
+                            <div class="comments-section" id="cat-comments-${cat.id}" style="margin-top: var(--spacing-sm);">
+                                ${cat.comments.map(comment => `
+                                    <div class="comment-item">
+                                        <div class="comment-author">${comment.author}</div>
+                                        <div class="comment-content">${comment.content}</div>
+                                        <div class="comment-time">${comment.time}</div>
+                                    </div>
+                                `).join('')}
+                                <div class="comment-item">
+                                    <div class="form-group" style="margin: 0;">
+                                        <input type="text" class="input" placeholder="写下你的评论..." onkeypress="if(event.key==='Enter') addCatComment(${cat.id}, this.value, this)">
+                                    </div>
+                                </div>
+                            </div>
+                        ` : ''}
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function likeCat(catId, button) {
+            const cat = appData.cats.find(c => c.id === catId);
+            if (cat) {
+                cat.liked = !cat.liked;
+                cat.likes += cat.liked ? 1 : -1;
+                
+                const btn = button.querySelector('span:first-child');
+                const count = button.querySelector('span:last-child');
+                
+                btn.textContent = cat.liked ? '❤️' : '🤍';
+                button.classList.toggle('liked', cat.liked);
+                count.textContent = cat.likes;
+                
+                showToast(cat.liked ? '已点赞' : '已取消点赞', 'success');
+            }
+        }
+
+        function commentCat(catId) {
+            // 滚动到评论区
+            const commentsSection = document.getElementById(`cat-comments-${catId}`);
+            if (commentsSection) {
+                commentsSection.classList.add('expanded');
+                commentsSection.scrollIntoView({ behavior: 'smooth' });
+                // 聚焦到评论输入框
+                commentsSection.querySelector('input').focus();
+            }
+        }
+
+        function addCatComment(catId, content, input) {
+            if (!content.trim()) return;
+            
+            const cat = appData.cats.find(c => c.id === catId);
+            if (cat) {
+                const comment = {
+                    author: appData.currentUser || '游客',
+                    content: content.trim(),
+                    time: '刚刚'
+                };
+                cat.comments.push(comment);
+                renderCats();
+                showToast('评论成功', 'success');
+            }
+        }
+
+        function editCat(catId) {
+            showToast('编辑功能开发中...', 'info');
+        }
+
+        function deleteCat(catId) {
+            if (confirm('确定要删除这只猫咪吗？')) {
+                const index = appData.cats.findIndex(c => c.id === catId);
+                if (index > -1) {
+                    appData.cats.splice(index, 1);
+                    renderCats();
+                    showToast('删除成功', 'success');
+                }
+            }
         }
 
         // 发表帖子
@@ -1669,14 +2041,23 @@
 
         // 加载附近医院
         function loadNearbyHospitals() {
-            // 模拟医院数据
-            appData.hospitals = [
+            if (!appData.currentLocation) {
+                // 如果没有定位，使用默认杭州市中心位置
+                appData.currentLocation = {
+                    lat: 30.2741,
+                    lng: 120.1551
+                };
+            }
+
+            // 模拟医院数据，包含真实坐标用于计算距离
+            const hospitalData = [
                 {
                     id: 1,
                     name: '杭州宠物医院',
                     address: '杭州市江干区钱江新城民心路88号',
                     phone: '0571-11223344',
-                    distance: '1.2km',
+                    lat: 30.2841,
+                    lng: 120.1651,
                     rating: 4.8,
                     reviews: [
                         { author: '猫主人', content: '医生很专业，服务态度很好', time: '2天前', rating: 5 },
@@ -1688,7 +2069,8 @@
                     name: '协和宠物医院',
                     address: '杭州市西湖区文三路199号',
                     phone: '0571-22334455',
-                    distance: '2.5km',
+                    lat: 30.2641,
+                    lng: 120.1451,
                     rating: 4.6,
                     reviews: [
                         { author: '宠物家长', content: '急诊很快，设备先进', time: '3天前', rating: 5 },
@@ -1700,15 +2082,71 @@
                     name: '爱心宠物医院',
                     address: '杭州市拱墅区莫干山路123号',
                     phone: '0571-33445566',
-                    distance: '3.8km',
+                    lat: 30.2741,
+                    lng: 120.1351,
                     rating: 4.9,
                     reviews: [
                         { author: '铲屎官', content: '服务一流，推荐！', time: '1天前', rating: 5 }
                     ]
+                },
+                {
+                    id: 4,
+                    name: '萌宠宠物医院',
+                    address: '杭州市滨江区江南大道588号',
+                    phone: '0571-44556677',
+                    lat: 30.2541,
+                    lng: 120.1851,
+                    rating: 4.7,
+                    reviews: [
+                        { author: '宠物爱好者', content: '环境很好，医生专业', time: '4天前', rating: 4 }
+                    ]
+                },
+                {
+                    id: 5,
+                    name: '宠物之家医院',
+                    address: '杭州市上城区解放路168号',
+                    phone: '0571-55667788',
+                    lat: 30.2941,
+                    lng: 120.1751,
+                    rating: 4.5,
+                    reviews: [
+                        { author: '养猫达人', content: '价格实惠，服务态度好', time: '5天前', rating: 4 }
+                    ]
                 }
             ];
 
+            // 计算距离并排序
+            appData.hospitals = hospitalData.map(hospital => {
+                const distance = calculateDistance(
+                    appData.currentLocation.lat,
+                    appData.currentLocation.lng,
+                    hospital.lat,
+                    hospital.lng
+                );
+                
+                return {
+                    ...hospital,
+                    distance: distance,
+                    distanceText: distance < 1 ? `${(distance * 1000).toFixed(0)}m` : `${distance.toFixed(1)}km`
+                };
+            }).sort((a, b) => a.distance - b.distance);
+
             renderHospitals();
+            showToast(`找到 ${appData.hospitals.length} 家附近医院`, 'info');
+        }
+
+        // 计算两点之间距离（使用Haversine公式）
+        function calculateDistance(lat1, lon1, lat2, lon2) {
+            const R = 6371; // 地球半径（公里）
+            const dLat = (lat2 - lat1) * Math.PI / 180;
+            const dLon = (lon2 - lon1) * Math.PI / 180;
+            const a = 
+                Math.sin(dLat/2) * Math.sin(dLat/2) +
+                Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) * 
+                Math.sin(dLon/2) * Math.sin(dLon/2);
+            const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+            const distance = R * c;
+            return distance;
         }
 
         // 渲染医院列表
@@ -1721,7 +2159,7 @@
                         <div class="hospital-info">
                             <div>📍 ${hospital.address}</div>
                             <div>📞 ${hospital.phone}</div>
-                            <div>🚶 距离 ${hospital.distance}</div>
+                            <div>🚶 距离 ${hospital.distanceText}</div>
                         </div>
                         <div class="hospital-rating">
                             <span class="rating-stars">${'⭐'.repeat(Math.floor(hospital.rating))}</span>
@@ -1908,6 +2346,9 @@
                 
                 // 初始化医院数据
                 loadNearbyHospitals();
+                
+                // 初始化猫咪列表
+                renderCats();
                 
                 // 初始化登录按钮
                 updateLoginButton();
