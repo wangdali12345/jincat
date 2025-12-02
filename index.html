@@ -74,12 +74,15 @@
 
         /* 导航栏 */
         .nav {
-            background: rgba(255, 255, 255, 0.9);
+            background: rgba(255, 255, 255, 0.95);
             backdrop-filter: blur(20px);
             border-bottom: 1px solid var(--apple-border);
-            position: sticky;
+            position: fixed;
             top: 0;
-            z-index: 100;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            box-shadow: var(--shadow-light);
         }
 
         .nav-content {
@@ -118,9 +121,10 @@
         /* 页面容器 */
         .page {
             display: none;
-            padding: var(--spacing-lg) 0;
-            min-height: calc(100vh - 60px);
+            padding: var(--spacing-lg) var(--spacing-md);
+            min-height: 100vh;
             margin-top: 60px;
+            padding-bottom: 80px; /* 给底部按钮留空间 */
         }
 
         .page.active {
@@ -313,23 +317,7 @@
         /* 响应式 */
         @media (max-width: 768px) {
             .nav-menu {
-                position: fixed;
-                top: 60px;
-                left: 0;
-                right: 0;
-                background: white;
-                flex-direction: column;
-                padding: var(--spacing-md);
-                box-shadow: var(--shadow-medium);
-                transform: translateY(-100%);
-                transition: transform 0.3s ease;
-                z-index: 999;
-                gap: var(--spacing-sm);
-            }
-
-            .nav-menu.active {
-                transform: translateY(0);
-                display: flex !important;
+                display: none;
             }
 
             .mobile-nav-toggle {
@@ -339,6 +327,46 @@
                 font-size: 24px;
                 cursor: pointer;
                 color: var(--apple-black);
+            }
+
+            /* 移动端快捷导航 */
+            .mobile-quick-nav {
+                position: fixed;
+                bottom: 0;
+                left: 0;
+                right: 0;
+                background: white;
+                border-top: 1px solid var(--apple-border);
+                display: flex;
+                justify-content: space-around;
+                padding: var(--spacing-xs) 0;
+                z-index: 998;
+                box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
+            }
+
+            .mobile-quick-nav-item {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                gap: 4px;
+                padding: var(--spacing-xs);
+                text-decoration: none;
+                color: var(--apple-gray-medium);
+                font-size: 12px;
+                cursor: pointer;
+                transition: color 0.3s ease;
+            }
+
+            .mobile-quick-nav-item.active {
+                color: var(--apple-blue);
+            }
+
+            .mobile-quick-nav-item:hover {
+                color: var(--apple-blue);
+            }
+
+            .mobile-quick-nav-item span:first-child {
+                font-size: 20px;
             }
 
             .grid-3 {
@@ -365,6 +393,18 @@
                 width: 95%;
                 max-height: 90vh;
                 margin: 20px auto;
+            }
+
+            /* 移动端浮动按钮调整 */
+            .fab {
+                bottom: 80px; /* 避免遮挡底部导航 */
+            }
+        }
+
+        /* 桌面端隐藏移动端导航 */
+        @media (min-width: 769px) {
+            .mobile-quick-nav {
+                display: none;
             }
         }
 
@@ -1124,6 +1164,30 @@
     <!-- Toast通知容器 -->
     <div id="toast" class="toast"></div>
 
+    <!-- 移动端快捷导航 -->
+    <nav class="mobile-quick-nav">
+        <a href="#" class="mobile-quick-nav-item active" data-page="home" onclick="showPage('home', this)">
+            <span>🏠</span>
+            <span>首页</span>
+        </a>
+        <a href="#" class="mobile-quick-nav-item" data-page="cats" onclick="showPage('cats', this)">
+            <span>🐱</span>
+            <span>猫咪</span>
+        </a>
+        <a href="#" class="mobile-quick-nav-item" data-page="hospital" onclick="showPage('hospital', this)">
+            <span>🏥</span>
+            <span>医院</span>
+        </a>
+        <a href="#" class="mobile-quick-nav-item" data-page="forum" onclick="showPage('forum', this)">
+            <span>💬</span>
+            <span>论坛</span>
+        </a>
+        <a href="#" class="mobile-quick-nav-item" data-page="shop" onclick="showPage('shop', this)">
+            <span>🛍️</span>
+            <span>商城</span>
+        </a>
+    </nav>
+
     <!-- 右下角私信按钮 -->
     <button class="fab" onclick="openMessageModal()">✉️</button>
 
@@ -1151,13 +1215,19 @@
     <div id="loginModal" class="modal-overlay">
         <div class="modal-content">
             <div class="modal-header">
-                <h3 id="loginTitle">用户登录</h3>
+                <h3 id="loginTitle">管理员登录</h3>
                 <button class="btn btn-secondary" onclick="closeLoginModal()">×</button>
             </div>
             <div class="modal-body">
+                <div style="background: var(--apple-gray-light); padding: var(--spacing-sm); border-radius: var(--border-radius-sm); margin-bottom: var(--spacing-md);">
+                    <p style="color: var(--apple-gray-dark); font-size: 14px; margin: 0;">
+                        <strong>普通用户无需登录</strong>即可使用所有功能。<br>
+                        只有管理员需要登录来管理猫咪信息。
+                    </p>
+                </div>
                 <div class="form-group">
-                    <label>账号</label>
-                    <input type="text" class="input" id="username" placeholder="请输入账号...">
+                    <label>管理员账号</label>
+                    <input type="text" class="input" id="username" placeholder="请输入管理员账号...">
                 </div>
                 <div class="form-group">
                     <label>密码</label>
@@ -1166,7 +1236,7 @@
             </div>
             <div class="modal-footer">
                 <button class="btn btn-secondary" onclick="closeLoginModal()">取消</button>
-                <button class="btn btn-primary" onclick="handleLogin()">登录</button>
+                <button class="btn btn-primary" onclick="handleLogin()">管理员登录</button>
             </div>
         </div>
     </div>
@@ -1341,7 +1411,7 @@
 
             // 检查管理员账号
             if (username === ADMIN_CREDENTIALS.username && password === ADMIN_CREDENTIALS.password) {
-                appData.currentUser = username;
+                appData.currentUser = '管理员';
                 appData.isLoggedIn = true;
                 appData.isAdmin = true;
                 
@@ -1350,14 +1420,8 @@
                 showToast('管理员登录成功！', 'success');
                 enableAdminFeatures();
             } else {
-                // 普通用户登录（这里简化处理，实际项目需要注册系统）
-                appData.currentUser = username;
-                appData.isLoggedIn = true;
-                appData.isAdmin = false;
-                
-                closeLoginModal();
-                updateLoginButton();
-                showToast('登录成功！', 'success');
+                showToast('账号或密码错误，只有管理员可以登录', 'error');
+                // 不允许普通用户登录，普通用户以游客身份使用
             }
         }
 
@@ -1384,7 +1448,7 @@
                     loginBtn.onclick = logout;
                 }
             } else {
-                loginBtn.textContent = '登录';
+                loginBtn.textContent = '管理员登录';
                 loginBtn.className = 'btn btn-secondary';
                 loginBtn.onclick = toggleLogin;
             }
@@ -1640,8 +1704,9 @@
                                     </div>
                                 `).join('')}
                                 <div class="comment-item">
-                                    <div class="form-group" style="margin: 0;">
-                                        <input type="text" class="input" placeholder="写下你的评论..." onkeypress="if(event.key==='Enter') addCatComment(${cat.id}, this.value, this)">
+                                    <div class="form-group" style="margin: 0; display: flex; gap: 8px;">
+                                        <input type="text" class="input" id="cat-comment-input-${cat.id}" placeholder="写下你的评论..." onkeypress="if(event.key==='Enter') addCatComment(${cat.id}, this.value, this)">
+                                        <button class="btn btn-primary btn-small" onclick="addCatComment(${cat.id}, document.getElementById('cat-comment-input-${cat.id}').value, document.getElementById('cat-comment-input-${cat.id}'))">发送</button>
                                     </div>
                                 </div>
                             </div>
@@ -1680,18 +1745,26 @@
         }
 
         function addCatComment(catId, content, input) {
-            if (!content.trim()) return;
+            if (!content.trim()) {
+                showToast('请输入评论内容', 'error');
+                return;
+            }
             
             const cat = appData.cats.find(c => c.id === catId);
             if (cat) {
                 const comment = {
-                    author: appData.currentUser || '游客',
+                    author: appData.currentUser ? appData.currentUser : '游客',
                     content: content.trim(),
                     time: '刚刚'
                 };
                 cat.comments.push(comment);
                 renderCats();
                 showToast('评论成功', 'success');
+                
+                // 清空输入框
+                if (input) {
+                    input.value = '';
+                }
             }
         }
 
@@ -1834,8 +1907,9 @@
                             </div>
                         `).join('')}
                         <div class="comment-item">
-                            <div class="form-group" style="margin: 0;">
-                                <input type="text" class="input" placeholder="写下你的评论..." onkeypress="if(event.key==='Enter') addComment(${post.id}, this.value, this)">
+                            <div class="form-group" style="margin: 0; display: flex; gap: 8px;">
+                                <input type="text" class="input" id="comment-input-${post.id}" placeholder="写下你的评论..." onkeypress="if(event.key==='Enter') addComment(${post.id}, this.value, this)">
+                                <button class="btn btn-primary btn-small" onclick="addComment(${post.id}, document.getElementById('comment-input-${post.id}').value, document.getElementById('comment-input-${post.id}'))">发送</button>
                             </div>
                         </div>
                     </div>
@@ -1890,18 +1964,26 @@
 
         // 添加评论
         function addComment(postId, content, input) {
-            if (!content.trim()) return;
+            if (!content.trim()) {
+                showToast('请输入评论内容', 'error');
+                return;
+            }
             
             const post = appData.posts.find(p => p.id === postId);
             if (post) {
                 const comment = {
-                    author: '用户' + Math.floor(Math.random() * 1000),
+                    author: appData.currentUser ? appData.currentUser : '游客',
                     content: content.trim(),
                     time: '刚刚'
                 };
                 post.comments.push(comment);
                 renderPosts();
                 showToast('评论成功', 'success');
+                
+                // 清空输入框
+                if (input) {
+                    input.value = '';
+                }
             }
         }
 
@@ -1964,17 +2046,13 @@
 
                     map.add(currentMarker);
 
-                    // 添加医院标记
+                    // 添加所有医院标记
                     appData.hospitals.forEach((hospital, index) => {
-                        // 模拟医院位置（实际项目中需要真实坐标）
-                        const hospitalPositions = [
-                            [appData.currentLocation.lng + 0.01, appData.currentLocation.lat + 0.01],
-                            [appData.currentLocation.lng - 0.015, appData.currentLocation.lat + 0.008],
-                            [appData.currentLocation.lng + 0.008, appData.currentLocation.lat - 0.012]
-                        ];
+                        // 使用真实的医院坐标
+                        const hospitalPosition = [hospital.lng, hospital.lat];
                         
                         const marker = new AMap.Marker({
-                            position: hospitalPositions[index] || [appData.currentLocation.lng + 0.01, appData.currentLocation.lat],
+                            position: hospitalPosition,
                             title: hospital.name,
                             content: '<div style="font-size: 20px;">🏥</div>'
                         });
@@ -1986,7 +2064,7 @@
                         map.add(marker);
                     });
 
-                    showToast('地图加载成功！', 'success');
+                    showToast('地图加载成功！显示 ' + appData.hospitals.length + ' 家附近医院', 'success');
                     
                 } catch (error) {
                     console.error('地图初始化失败:', error);
