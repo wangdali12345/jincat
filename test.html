@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>简单测试</title>
+</head>
+<body>
+    <h1>如果你能看到这个页面，说明文件上传成功了！</h1>
+    <p>时间: <span id="time"></span></p>
+    
+    <button onclick="alert('JavaScript正常工作！')">测试JavaScript</button>
+    
+    <script>
+        document.getElementById('time').textContent = new Date().toLocaleString();
+        console.log('页面加载成功');
+    </script>
+</body>
+</html>
