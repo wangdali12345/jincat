@@ -2669,7 +2669,7 @@
     <!-- 帖子详情页面 -->
     <div id="postDetail" class="page">
         <div class="container">
-            <button class="btn btn-secondary" onclick="navigateTo('forum')" style="margin-bottom: var(--spacing-md);">
+            <button class="btn btn-secondary" onclick="showPage('forum')" style="margin-bottom: var(--spacing-md);">
                 ⬅️ 返回论坛
             </button>
             
@@ -3168,12 +3168,10 @@
             
             // 简化的初始化流程，避免移动端问题
             try {
-                // 首先确保首页显示
-                const homePage = document.getElementById('home');
-                if (homePage) {
-                    homePage.classList.add('active');
-                    console.log('首页已激活');
-                }
+                // 首先确保所有页面都不显示
+                document.querySelectorAll('.page').forEach(page => {
+                    page.classList.remove('active');
+                });
                 
                 // 然后加载数据
                 loadData();
@@ -3184,8 +3182,26 @@
                 // 加载初始数据
                 loadInitialData();
                 
+                // 确保首页显示
+                const homePage = document.getElementById('home');
+                if (homePage) {
+                    homePage.classList.add('active');
+                    console.log('首页已激活');
+                }
+                
                 // 渲染首页内容
                 renderHomePage();
+                
+                // 设置导航状态
+                document.querySelectorAll('.nav-link').forEach(link => {
+                    link.classList.remove('active');
+                });
+                
+                // 激活首页导航
+                const homeNav = document.querySelector('[data-page="home"]');
+                if (homeNav) {
+                    homeNav.classList.add('active');
+                }
                 
                 console.log('页面初始化完成');
                 
@@ -3204,13 +3220,44 @@
 
         // 初始化事件监听器
         function initializeEventListeners() {
-            // 导航点击事件
+            // 导航点击事件 - 处理data-page和onclick两种方式
             document.querySelectorAll('.nav-link').forEach(link => {
                 link.addEventListener('click', function(e) {
                     e.preventDefault();
-                    const page = this.getAttribute('data-page');
+                    
+                    // 优先使用data-page属性
+                    let page = this.getAttribute('data-page');
+                    
+                    // 如果没有data-page，检查onclick属性
+                    if (!page) {
+                        const onclickAttr = this.getAttribute('onclick');
+                        if (onclickAttr && onclickAttr.includes("showPage('")) {
+                            const match = onclickAttr.match(/showPage\('([^']+)'\)/);
+                            if (match) {
+                                page = match[1];
+                            }
+                        }
+                    }
+                    
                     if (page) {
+                        console.log('导航点击:', page);
                         showPage(page);
+                    } else {
+                        console.warn('无法获取页面ID', this);
+                    }
+                });
+            });
+
+            // 处理卡片点击事件
+            document.querySelectorAll('.card[onclick]').forEach(card => {
+                card.addEventListener('click', function(e) {
+                    const onclickAttr = this.getAttribute('onclick');
+                    if (onclickAttr && onclickAttr.includes("showPage('")) {
+                        const match = onclickAttr.match(/showPage\('([^']+)'\)/);
+                        if (match) {
+                            e.preventDefault();
+                            showPage(match[1]);
+                        }
                     }
                 });
             });
@@ -3605,7 +3652,16 @@
                     link.classList.remove('active');
                 });
                 
-                const activeLink = document.querySelector(`[data-page="${pageId}"]`);
+                // 尝试多种方式找到导航链接
+                let activeLink = document.querySelector(`[data-page="${pageId}"]`);
+                if (!activeLink) {
+                    // 尝试通过onclick属性查找
+                    activeLink = Array.from(document.querySelectorAll('.nav-link')).find(link => {
+                        const onclick = link.getAttribute('onclick');
+                        return onclick && onclick.includes(`showPage('${pageId}')`);
+                    });
+                }
+                
                 if (activeLink) {
                     activeLink.classList.add('active');
                 }
@@ -3648,6 +3704,9 @@
                             break;
                         case 'orders':
                             renderOrdersPage();
+                            break;
+                        case 'postDetail':
+                            // 帖子详情页不需要额外渲染，已在viewPostDetail中处理
                             break;
                     }
                 } catch (renderError) {
@@ -5658,7 +5717,7 @@
             renderComments(postId);
 
             // 导航到帖子详情页
-            navigateTo('postDetail');
+            showPage('postDetail');
             
             // 存储当前查看的帖子ID
             appData.currentPostId = postId;
