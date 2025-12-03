@@ -800,8 +800,8 @@
                 </div>
 
                 <div style="display: flex; align-items: center; gap: var(--spacing-sm); z-index: 1002; position: relative;">
-                    <button class="btn btn-secondary" onclick="toggleLogin()" id="loginBtn" style="padding: 8px 16px; font-size: 14px; z-index: 1003;">管理员登录</button>
-                    <button class="mobile-nav-toggle" onclick="toggleMobileMenu()">☰</button>
+                    <button class="btn btn-secondary" onclick="toggleLogin()" id="loginBtn" style="padding: 8px 16px; font-size: 14px; z-index: 1005; position: relative; pointer-events: auto; cursor: pointer;">管理员登录</button>
+                    <button class="mobile-nav-toggle" onclick="toggleMobileMenu()" style="z-index: 1004; position: relative; pointer-events: auto;">☰</button>
                 </div>
             </div>
         </div>
@@ -1366,16 +1366,23 @@
             showToast('正在跳转到淘宝...', 'info');
             
             if (isMobile) {
-                // 移动端优先尝试打开淘宝APP
+                // 移动端强制尝试打开淘宝APP
                 const taobaoAppUrl = `taobao://s.taobao.com/search?q=${encodeURIComponent(category + ' 宠物用品')}`;
-                const taobaoWebUrl = `https://m.taobao.com/search?q=${encodeURIComponent(category + ' 宠物用品')}`;
                 
-                // 先尝试打开APP
-                window.open(taobaoAppUrl, '_blank');
-                // 500ms后打开网页版作为备选
+                // 创建一个隐藏的iframe来尝试唤醒APP
+                const iframe = document.createElement('iframe');
+                iframe.style.display = 'none';
+                iframe.src = taobaoAppUrl;
+                document.body.appendChild(iframe);
+                
+                // 3秒后移除iframe并打开网页版作为备选
                 setTimeout(() => {
+                    document.body.removeChild(iframe);
+                    // 如果APP没有打开，跳转到网页版
+                    const taobaoWebUrl = `https://m.taobao.com/search?q=${encodeURIComponent(category + ' 宠物用品')}`;
                     window.open(taobaoWebUrl, '_blank');
-                }, 500);
+                }, 3000);
+                
             } else {
                 // 桌面端使用淘宝PC版链接
                 const taobaoUrl = `https://s.taobao.com/search?q=${encodeURIComponent(category + ' 宠物用品')}`;
@@ -1392,16 +1399,23 @@
             showToast('正在跳转到淘宝...', 'info');
             
             if (isMobile) {
-                // 移动端优先尝试打开淘宝APP
+                // 移动端强制尝试打开淘宝APP
                 const taobaoAppUrl = `taobao://s.taobao.com/search?q=${encodeURIComponent(product)}`;
-                const taobaoWebUrl = `https://m.taobao.com/search?q=${encodeURIComponent(product)}`;
                 
-                // 先尝试打开APP
-                window.open(taobaoAppUrl, '_blank');
-                // 500ms后打开网页版作为备选
+                // 创建一个隐藏的iframe来尝试唤醒APP
+                const iframe = document.createElement('iframe');
+                iframe.style.display = 'none';
+                iframe.src = taobaoAppUrl;
+                document.body.appendChild(iframe);
+                
+                // 3秒后移除iframe并打开网页版作为备选
                 setTimeout(() => {
+                    document.body.removeChild(iframe);
+                    // 如果APP没有打开，跳转到网页版
+                    const taobaoWebUrl = `https://m.taobao.com/search?q=${encodeURIComponent(product)}`;
                     window.open(taobaoWebUrl, '_blank');
-                }, 500);
+                }, 3000);
+                
             } else {
                 // 桌面端使用淘宝PC版链接
                 const taobaoUrl = `https://s.taobao.com/search?q=${encodeURIComponent(product)}`;
@@ -1446,16 +1460,39 @@
 
         // 登录相关功能
         function toggleLogin() {
-            console.log('Toggle login clicked'); // 调试信息
+            console.log('Toggle login clicked - function executed'); // 调试信息
+            
+            // 防止事件冒泡
+            if (event) {
+                event.preventDefault();
+                event.stopPropagation();
+            }
+            
             const modal = document.getElementById('loginModal');
+            console.log('Login modal found:', !!modal);
+            
             if (modal) {
-                modal.classList.add('active');
-                document.getElementById('username').value = '';
-                document.getElementById('password').value = '';
+                // 强制显示模态框
+                modal.style.display = 'block';
+                setTimeout(() => {
+                    modal.classList.add('active');
+                }, 10);
+                
+                // 清空输入框
+                const usernameInput = document.getElementById('username');
+                const passwordInput = document.getElementById('password');
+                if (usernameInput) usernameInput.value = '';
+                if (passwordInput) passwordInput.value = '';
+                
+                console.log('Modal should be visible now');
+                showToast('点击登录按钮成功', 'success');
+                
                 // 聚焦到用户名输入框
                 setTimeout(() => {
-                    document.getElementById('username').focus();
-                }, 100);
+                    if (usernameInput) {
+                        usernameInput.focus();
+                    }
+                }, 200);
             } else {
                 console.error('Login modal not found');
                 showToast('登录界面错误', 'error');
@@ -2290,14 +2327,45 @@
 
         // 加载附近医院
         function loadNearbyHospitals() {
-            if (!appData.currentLocation) {
-                // 如果没有定位，使用默认杭州市中心位置
+            // 首先尝试获取用户真实位置
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(
+                    function(position) {
+                        // 成功获取位置
+                        appData.currentLocation = {
+                            lat: position.coords.latitude,
+                            lng: position.coords.longitude
+                        };
+                        console.log('获取到真实位置:', appData.currentLocation);
+                        generateHospitals();
+                    },
+                    function(error) {
+                        // 定位失败，使用默认位置
+                        console.warn('定位失败，使用默认位置:', error.message);
+                        appData.currentLocation = {
+                            lat: 30.2741,
+                            lng: 120.1551
+                        };
+                        generateHospitals();
+                    },
+                    {
+                        enableHighAccuracy: true,
+                        timeout: 5000,
+                        maximumAge: 0
+                    }
+                );
+            } else {
+                // 浏览器不支持定位
                 appData.currentLocation = {
                     lat: 30.2741,
                     lng: 120.1551
                 };
+                generateHospitals();
             }
+        }
 
+        // 生成医院数据
+        function generateHospitals() {
             // 清空现有医院数据，确保每次都重新生成
             appData.hospitals = [];
             
@@ -2327,15 +2395,43 @@
                 const lat = appData.currentLocation.lat + distance * Math.sin(angle) / 111;
                 const lng = appData.currentLocation.lng + distance * Math.cos(angle) / (111 * Math.cos(appData.currentLocation.lat * Math.PI / 180));
                 
-                // 生成地址
-                const districts = ['江干区', '西湖区', '拱墅区', '滨江区', '上城区', '下城区', '余杭区', '萧山区'];
+                // 根据当前位置生成更真实的地址
+                let city = '杭州市'; // 默认杭州
+                let districts, addressPrefix;
+                
+                // 根据经纬度判断城市
+                if (appData.currentLocation.lat > 39 && appData.currentLocation.lat < 41 && 
+                    appData.currentLocation.lng > 116 && appData.currentLocation.lng < 117) {
+                    // 北京
+                    city = '北京市';
+                    districts = ['朝阳区', '海淀区', '东城区', '西城区', '丰台区', '石景山区', '通州区', '昌平区'];
+                } else if (appData.currentLocation.lat > 31 && appData.currentLocation.lat < 32 && 
+                          appData.currentLocation.lng > 121 && appData.currentLocation.lng < 122) {
+                    // 上海
+                    city = '上海市';
+                    districts = ['浦东新区', '黄浦区', '徐汇区', '长宁区', '静安区', '普陀区', '虹口区', '杨浦区'];
+                } else if (appData.currentLocation.lat > 22 && appData.currentLocation.lat < 24 && 
+                          appData.currentLocation.lng > 113 && appData.currentLocation.lng < 115) {
+                    // 深圳
+                    city = '深圳市';
+                    districts = ['福田区', '南山区', '罗湖区', '宝安区', '龙岗区', '龙华区', '坪山区', '光明区'];
+                } else if (appData.currentLocation.lat > 30 && appData.currentLocation.lat < 31 && 
+                          appData.currentLocation.lng > 120 && appData.currentLocation.lng < 121) {
+                    // 杭州
+                    city = '杭州市';
+                    districts = ['江干区', '西湖区', '拱墅区', '滨江区', '上城区', '下城区', '余杭区', '萧山区'];
+                } else {
+                    // 其他城市，使用通用名称
+                    districts = ['中心区', '东区', '西区', '南区', '北区', '新区', '开发区', '高新区'];
+                }
+                
                 const roads = ['路', '街', '大道', '巷', '广场', '中心'];
                 const numbers = Math.floor(Math.random() * 999) + 1;
                 
                 return {
                     id: index + 1,
                     name: template.prefix + template.suffix,
-                    address: `杭州市${districts[index % districts.length]}${roads[index % roads.length]}${numbers}号`,
+                    address: `${city}${districts[index % districts.length]}${roads[index % roads.length]}${numbers}号`,
                     phone: `0571-${Math.floor(Math.random() * 90000000) + 10000000}`,
                     lat: lat,
                     lng: lng,
@@ -2608,6 +2704,24 @@
                 
                 // 初始化登录按钮
                 updateLoginButton();
+                
+                // 专门为登录按钮添加事件监听器（备用方案）
+                const loginBtn = document.getElementById('loginBtn');
+                if (loginBtn) {
+                    // 移除可能存在的事件监听器
+                    loginBtn.replaceWith(loginBtn.cloneNode(true));
+                    const newLoginBtn = document.getElementById('loginBtn');
+                    
+                    // 添加新的事件监听器
+                    newLoginBtn.addEventListener('click', function(e) {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        console.log('Login button clicked via addEventListener');
+                        toggleLogin();
+                    });
+                    
+                    console.log('✅ 登录按钮事件监听器已添加');
+                }
                 
                 // 检查所有onclick功能
                 document.querySelectorAll('[onclick]').forEach(element => {
