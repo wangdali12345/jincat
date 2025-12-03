@@ -350,6 +350,20 @@
             background: var(--apple-blue);
         }
 
+        /* 管理员按钮样式 */
+        .admin-btn {
+            background-color: var(--apple-red) !important;
+            color: white !important;
+        }
+
+        .admin-btn:hover {
+            background-color: #d32f2f !important;
+        }
+
+        .admin-btn span:first-child {
+            margin-right: 4px;
+        }
+
         /* 响应式 */
         @media (max-width: 768px) {
             .nav-menu {
@@ -1219,7 +1233,10 @@
         <div class="container">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--spacing-md);">
                 <h2>💬 论坛交流</h2>
-                <button class="btn btn-primary" onclick="createPost()">+ 发表帖子</button>
+                <div style="display: flex; gap: var(--spacing-sm);">
+                    <button id="forumManageBtn" class="btn btn-secondary" onclick="manageForum()" style="display: none;">📝 管理论坛</button>
+                    <button class="btn btn-primary" onclick="createPost()">+ 发表帖子</button>
+                </div>
             </div>
             
             <div id="postList">
@@ -1850,9 +1867,11 @@
             // 管理员可以修改的元素添加编辑功能
             console.log('管理员功能已启用');
             
-            // 启用猫咪管理页面的添加按钮
-            const addCatBtn = document.getElementById('addCatBtn');
-            if (addCatBtn) addCatBtn.style.display = 'block';
+            // 启用猫咪管理页面
+            const catManagementButtons = document.getElementById('catManagementButtons');
+            const catUserHint = document.getElementById('catUserHint');
+            if (catManagementButtons) catManagementButtons.style.display = 'block';
+            if (catUserHint) catUserHint.style.display = 'none';
             
             // 启用商城管理功能
             const shopManageBtn = document.getElementById('shopManageBtn');
@@ -1862,14 +1881,84 @@
             const hospitalManageBtn = document.getElementById('hospitalManageBtn');
             if (hospitalManageBtn) hospitalManageBtn.style.display = 'block';
             
+            // 启用论坛管理功能
+            enableForumAdminFeatures();
+            
             // 重新渲染相关页面
             renderCats();
+            renderPosts();
             updateProfileMenu();
+            
+            showToast('管理员功能已全部启用', 'success');
+        }
+
+        // 论坛管理功能
+        function enableForumAdminFeatures() {
+            const forumManageBtn = document.getElementById('forumManageBtn');
+            if (forumManageBtn) forumManageBtn.style.display = 'block';
+        }
+
+        function disableForumAdminFeatures() {
+            const forumManageBtn = document.getElementById('forumManageBtn');
+            if (forumManageBtn) forumManageBtn.style.display = 'none';
+        }
+
+        function manageForum() {
+            showToast('论坛管理功能：可以删除/置顶帖子', 'info');
+            // 这里可以添加更详细的论坛管理功能
+        }
+
+        // 删除帖子
+        function deletePost(postId) {
+            if (confirm('确定要删除这篇帖子吗？')) {
+                const index = appData.posts.findIndex(p => p.id === postId);
+                if (index !== -1) {
+                    appData.posts.splice(index, 1);
+                    renderPosts();
+                    showToast('帖子已删除', 'success');
+                }
+            }
+        }
+
+        // 置顶帖子
+        function pinPost(postId) {
+            const post = appData.posts.find(p => p.id === postId);
+            if (post) {
+                // 将帖子移到顶部
+                appData.posts = appData.posts.filter(p => p.id !== postId);
+                appData.posts.unshift(post);
+                post.pinned = true;
+                post.pinTime = new Date().toLocaleString();
+                renderPosts();
+                showToast('帖子已置顶', 'success');
+            }
         }
 
         function disableAdminFeatures() {
             // 禁用管理员功能
             console.log('管理员功能已禁用');
+            
+            // 禁用猫咪管理页面
+            const catManagementButtons = document.getElementById('catManagementButtons');
+            const catUserHint = document.getElementById('catUserHint');
+            if (catManagementButtons) catManagementButtons.style.display = 'none';
+            if (catUserHint) catUserHint.style.display = 'block';
+            
+            // 禁用商城管理功能
+            const shopManageBtn = document.getElementById('shopManageBtn');
+            if (shopManageBtn) shopManageBtn.style.display = 'none';
+            
+            // 禁用医院管理功能
+            const hospitalManageBtn = document.getElementById('hospitalManageBtn');
+            if (hospitalManageBtn) hospitalManageBtn.style.display = 'none';
+            
+            // 禁用论坛管理功能
+            disableForumAdminFeatures();
+            
+            // 重新渲染相关页面
+            renderCats();
+            renderPosts();
+            updateProfileMenu();
         }
 
         function showAdminPanel() {
@@ -2471,6 +2560,16 @@
                             <span>📤</span>
                             <span>分享</span>
                         </button>
+                        ${appData.isAdmin ? `
+                            <button class="post-action-btn admin-btn" onclick="deletePost(${post.id})">
+                                <span>🗑️</span>
+                                <span>删除</span>
+                            </button>
+                            <button class="post-action-btn admin-btn" onclick="pinPost(${post.id})">
+                                <span>📌</span>
+                                <span>置顶</span>
+                            </button>
+                        ` : ''}
                     </div>
                     <div class="comments-section" id="comments-${post.id}">
                         ${post.comments.map(comment => `
@@ -3061,8 +3160,13 @@
                 initDefaultCats();
                 renderCats();
                 
-                // 初始化登录按钮
+                // 初始化登录按钮和管理员状态
                 updateLoginButton();
+                
+                // 如果已登录管理员，启用所有功能
+                if (appData.isAdmin) {
+                    enableAdminFeatures();
+                }
                 
                 // 专门为登录按钮添加事件监听器（备用方案）
                 const loginBtn = document.getElementById('loginBtn');
