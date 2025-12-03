@@ -397,7 +397,22 @@
 
             /* 移动端浮动按钮调整 */
             .fab {
-                bottom: 80px; /* 避免遮挡底部导航 */
+                bottom: 85px; /* 避免遮挡底部导航，增加间距 */
+                right: 20px;
+                width: 50px;
+                height: 50px;
+                border-radius: 50%;
+                background: var(--apple-blue);
+                color: white;
+                border: none;
+                font-size: 20px;
+                cursor: pointer;
+                box-shadow: var(--shadow-heavy);
+                z-index: 996; /* 降低z-index，避免覆盖导航 */
+                transition: all 0.3s ease;
+                display: flex;
+                align-items: center;
+                justify-content: center;
             }
         }
 
@@ -611,18 +626,18 @@
         /* 右下角浮动按钮 */
         .fab {
             position: fixed;
-            bottom: 24px;
-            right: 24px;
-            width: 56px;
-            height: 56px;
+            bottom: 80px; /* 避免遮挡底部导航 */
+            right: 20px;
+            width: 50px;
+            height: 50px;
             border-radius: 50%;
             background: var(--apple-blue);
             color: white;
             border: none;
-            font-size: 24px;
+            font-size: 20px;
             cursor: pointer;
             box-shadow: var(--shadow-heavy);
-            z-index: 999;
+            z-index: 997; /* 确保不会覆盖导航 */
             transition: all 0.3s ease;
             display: flex;
             align-items: center;
@@ -784,8 +799,8 @@
                     <a href="#" class="nav-link" data-page="shop" onclick="showPageAndCloseMenu('shop', this)">宠物商城</a>
                 </div>
 
-                <div style="display: flex; align-items: center; gap: var(--spacing-sm);">
-                    <button class="btn btn-secondary" onclick="toggleLogin()" id="loginBtn" style="padding: 8px 16px; font-size: 14px; position: relative; z-index: 1002;">管理员登录</button>
+                <div style="display: flex; align-items: center; gap: var(--spacing-sm); z-index: 1002; position: relative;">
+                    <button class="btn btn-secondary" onclick="toggleLogin()" id="loginBtn" style="padding: 8px 16px; font-size: 14px; z-index: 1003;">管理员登录</button>
                     <button class="mobile-nav-toggle" onclick="toggleMobileMenu()">☰</button>
                 </div>
             </div>
@@ -1189,7 +1204,7 @@
     </nav>
 
     <!-- 右下角私信按钮 -->
-    <button class="fab" onclick="openMessageModal()">✉️</button>
+    <button class="fab" onclick="openMessageModal()" style="bottom: 80px;">✉️</button>
 
     <!-- 私信模态框 -->
     <div id="messageModal" class="modal-overlay">
@@ -1338,22 +1353,62 @@
             filterHospitals(searchTerm);
         }
 
+        // 检测是否为移动设备
+        function isMobileDevice() {
+            return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || 
+                   (window.innerWidth <= 768 && 'ontouchstart' in window);
+        }
+
         // 打开淘宝分类
         function openTaobaoCategory(category) {
-            const taobaoUrl = `https://s.taobao.com/search?q=${encodeURIComponent(category + ' 宠物用品')}`;
+            const isMobile = isMobileDevice();
+            
             showToast('正在跳转到淘宝...', 'info');
-            setTimeout(() => {
-                window.open(taobaoUrl, '_blank');
-            }, 500);
+            
+            if (isMobile) {
+                // 移动端优先尝试打开淘宝APP
+                const taobaoAppUrl = `taobao://s.taobao.com/search?q=${encodeURIComponent(category + ' 宠物用品')}`;
+                const taobaoWebUrl = `https://m.taobao.com/search?q=${encodeURIComponent(category + ' 宠物用品')}`;
+                
+                // 先尝试打开APP
+                window.open(taobaoAppUrl, '_blank');
+                // 500ms后打开网页版作为备选
+                setTimeout(() => {
+                    window.open(taobaoWebUrl, '_blank');
+                }, 500);
+            } else {
+                // 桌面端使用淘宝PC版链接
+                const taobaoUrl = `https://s.taobao.com/search?q=${encodeURIComponent(category + ' 宠物用品')}`;
+                setTimeout(() => {
+                    window.open(taobaoUrl, '_blank');
+                }, 500);
+            }
         }
 
         // 打开淘宝商品
         function openTaobaoProduct(product) {
-            const taobaoUrl = `https://s.taobao.com/search?q=${encodeURIComponent(product)}`;
+            const isMobile = isMobileDevice();
+            
             showToast('正在跳转到淘宝...', 'info');
-            setTimeout(() => {
-                window.open(taobaoUrl, '_blank');
-            }, 500);
+            
+            if (isMobile) {
+                // 移动端优先尝试打开淘宝APP
+                const taobaoAppUrl = `taobao://s.taobao.com/search?q=${encodeURIComponent(product)}`;
+                const taobaoWebUrl = `https://m.taobao.com/search?q=${encodeURIComponent(product)}`;
+                
+                // 先尝试打开APP
+                window.open(taobaoAppUrl, '_blank');
+                // 500ms后打开网页版作为备选
+                setTimeout(() => {
+                    window.open(taobaoWebUrl, '_blank');
+                }, 500);
+            } else {
+                // 桌面端使用淘宝PC版链接
+                const taobaoUrl = `https://s.taobao.com/search?q=${encodeURIComponent(product)}`;
+                setTimeout(() => {
+                    window.open(taobaoUrl, '_blank');
+                }, 500);
+            }
         }
 
         // 打开私信模态框
@@ -1401,6 +1456,9 @@
                 setTimeout(() => {
                     document.getElementById('username').focus();
                 }, 100);
+            } else {
+                console.error('Login modal not found');
+                showToast('登录界面错误', 'error');
             }
         }
 
@@ -1719,30 +1777,12 @@
             const catList = document.getElementById('catList');
             
             if (appData.cats.length === 0) {
-                // 显示示例猫咪
+                // 显示提示信息
                 catList.innerHTML = `
-                    <div class="card">
-                        <div style="padding: var(--spacing-md);">
-                            <img src="https://picsum.photos/300/200?cat" style="width: 100%; height: 200px; object-fit: cover; border-radius: var(--border-radius-sm); margin-bottom: var(--spacing-sm);">
-                            <h3>示例猫咪</h3>
-                            <p>品种：英短</p>
-                            <p>年龄：2岁</p>
-                            <p>性别：公</p>
-                            <div style="margin-top: var(--spacing-sm);">
-                                <button class="post-action-btn ${appData.cats[0]?.liked ? 'liked' : ''}" onclick="likeCat(0, this)">
-                                    <span>${appData.cats[0]?.liked ? '❤️' : '🤍'}</span>
-                                    <span>128</span>
-                                </button>
-                                <button class="post-action-btn" onclick="commentCat(0)">
-                                    <span>💬</span>
-                                    <span>评论</span>
-                                </button>
-                                ${appData.isAdmin ? `
-                                    <button class="btn btn-secondary btn-small">编辑</button>
-                                    <button class="btn btn-secondary btn-small">删除</button>
-                                ` : ''}
-                            </div>
-                        </div>
+                    <div style="text-align: center; padding: 40px; color: var(--apple-gray-medium);">
+                        <div style="font-size: 48px; margin-bottom: var(--spacing-sm);">🐱</div>
+                        <p>暂无猫咪信息</p>
+                        ${appData.isAdmin ? '<button class="btn btn-primary" onclick="addCat()">添加第一只猫咪</button>' : ''}
                     </div>
                 `;
                 return;
@@ -1772,7 +1812,7 @@
                                 <button class="btn btn-secondary btn-small" onclick="deleteCat(${cat.id})">删除</button>
                             ` : ''}
                         </div>
-                        ${cat.comments.length > 0 ? `
+                        ${cat.comments.length > 0 || !appData.isAdmin ? `
                             <div class="comments-section" id="cat-comments-${cat.id}" style="margin-top: var(--spacing-sm);">
                                 ${cat.comments.map(comment => `
                                     <div class="comment-item">
@@ -1903,6 +1943,59 @@
             renderPosts();
             closeCreatePostModal();
             showToast('发表成功！', 'success');
+        }
+
+        // 初始化默认猫咪数据
+        function initDefaultCats() {
+            if (appData.cats.length === 0) {
+                appData.cats = [
+                    {
+                        id: 1,
+                        name: '咪咪',
+                        breed: '英短',
+                        age: 2,
+                        gender: '母',
+                        photo: 'https://picsum.photos/300/200?cat1',
+                        description: '一只可爱的小猫咪，性格温顺，喜欢玩耍',
+                        addedBy: '管理员',
+                        addedTime: '2024-01-15 10:30:00',
+                        likes: 15,
+                        comments: [
+                            {
+                                author: '用户1',
+                                content: '好可爱的猫咪！',
+                                time: '2小时前'
+                            },
+                            {
+                                author: '游客',
+                                content: '毛色真漂亮',
+                                time: '1天前'
+                            }
+                        ],
+                        liked: false
+                    },
+                    {
+                        id: 2,
+                        name: '小白',
+                        breed: '布偶猫',
+                        age: 3,
+                        gender: '公',
+                        photo: 'https://picsum.photos/300/200?cat2',
+                        description: '漂亮的布偶猫，眼睛像蓝宝石一样',
+                        addedBy: '管理员',
+                        addedTime: '2024-01-14 15:20:00',
+                        likes: 23,
+                        comments: [
+                            {
+                                author: '猫奴',
+                                content: '布偶猫太美了！',
+                                time: '3小时前'
+                            }
+                        ],
+                        liked: false
+                    }
+                ];
+            }
         }
 
         // 渲染帖子列表
@@ -2205,16 +2298,25 @@
                 };
             }
 
-            // 根据当前位置动态生成医院数据
-            const hospitalTemplates = [
-                { prefix: '爱心', suffix: '宠物医院', baseRating: 4.8 },
-                { prefix: '协和', suffix: '宠物医院', baseRating: 4.6 },
-                { prefix: '萌宠', suffix: '医院', baseRating: 4.7 },
-                { prefix: '宠物之家', suffix: '医院', baseRating: 4.5 },
-                { prefix: '守护', suffix: '宠物医院', baseRating: 4.9 },
-                { prefix: '阳光', suffix: '宠物医院', baseRating: 4.4 },
-                { prefix: '蓝天', suffix: '宠物诊所', baseRating: 4.7 }
-            ];
+            // 清空现有医院数据，确保每次都重新生成
+            appData.hospitals = [];
+            
+            // 每次刷新都生成新的随机医院名称和数据
+            const hospitalPrefixes = ['爱心', '协和', '萌宠', '守护', '阳光', '蓝天', '希望', '康乐', '健康', '宠爱'];
+            const hospitalSuffixes = ['宠物医院', '动物医院', '宠物诊所', '兽医院', '宠物中心'];
+            
+            const hospitalTemplates = [];
+            
+            // 生成7个随机医院
+            for (let i = 0; i < 7; i++) {
+                const randomPrefix = hospitalPrefixes[Math.floor(Math.random() * hospitalPrefixes.length)];
+                const randomSuffix = hospitalSuffixes[Math.floor(Math.random() * hospitalSuffixes.length)];
+                hospitalTemplates.push({
+                    prefix: randomPrefix,
+                    suffix: randomSuffix,
+                    baseRating: 4.0 + Math.random() * 1.0 // 4.0-5.0之间的随机评分
+                });
+            }
 
             // 基于当前位置生成医院数据
             const hospitalData = hospitalTemplates.map((template, index) => {
@@ -2501,6 +2603,7 @@
                 loadNearbyHospitals();
                 
                 // 初始化猫咪列表
+                initDefaultCats();
                 renderCats();
                 
                 // 初始化登录按钮
