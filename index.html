@@ -281,6 +281,42 @@
             gap: var(--spacing-sm);
         }
 
+        /* 个人中心菜单项样式 */
+        .menu-item {
+            display: flex;
+            align-items: center;
+            padding: var(--spacing-sm) var(--spacing-md);
+            cursor: pointer;
+            border-radius: var(--border-radius-sm);
+            transition: background-color 0.2s ease;
+            margin-bottom: var(--spacing-xs);
+        }
+
+        .menu-item:hover {
+            background-color: var(--apple-gray-light);
+        }
+
+        .menu-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .menu-icon {
+            font-size: 18px;
+            width: 24px;
+            text-align: center;
+            margin-right: var(--spacing-sm);
+        }
+
+        .menu-text {
+            flex: 1;
+            font-size: 16px;
+        }
+
+        .menu-arrow {
+            color: var(--apple-gray-medium);
+            font-size: 14px;
+        }
+
         /* Toast通知 */
         .toast {
             position: fixed;
@@ -797,10 +833,10 @@
                     <a href="#" class="nav-link" data-page="logistics" onclick="showPageAndCloseMenu('logistics', this)">物流查询</a>
                     <a href="#" class="nav-link" data-page="forum" onclick="showPageAndCloseMenu('forum', this)">论坛交流</a>
                     <a href="#" class="nav-link" data-page="shop" onclick="showPageAndCloseMenu('shop', this)">宠物商城</a>
+                    <a href="#" class="nav-link" data-page="profile" onclick="showPageAndCloseMenu('profile', this)">个人中心</a>
                 </div>
 
                 <div style="display: flex; align-items: center; gap: var(--spacing-sm); z-index: 1002; position: relative;">
-                    <button class="btn btn-secondary" onclick="toggleLogin()" id="loginBtn" style="padding: 8px 16px; font-size: 14px; z-index: 1005; position: relative; pointer-events: auto; cursor: pointer;">管理员登录</button>
                     <button class="mobile-nav-toggle" onclick="toggleMobileMenu()" style="z-index: 1004; position: relative; pointer-events: auto;">☰</button>
                 </div>
             </div>
@@ -961,7 +997,10 @@
             
             <!-- 医院列表 -->
             <div id="hospitalList">
-                <!-- 医院卡片将在这里动态生成 -->
+                <div style="text-align: center; padding: 40px; color: var(--apple-gray-medium);">
+                    <div style="font-size: 48px; margin-bottom: var(--spacing-sm);">🏥</div>
+                    <p>请点击上方"刷新"按钮搜索附近宠物医院</p>
+                </div>
             </div>
         </div>
     </div>
@@ -1176,6 +1215,89 @@
         </div>
     </div>
 
+    <!-- 个人中心页面 -->
+    <div id="profile" class="page">
+        <div class="container">
+            <h2>👤 个人中心</h2>
+            
+            <!-- 用户信息卡片 -->
+            <div class="card" style="margin-bottom: var(--spacing-lg);">
+                <div style="padding: var(--spacing-md); display: flex; align-items: center; gap: var(--spacing-md);">
+                    <div style="width: 60px; height: 60px; background: linear-gradient(135deg, var(--apple-blue), var(--apple-purple)); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 24px; color: white;">
+                        👤
+                    </div>
+                    <div style="flex: 1;">
+                        <h3 id="userName">游客用户</h3>
+                        <p style="color: var(--apple-gray-medium); font-size: 14px;">欢迎来到金猫之家</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 功能菜单 -->
+            <div class="card" style="margin-bottom: var(--spacing-lg);">
+                <div style="padding: var(--spacing-md);">
+                    <h3 style="margin-bottom: var(--spacing-md);">🔧 管理功能</h3>
+                    <div class="menu-item" onclick="toggleLogin()">
+                        <span class="menu-icon">🔐</span>
+                        <span class="menu-text">管理员登录</span>
+                        <span class="menu-arrow">→</span>
+                    </div>
+                    <div id="adminMenuItems" style="display: none;">
+                        <div class="menu-item" onclick="showAdminPanel()">
+                            <span class="menu-icon">⚙️</span>
+                            <span class="menu-text">管理员面板</span>
+                            <span class="menu-arrow">→</span>
+                        </div>
+                        <div class="menu-item" onclick="handleLogout()">
+                            <span class="menu-icon">🚪</span>
+                            <span class="menu-text">退出登录</span>
+                            <span class="menu-arrow">→</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 用户服务 -->
+            <div class="card" style="margin-bottom: var(--spacing-lg);">
+                <div style="padding: var(--spacing-md);">
+                    <h3 style="margin-bottom: var(--spacing-md);">🛠️ 用户服务</h3>
+                    <div class="menu-item" onclick="showAddressManager()">
+                        <span class="menu-icon">📍</span>
+                        <span class="menu-text">地址管理</span>
+                        <span class="menu-arrow">→</span>
+                    </div>
+                    <div class="menu-item" onclick="showOrderManager()">
+                        <span class="menu-icon">📦</span>
+                        <span class="menu-text">我的订单</span>
+                        <span class="menu-arrow">→</span>
+                    </div>
+                    <div class="menu-item" onclick="showSettings()">
+                        <span class="menu-icon">⚙️</span>
+                        <span class="menu-text">设置</span>
+                        <span class="menu-arrow">→</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 关于我们 -->
+            <div class="card">
+                <div style="padding: var(--spacing-md);">
+                    <h3 style="margin-bottom: var(--spacing-md);">ℹ️ 关于</h3>
+                    <div class="menu-item" onclick="showAbout()">
+                        <span class="menu-icon">🐱</span>
+                        <span class="menu-text">关于金猫之家</span>
+                        <span class="menu-arrow">→</span>
+                    </div>
+                    <div class="menu-item" onclick="showVersion()">
+                        <span class="menu-icon">📱</span>
+                        <span class="menu-text">版本信息</span>
+                        <span class="menu-arrow">→</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Toast通知容器 -->
     <div id="toast" class="toast"></div>
 
@@ -1200,6 +1322,10 @@
         <a href="#" class="mobile-quick-nav-item" data-page="shop" onclick="showPage('shop', this)">
             <span>🛍️</span>
             <span>商城</span>
+        </a>
+        <a href="#" class="mobile-quick-nav-item" data-page="profile" onclick="showPage('profile', this)">
+            <span>👤</span>
+            <span>我的</span>
         </a>
     </nav>
 
@@ -1366,22 +1492,17 @@
             showToast('正在跳转到淘宝...', 'info');
             
             if (isMobile) {
-                // 移动端强制尝试打开淘宝APP
+                // 移动端使用直接跳转方式，避免iframe卡死
                 const taobaoAppUrl = `taobao://s.taobao.com/search?q=${encodeURIComponent(category + ' 宠物用品')}`;
+                const taobaoWebUrl = `https://m.taobao.com/search?q=${encodeURIComponent(category + ' 宠物用品')}`;
                 
-                // 创建一个隐藏的iframe来尝试唤醒APP
-                const iframe = document.createElement('iframe');
-                iframe.style.display = 'none';
-                iframe.src = taobaoAppUrl;
-                document.body.appendChild(iframe);
+                // 先尝试打开APP
+                window.location.href = taobaoAppUrl;
                 
-                // 3秒后移除iframe并打开网页版作为备选
+                // 1秒后跳转到网页版（如果APP没有响应）
                 setTimeout(() => {
-                    document.body.removeChild(iframe);
-                    // 如果APP没有打开，跳转到网页版
-                    const taobaoWebUrl = `https://m.taobao.com/search?q=${encodeURIComponent(category + ' 宠物用品')}`;
                     window.open(taobaoWebUrl, '_blank');
-                }, 3000);
+                }, 1000);
                 
             } else {
                 // 桌面端使用淘宝PC版链接
@@ -1399,22 +1520,17 @@
             showToast('正在跳转到淘宝...', 'info');
             
             if (isMobile) {
-                // 移动端强制尝试打开淘宝APP
+                // 移动端使用直接跳转方式，避免iframe卡死
                 const taobaoAppUrl = `taobao://s.taobao.com/search?q=${encodeURIComponent(product)}`;
+                const taobaoWebUrl = `https://m.taobao.com/search?q=${encodeURIComponent(product)}`;
                 
-                // 创建一个隐藏的iframe来尝试唤醒APP
-                const iframe = document.createElement('iframe');
-                iframe.style.display = 'none';
-                iframe.src = taobaoAppUrl;
-                document.body.appendChild(iframe);
+                // 先尝试打开APP
+                window.location.href = taobaoAppUrl;
                 
-                // 3秒后移除iframe并打开网页版作为备选
+                // 1秒后跳转到网页版（如果APP没有响应）
                 setTimeout(() => {
-                    document.body.removeChild(iframe);
-                    // 如果APP没有打开，跳转到网页版
-                    const taobaoWebUrl = `https://m.taobao.com/search?q=${encodeURIComponent(product)}`;
                     window.open(taobaoWebUrl, '_blank');
-                }, 3000);
+                }, 1000);
                 
             } else {
                 // 桌面端使用淘宝PC版链接
@@ -1555,6 +1671,9 @@
                 loginBtn.className = 'btn btn-secondary';
                 loginBtn.onclick = toggleLogin;
             }
+            
+            // 更新个人中心菜单
+            updateProfileMenu();
             
             // 更新猫咪管理页面权限
             updateCatManagementButtons();
@@ -2555,22 +2674,16 @@
             }
         }
 
-        // 选择医院
+        // 选择医院 - 直接跳转高德地图
         function selectHospital(hospitalId) {
             const hospital = appData.hospitals.find(h => h.id === hospitalId);
             if (hospital) {
-                showToast(`已选择 ${hospital.name}`, 'success');
-                // 自动打开高德地图导航
-                openGaodeMap(hospitalId);
-            }
-        }
-
-        // 打开高德地图
-        function openGaodeMap(hospitalId) {
-            const hospital = appData.hospitals.find(h => h.id === hospitalId);
-            if (hospital) {
-                const gaodeUrl = `https://uri.amap.com/navigation?to=${encodeURIComponent(hospital.address)},${hospital.name}&mode=car&coordinate=120.1551,30.2741`;
-                showToast('正在打开高德地图...', 'info');
+                showToast(`正在跳转到高德地图导航到 ${hospital.name}...`, 'info');
+                
+                // 构建高德地图导航URL，目的地为选中的医院
+                const gaodeUrl = `https://uri.amap.com/navigation?to=${hospital.lng},${hospital.lat},${encodeURIComponent(hospital.name)}&mode=car&coordinate=${appData.currentLocation.lng},${appData.currentLocation.lat}`;
+                
+                // 延迟跳转，让提示先显示
                 setTimeout(() => {
                     window.open(gaodeUrl, '_blank');
                 }, 500);
@@ -2757,6 +2870,44 @@
             const navMenu = document.querySelector('.nav-menu');
             navMenu.style.display = navMenu.style.display === 'flex' ? 'none' : 'flex';
         });
+
+        // 个人中心相关功能
+        function showAddressManager() {
+            showToast('地址管理功能开发中...', 'info');
+            // 这里可以添加地址管理模态框
+        }
+
+        function showOrderManager() {
+            showToast('订单管理功能开发中...', 'info');
+            // 这里可以添加订单管理模态框
+        }
+
+        function showSettings() {
+            showToast('设置功能开发中...', 'info');
+            // 这里可以添加设置模态框
+        }
+
+        function showAbout() {
+            showToast('金猫之家 v1.0 - 杭州自家小猫咪-李先生的宠物社区平台', 'info');
+        }
+
+        function showVersion() {
+            showToast('版本：1.0.0 | 更新时间：2024年', 'info');
+        }
+
+        // 更新管理员菜单显示
+        function updateProfileMenu() {
+            const adminMenuItems = document.getElementById('adminMenuItems');
+            const userName = document.getElementById('userName');
+            
+            if (appData.isAdmin) {
+                if (adminMenuItems) adminMenuItems.style.display = 'block';
+                if (userName) userName.textContent = '管理员';
+            } else {
+                if (adminMenuItems) adminMenuItems.style.display = 'none';
+                if (userName) userName.textContent = '游客用户';
+            }
+        }
     </script>
 </body>
 </html>
