@@ -917,6 +917,100 @@
         </div>
     </div>
 
+    <!-- 商城管理模态框 -->
+    <div id="shopManagerModal" class="modal-overlay">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>商品管理</h3>
+                <button class="btn btn-secondary" onclick="closeShopManager()">×</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>商品名称</label>
+                    <input type="text" class="input" id="productName" placeholder="请输入商品名称...">
+                </div>
+                <div class="form-group">
+                    <label>商品分类</label>
+                    <select class="input" id="productCategory">
+                        <option value="猫粮">猫粮</option>
+                        <option value="猫玩具">猫玩具</option>
+                        <option value="猫砂">猫砂</option>
+                        <option value="猫窝">猫窝</option>
+                        <option value="猫护理">猫护理</option>
+                        <option value="猫保健品">猫保健品</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>商品价格</label>
+                    <input type="text" class="input" id="productPrice" placeholder="请输入价格（如：29）">
+                </div>
+                <div class="form-group">
+                    <label>淘宝链接</label>
+                    <input type="text" class="input" id="productTaobaoUrl" placeholder="请输入淘宝商品链接...">
+                </div>
+                <div class="form-group">
+                    <label>商品图标</label>
+                    <select class="input" id="productIcon">
+                        <option value="🥫">🥫 猫粮</option>
+                        <option value="🧶">🧶 玩具</option>
+                        <option value="🧼">🧼 猫砂</option>
+                        <option value="🏠">🏠 猫窝</option>
+                        <option value="🧴">🧴 护理</option>
+                        <option value="💊">💊 保健品</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>商品描述</label>
+                    <textarea class="input" id="productDescription" rows="3" placeholder="请输入商品描述..."></textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeShopManager()">取消</button>
+                <button class="btn btn-primary" onclick="saveProduct()">保存商品</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 医院管理模态框 -->
+    <div id="hospitalManagerModal" class="modal-overlay">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>添加医院</h3>
+                <button class="btn btn-secondary" onclick="closeHospitalManager()">×</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>医院名称</label>
+                    <input type="text" class="input" id="hospitalName" placeholder="请输入医院名称...">
+                </div>
+                <div class="form-group">
+                    <label>医院地址</label>
+                    <input type="text" class="input" id="hospitalAddress" placeholder="请输入详细地址...">
+                </div>
+                <div class="form-group">
+                    <label>联系电话</label>
+                    <input type="text" class="input" id="hospitalPhone" placeholder="请输入联系电话...">
+                </div>
+                <div class="form-group">
+                    <label>经度（可选）</label>
+                    <input type="text" class="input" id="hospitalLng" placeholder="如：120.1551">
+                </div>
+                <div class="form-group">
+                    <label>纬度（可选）</label>
+                    <input type="text" class="input" id="hospitalLat" placeholder="如：30.2741">
+                </div>
+                <div class="form-group">
+                    <label>医院简介</label>
+                    <textarea class="input" id="hospitalDescription" rows="3" placeholder="请输入医院简介..."></textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeHospitalManager()">取消</button>
+                <button class="btn btn-primary" onclick="saveHospital()">添加医院</button>
+            </div>
+        </div>
+    </div>
+
     <!-- 添加猫咪模态框 -->
     <div id="addCatModal" class="modal-overlay">
         <div class="modal-content">
@@ -954,8 +1048,18 @@
                     </select>
                 </div>
                 <div class="form-group">
-                    <label>照片URL（可选）</label>
-                    <input type="text" class="input" id="catPhoto" placeholder="请输入照片链接...">
+                    <label>照片</label>
+                    <div style="display: flex; gap: var(--spacing-sm); margin-bottom: var(--spacing-sm);">
+                        <input type="text" class="input" id="catPhoto" placeholder="请输入照片链接或上传图片...">
+                        <input type="file" id="catPhotoUpload" accept="image/*" style="display: none;" onchange="handleCatPhotoUpload(event)">
+                        <button class="btn btn-secondary" onclick="document.getElementById('catPhotoUpload').click()">📷 上传</button>
+                    </div>
+                    <div id="catPhotoPreview" style="width: 100%; height: 200px; border: 2px dashed var(--apple-border); border-radius: var(--border-radius-sm); display: flex; align-items: center; justify-content: center; color: var(--apple-gray-medium); background-color: var(--apple-gray-light);">
+                        <div style="text-align: center;">
+                            <div style="font-size: 48px; margin-bottom: var(--spacing-sm);">🐱</div>
+                            <p>照片预览区域</p>
+                        </div>
+                    </div>
                 </div>
                 <div class="form-group">
                     <label>简介</label>
@@ -977,6 +1081,7 @@
                 <div style="display: flex; gap: var(--spacing-sm);">
                     <button class="btn btn-primary" onclick="getCurrentLocation()">📍 定位</button>
                     <button class="btn btn-secondary" onclick="refreshHospitals()">🔄 刷新</button>
+                    <button id="hospitalManageBtn" class="btn btn-primary" onclick="openHospitalManager()" style="display: none;">➕ 添加医院</button>
                 </div>
             </div>
             
@@ -1148,7 +1253,12 @@
     <!-- 宠物商城页面 -->
     <div id="shop" class="page">
         <div class="container">
-            <h2>🛍️ 宠物商城</h2>
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--spacing-md);">
+                <h2>🛍️ 宠物商城</h2>
+                <div id="shopManageBtn" style="display: none;">
+                    <button class="btn btn-primary" onclick="openShopManager()">📝 管理商品</button>
+                </div>
+            </div>
             
             <!-- 商品分类 -->
             <div class="category-grid">
@@ -1634,13 +1744,27 @@
                 appData.isLoggedIn = true;
                 appData.isAdmin = true;
                 
-                closeLoginModal();
+                // 关闭登录模态框
+                const loginModal = document.getElementById('loginModal');
+                if (loginModal) {
+                    loginModal.classList.remove('active');
+                    loginModal.style.display = 'none';
+                }
+                
+                // 清空输入框
+                document.getElementById('username').value = '';
+                document.getElementById('password').value = '';
+                
+                // 更新界面状态
                 updateLoginButton();
-                showToast('管理员登录成功！', 'success');
                 enableAdminFeatures();
+                
+                showToast('管理员登录成功！', 'success');
+                console.log('管理员登录成功，功能已启用');
             } else {
                 showToast('账号或密码错误，只有管理员可以登录', 'error');
-                // 不允许普通用户登录，普通用户以游客身份使用
+                // 清空密码输入框
+                document.getElementById('password').value = '';
             }
         }
 
@@ -1697,6 +1821,22 @@
         function enableAdminFeatures() {
             // 管理员可以修改的元素添加编辑功能
             console.log('管理员功能已启用');
+            
+            // 启用猫咪管理页面的添加按钮
+            const addCatBtn = document.getElementById('addCatBtn');
+            if (addCatBtn) addCatBtn.style.display = 'block';
+            
+            // 启用商城管理功能
+            const shopManageBtn = document.getElementById('shopManageBtn');
+            if (shopManageBtn) shopManageBtn.style.display = 'block';
+            
+            // 启用医院管理功能
+            const hospitalManageBtn = document.getElementById('hospitalManageBtn');
+            if (hospitalManageBtn) hospitalManageBtn.style.display = 'block';
+            
+            // 重新渲染相关页面
+            renderCats();
+            updateProfileMenu();
         }
 
         function disableAdminFeatures() {
@@ -1893,6 +2033,66 @@
 
         function closeAddCatModal() {
             document.getElementById('addCatModal').classList.remove('active');
+            // 清空表单
+            document.getElementById('catName').value = '';
+            document.getElementById('catBreed').value = '';
+            document.getElementById('catAge').value = '';
+            document.getElementById('catGender').value = '公';
+            document.getElementById('catPhoto').value = '';
+            document.getElementById('catDescription').value = '';
+            document.getElementById('catPhotoPreview').innerHTML = `
+                <div style="text-align: center;">
+                    <div style="font-size: 48px; margin-bottom: var(--spacing-sm);">🐱</div>
+                    <p>照片预览区域</p>
+                </div>
+            `;
+            // 重置编辑状态
+            delete appData.editingCatId;
+        }
+
+        // 处理猫咪照片上传
+        function handleCatPhotoUpload(event) {
+            const file = event.target.files[0];
+            if (file && file.type.startsWith('image/')) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const photoUrl = e.target.result;
+                    document.getElementById('catPhoto').value = photoUrl;
+                    document.getElementById('catPhotoPreview').innerHTML = `
+                        <img src="${photoUrl}" style="width: 100%; height: 100%; object-fit: cover; border-radius: var(--border-radius-sm);">
+                    `;
+                    showToast('图片上传成功', 'success');
+                };
+                reader.readAsDataURL(file);
+            } else {
+                showToast('请选择有效的图片文件', 'error');
+            }
+        }
+
+        // 编辑猫咪
+        function editCat(catId) {
+            const cat = appData.cats.find(c => c.id === catId);
+            if (cat) {
+                appData.editingCatId = catId;
+                // 填充表单
+                document.getElementById('catName').value = cat.name;
+                document.getElementById('catBreed').value = cat.breed;
+                document.getElementById('catAge').value = cat.age;
+                document.getElementById('catGender').value = cat.gender;
+                document.getElementById('catPhoto').value = cat.photo;
+                document.getElementById('catDescription').value = cat.description || '';
+                
+                // 显示图片预览
+                document.getElementById('catPhotoPreview').innerHTML = `
+                    <img src="${cat.photo}" style="width: 100%; height: 100%; object-fit: cover; border-radius: var(--border-radius-sm);">
+                `;
+                
+                // 修改模态框标题和按钮
+                document.querySelector('#addCatModal .modal-header h3').textContent = '编辑猫咪';
+                document.querySelector('#addCatModal .modal-footer .btn-primary').textContent = '保存';
+                
+                document.getElementById('addCatModal').classList.add('active');
+            }
         }
 
         function submitCat() {
@@ -1908,25 +2108,44 @@
                 return;
             }
 
-            const cat = {
-                id: Date.now(),
-                name: name,
-                breed: breed,
-                age: parseInt(age),
-                gender: gender,
-                photo: photo || 'https://picsum.photos/300/200?random=' + Date.now(),
-                description: description || `这是一只可爱的${breed}`,
-                addedBy: appData.currentUser,
-                addedTime: new Date().toLocaleString(),
-                likes: 0,
-                comments: [],
-                liked: false
-            };
+            if (appData.editingCatId) {
+                // 编辑模式
+                const cat = appData.cats.find(c => c.id === appData.editingCatId);
+                if (cat) {
+                    cat.name = name;
+                    cat.breed = breed;
+                    cat.age = parseInt(age);
+                    cat.gender = gender;
+                    cat.photo = photo || 'https://picsum.photos/300/200?random=' + Date.now();
+                    cat.description = description || `这是一只可爱的${breed}`;
+                    cat.updatedTime = new Date().toLocaleString();
+                    
+                    renderCats();
+                    closeAddCatModal();
+                    showToast('猫咪信息更新成功！', 'success');
+                }
+            } else {
+                // 添加模式
+                const cat = {
+                    id: Date.now(),
+                    name: name,
+                    breed: breed,
+                    age: parseInt(age),
+                    gender: gender,
+                    photo: photo || 'https://picsum.photos/300/200?random=' + Date.now(),
+                    description: description || `这是一只可爱的${breed}`,
+                    addedBy: appData.currentUser,
+                    addedTime: new Date().toLocaleString(),
+                    likes: 0,
+                    comments: [],
+                    liked: false
+                };
 
-            appData.cats.unshift(cat);
-            renderCats();
-            closeAddCatModal();
-            showToast('猫咪添加成功！', 'success');
+                appData.cats.unshift(cat);
+                renderCats();
+                closeAddCatModal();
+                showToast('猫咪添加成功！', 'success');
+            }
         }
 
         function renderCats() {
@@ -2808,8 +3027,7 @@
                 // 初始化论坛帖子
                 renderPosts();
                 
-                // 初始化医院数据
-                loadNearbyHospitals();
+                // 医院数据需要手动刷新，不自动加载
                 
                 // 初始化猫咪列表
                 initDefaultCats();
@@ -2907,6 +3125,106 @@
                 if (adminMenuItems) adminMenuItems.style.display = 'none';
                 if (userName) userName.textContent = '游客用户';
             }
+        }
+
+        // 商城管理功能
+        function openShopManager() {
+            document.getElementById('shopManagerModal').classList.add('active');
+            // 清空表单
+            document.getElementById('productName').value = '';
+            document.getElementById('productPrice').value = '';
+            document.getElementById('productTaobaoUrl').value = '';
+            document.getElementById('productDescription').value = '';
+        }
+
+        function closeShopManager() {
+            document.getElementById('shopManagerModal').classList.remove('active');
+        }
+
+        function saveProduct() {
+            const name = document.getElementById('productName').value.trim();
+            const category = document.getElementById('productCategory').value;
+            const price = document.getElementById('productPrice').value.trim();
+            const taobaoUrl = document.getElementById('productTaobaoUrl').value.trim();
+            const icon = document.getElementById('productIcon').value;
+            const description = document.getElementById('productDescription').value.trim();
+
+            if (!name || !price || !taobaoUrl) {
+                showToast('请填写必要信息', 'error');
+                return;
+            }
+
+            const product = {
+                id: Date.now(),
+                name: name,
+                category: category,
+                price: price,
+                taobaoUrl: taobaoUrl,
+                icon: icon,
+                description: description || '优质宠物用品',
+                addedBy: appData.currentUser,
+                addedTime: new Date().toLocaleString()
+            };
+
+            // 保存到本地存储
+            const products = JSON.parse(localStorage.getItem('customProducts') || '[]');
+            products.push(product);
+            localStorage.setItem('customProducts', JSON.stringify(products));
+
+            closeShopManager();
+            showToast('商品添加成功！', 'success');
+        }
+
+        // 医院管理功能
+        function openHospitalManager() {
+            document.getElementById('hospitalManagerModal').classList.add('active');
+            // 清空表单
+            document.getElementById('hospitalName').value = '';
+            document.getElementById('hospitalAddress').value = '';
+            document.getElementById('hospitalPhone').value = '';
+            document.getElementById('hospitalLng').value = '';
+            document.getElementById('hospitalLat').value = '';
+            document.getElementById('hospitalDescription').value = '';
+        }
+
+        function closeHospitalManager() {
+            document.getElementById('hospitalManagerModal').classList.remove('active');
+        }
+
+        function saveHospital() {
+            const name = document.getElementById('hospitalName').value.trim();
+            const address = document.getElementById('hospitalAddress').value.trim();
+            const phone = document.getElementById('hospitalPhone').value.trim();
+            const lng = parseFloat(document.getElementById('hospitalLng').value) || 120.1551;
+            const lat = parseFloat(document.getElementById('hospitalLat').value) || 30.2741;
+            const description = document.getElementById('hospitalDescription').value.trim();
+
+            if (!name || !address || !phone) {
+                showToast('请填写必要信息', 'error');
+                return;
+            }
+
+            const hospital = {
+                id: Date.now(),
+                name: name,
+                address: address,
+                phone: phone,
+                lat: lat,
+                lng: lng,
+                rating: 4.5 + Math.random() * 0.5,
+                reviews: [],
+                distance: 0,
+                distanceText: '0m',
+                isCustom: true,
+                addedBy: appData.currentUser,
+                addedTime: new Date().toLocaleString()
+            };
+
+            // 添加到现有医院列表
+            appData.hospitals.unshift(hospital);
+            renderHospitals();
+            closeHospitalManager();
+            showToast('医院添加成功！', 'success');
         }
     </script>
 </body>
