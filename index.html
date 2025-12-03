@@ -810,9 +810,15 @@
         }
 
         .modal-overlay.active {
-            display: flex;
+            display: flex !important;
             align-items: center;
             justify-content: center;
+            z-index: 10000 !important;
+        }
+
+        /* 登录模态框特殊样式 */
+        #loginModal.modal-overlay.active {
+            z-index: 10001 !important;
         }
     </style>
 </head>
@@ -1347,7 +1353,7 @@
             <div class="card" style="margin-bottom: var(--spacing-lg);">
                 <div style="padding: var(--spacing-md);">
                     <h3 style="margin-bottom: var(--spacing-md);">🔧 管理功能</h3>
-                    <div class="menu-item" onclick="toggleLogin()">
+                    <div class="menu-item" onclick="toggleLogin(event)" onmousedown="toggleLogin(event)" style="cursor: pointer; user-select: none;">
                         <span class="menu-icon">🔐</span>
                         <span class="menu-text">管理员登录</span>
                         <span class="menu-arrow">→</span>
@@ -1463,7 +1469,7 @@
     </div>
 
     <!-- 登录模态框 -->
-    <div id="loginModal" class="modal-overlay">
+    <div id="loginModal" class="modal-overlay" onclick="if(event.target === this) closeLoginModal()">
         <div class="modal-content">
             <div class="modal-header">
                 <h3 id="loginTitle">管理员登录</h3>
@@ -1686,7 +1692,7 @@
 
         // 登录相关功能
         function toggleLogin() {
-            console.log('Toggle login clicked - function executed'); // 调试信息
+            console.log('Toggle login clicked - function executed');
             
             // 防止事件冒泡
             if (event) {
@@ -1698,11 +1704,24 @@
             console.log('Login modal found:', !!modal);
             
             if (modal) {
+                // 移除之前的类
+                modal.classList.remove('active');
+                
                 // 强制显示模态框
-                modal.style.display = 'block';
+                modal.style.display = 'flex';
+                modal.style.position = 'fixed';
+                modal.style.top = '0';
+                modal.style.left = '0';
+                modal.style.width = '100%';
+                modal.style.height = '100%';
+                modal.style.zIndex = '10001';
+                modal.style.backgroundColor = 'rgba(0, 0, 0, 0.5)';
+                
+                // 添加active类
                 setTimeout(() => {
                     modal.classList.add('active');
-                }, 10);
+                    console.log('Modal active class added');
+                }, 50);
                 
                 // 清空输入框
                 const usernameInput = document.getElementById('username');
@@ -1710,23 +1729,32 @@
                 if (usernameInput) usernameInput.value = '';
                 if (passwordInput) passwordInput.value = '';
                 
-                console.log('Modal should be visible now');
-                showToast('点击登录按钮成功', 'success');
+                showToast('登录界面已打开', 'info');
                 
                 // 聚焦到用户名输入框
                 setTimeout(() => {
                     if (usernameInput) {
                         usernameInput.focus();
+                        console.log('Username input focused');
                     }
-                }, 200);
+                }, 300);
             } else {
                 console.error('Login modal not found');
                 showToast('登录界面错误', 'error');
             }
         }
 
+        // 备用登录模态框显示函数
+        function showLoginModal() {
+            toggleLogin();
+        }
+
         function closeLoginModal() {
-            document.getElementById('loginModal').classList.remove('active');
+            const modal = document.getElementById('loginModal');
+            if (modal) {
+                modal.classList.remove('active');
+                modal.style.display = 'none';
+            }
         }
 
         function handleLogin() {
