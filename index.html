@@ -965,8 +965,16 @@
                     <input type="text" class="input" id="productPrice" placeholder="请输入价格（如：29）">
                 </div>
                 <div class="form-group">
-                    <label>淘宝链接</label>
-                    <input type="text" class="input" id="productTaobaoUrl" placeholder="请输入淘宝商品链接...">
+                    <label>购买链接平台</label>
+                    <select class="input" id="productPlatform">
+                        <option value="taobao">淘宝</option>
+                        <option value="pinduoduo">拼多多</option>
+                        <option value="jd">京东</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>商品链接</label>
+                    <input type="text" class="input" id="productUrl" placeholder="请输入商品购买链接...">
                 </div>
                 <div class="form-group">
                     <label>商品图标</label>
@@ -1262,8 +1270,12 @@
                     <textarea class="input" id="postContent" rows="6" placeholder="分享你的养猫经验..."></textarea>
                 </div>
                 <div class="form-group">
-                    <label>图片URL (可选)</label>
-                    <input type="text" class="input" id="postImages" placeholder="图片地址，多个用逗号分隔">
+                    <label>上传图片 (可选)</label>
+                    <input type="file" id="postImageUpload" accept="image/*" multiple style="display: none;" onchange="handlePostImageUpload(event)">
+                    <div id="postImagePreview" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); gap: 10px; margin-top: 10px;"></div>
+                    <button type="button" class="btn btn-secondary" onclick="document.getElementById('postImageUpload').click()" style="margin-top: 10px;">
+                        📷 选择图片
+                    </button>
                 </div>
             </div>
             <div class="modal-footer">
@@ -1285,32 +1297,32 @@
             
             <!-- 商品分类 -->
             <div class="category-grid">
-                <div class="category-card" onclick="openTaobaoCategory('猫粮')">
+                <div class="category-card" style="cursor: default;">
                     <div class="category-icon">🥫</div>
                     <h4>猫粮</h4>
                     <p style="color: var(--apple-gray-medium); font-size: 14px;">主食、零食、营养品</p>
                 </div>
-                <div class="category-card" onclick="openTaobaoCategory('猫玩具')">
+                <div class="category-card" style="cursor: default;">
                     <div class="category-icon">🧶</div>
                     <h4>猫玩具</h4>
                     <p style="color: var(--apple-gray-medium); font-size: 14px;">逗猫棒、毛线球、益智玩具</p>
                 </div>
-                <div class="category-card" onclick="openTaobaoCategory('猫砂')">
+                <div class="category-card" style="cursor: default;">
                     <div class="category-icon">🧼</div>
                     <h4>猫砂</h4>
                     <p style="color: var(--apple-gray-medium); font-size: 14px;">膨润砂、豆腐砂、水晶砂</p>
                 </div>
-                <div class="category-card" onclick="openTaobaoCategory('猫窝')">
+                <div class="category-card" style="cursor: default;">
                     <div class="category-icon">🏠</div>
                     <h4>猫窝</h4>
                     <p style="color: var(--apple-gray-medium); font-size: 14px;">猫床、猫帐篷、猫爬架</p>
                 </div>
-                <div class="category-card" onclick="openTaobaoCategory('猫护理')">
+                <div class="category-card" style="cursor: default;">
                     <div class="category-icon">🧴</div>
                     <h4>猫护理</h4>
                     <p style="color: var(--apple-gray-medium); font-size: 14px;">沐浴露、梳子、指甲剪</p>
                 </div>
-                <div class="category-card" onclick="openTaobaoCategory('猫保健品')">
+                <div class="category-card" style="cursor: default;">
                     <div class="category-icon">💊</div>
                     <h4>猫保健品</h4>
                     <p style="color: var(--apple-gray-medium); font-size: 14px;">维生素、益生菌、驱虫药</p>
@@ -1318,31 +1330,11 @@
             </div>
 
             <!-- 推荐商品 -->
-            <h3 style="margin-bottom: var(--spacing-md);">🔥 热门推荐</h3>
+            <h3 style="margin-bottom: var(--spacing-md);">🔥 精选商品</h3>
             <div class="grid grid-3" id="recommendedProducts">
-                <div class="card" onclick="openTaobaoProduct('猫粮')">
-                    <div style="padding: var(--spacing-md); text-align: center;">
-                        <div style="font-size: 48px; margin-bottom: var(--spacing-sm);">🥫</div>
-                        <h3>进口猫粮</h3>
-                        <p style="color: var(--apple-orange); font-weight: 600;">¥89</p>
-                        <button class="btn btn-primary">🛒 淘宝购买</button>
-                    </div>
-                </div>
-                <div class="card" onclick="openTaobaoProduct('猫玩具')">
-                    <div style="padding: var(--spacing-md); text-align: center;">
-                        <div style="font-size: 48px; margin-bottom: var(--spacing-sm);">🧶</div>
-                        <h3>逗猫棒套装</h3>
-                        <p style="color: var(--apple-orange); font-weight: 600;">¥29</p>
-                        <button class="btn btn-primary">🛒 淘宝购买</button>
-                    </div>
-                </div>
-                <div class="card" onclick="openTaobaoProduct('猫砂')">
-                    <div style="padding: var(--spacing-md); text-align: center;">
-                        <div style="font-size: 48px; margin-bottom: var(--spacing-sm);">🧼</div>
-                        <h3>豆腐猫砂</h3>
-                        <p style="color: var(--apple-orange); font-weight: 600;">¥45</p>
-                        <button class="btn btn-primary">🛒 淘宝购买</button>
-                    </div>
+                <div style="text-align: center; padding: 40px; color: var(--apple-gray-medium);">
+                    <div style="font-size: 48px; margin-bottom: var(--spacing-sm);">🛍️</div>
+                    <p>暂无商品，请联系管理员添加</p>
                 </div>
             </div>
         </div>
@@ -1631,61 +1623,7 @@
                    (window.innerWidth <= 768 && 'ontouchstart' in window);
         }
 
-        // 打开淘宝分类
-        function openTaobaoCategory(category) {
-            const isMobile = isMobileDevice();
-            
-            showToast('正在跳转到淘宝...', 'info');
-            
-            if (isMobile) {
-                // 移动端使用直接跳转方式，避免iframe卡死
-                const taobaoAppUrl = `taobao://s.taobao.com/search?q=${encodeURIComponent(category + ' 宠物用品')}`;
-                const taobaoWebUrl = `https://m.taobao.com/search?q=${encodeURIComponent(category + ' 宠物用品')}`;
-                
-                // 先尝试打开APP
-                window.location.href = taobaoAppUrl;
-                
-                // 1秒后跳转到网页版（如果APP没有响应）
-                setTimeout(() => {
-                    window.open(taobaoWebUrl, '_blank');
-                }, 1000);
-                
-            } else {
-                // 桌面端使用淘宝PC版链接
-                const taobaoUrl = `https://s.taobao.com/search?q=${encodeURIComponent(category + ' 宠物用品')}`;
-                setTimeout(() => {
-                    window.open(taobaoUrl, '_blank');
-                }, 500);
-            }
-        }
 
-        // 打开淘宝商品
-        function openTaobaoProduct(product) {
-            const isMobile = isMobileDevice();
-            
-            showToast('正在跳转到淘宝...', 'info');
-            
-            if (isMobile) {
-                // 移动端使用直接跳转方式，避免iframe卡死
-                const taobaoAppUrl = `taobao://s.taobao.com/search?q=${encodeURIComponent(product)}`;
-                const taobaoWebUrl = `https://m.taobao.com/search?q=${encodeURIComponent(product)}`;
-                
-                // 先尝试打开APP
-                window.location.href = taobaoAppUrl;
-                
-                // 1秒后跳转到网页版（如果APP没有响应）
-                setTimeout(() => {
-                    window.open(taobaoWebUrl, '_blank');
-                }, 1000);
-                
-            } else {
-                // 桌面端使用淘宝PC版链接
-                const taobaoUrl = `https://s.taobao.com/search?q=${encodeURIComponent(product)}`;
-                setTimeout(() => {
-                    window.open(taobaoUrl, '_blank');
-                }, 500);
-            }
-        }
 
         // 打开私信模态框
         function openMessageModal() {
@@ -1932,6 +1870,7 @@
             // 重新渲染相关页面
             renderCats();
             renderPosts();
+            renderProducts();
             updateProfileMenu();
             
             showToast('管理员功能已全部启用', 'success');
@@ -2355,11 +2294,18 @@
                         </div>
                         ${cat.comments.length > 0 || !appData.isAdmin ? `
                             <div class="comments-section" id="cat-comments-${cat.id}" style="margin-top: var(--spacing-sm);">
-                                ${cat.comments.map(comment => `
+                                ${cat.comments.map((comment, index) => `
                                     <div class="comment-item">
-                                        <div class="comment-author">${comment.author}</div>
-                                        <div class="comment-content">${comment.content}</div>
-                                        <div class="comment-time">${comment.time}</div>
+                                        <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                                            <div style="flex: 1;">
+                                                <div class="comment-author">${comment.author}</div>
+                                                <div class="comment-content">${comment.content}</div>
+                                                <div class="comment-time">${comment.time}</div>
+                                            </div>
+                                            ${appData.isAdmin ? `
+                                                <button class="btn btn-secondary btn-small" onclick="deleteCatComment(${cat.id}, ${index})" style="margin-left: 8px; padding: 4px 8px; font-size: 12px;">删除</button>
+                                            ` : ''}
+                                        </div>
                                     </div>
                                 `).join('')}
                                 <div class="comment-item">
@@ -2427,8 +2373,50 @@
             }
         }
 
+        function deleteCatComment(catId, commentIndex) {
+            if (!appData.isAdmin) {
+                showToast('只有管理员才能删除评论', 'error');
+                return;
+            }
+            
+            if (confirm('确定要删除这条评论吗？')) {
+                const cat = appData.cats.find(c => c.id === catId);
+                if (cat && cat.comments[commentIndex]) {
+                    cat.comments.splice(commentIndex, 1);
+                    renderCats();
+                    showToast('评论删除成功', 'success');
+                }
+            }
+        }
+
         function editCat(catId) {
-            showToast('编辑功能开发中...', 'info');
+            if (!appData.isAdmin) {
+                showToast('只有管理员才能编辑猫咪', 'error');
+                return;
+            }
+            
+            const cat = appData.cats.find(c => c.id === catId);
+            if (!cat) {
+                showToast('猫咪信息不存在', 'error');
+                return;
+            }
+            
+            // 设置编辑模式
+            appData.editingCatId = catId;
+            
+            // 填充表单
+            document.getElementById('catName').value = cat.name;
+            document.getElementById('catBreed').value = cat.breed;
+            document.getElementById('catAge').value = cat.age;
+            document.getElementById('catGender').value = cat.gender;
+            document.getElementById('catPhoto').value = cat.photo;
+            document.getElementById('catDescription').value = cat.description || '';
+            
+            // 修改模态框标题和按钮
+            document.querySelector('#addCatModal .modal-header h3').textContent = '编辑猫咪';
+            document.querySelector('#addCatModal .modal-footer .btn-primary').textContent = '保存';
+            
+            document.getElementById('addCatModal').classList.add('active');
         }
 
         function deleteCat(catId) {
@@ -2442,13 +2430,46 @@
             }
         }
 
+        // 处理图片上传
+        function handlePostImageUpload(event) {
+            const files = event.target.files;
+            const preview = document.getElementById('postImagePreview');
+            
+            for (let file of files) {
+                if (file.type.startsWith('image/')) {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        const imageContainer = document.createElement('div');
+                        imageContainer.style.cssText = 'position: relative; padding: 10px; border: 1px solid var(--apple-border); border-radius: var(--border-radius-sm); background: var(--apple-gray-light);';
+                        
+                        const img = document.createElement('img');
+                        img.src = e.target.result;
+                        img.style.cssText = 'width: 100%; height: 100px; object-fit: cover; border-radius: var(--border-radius-sm);';
+                        
+                        const removeBtn = document.createElement('button');
+                        removeBtn.innerHTML = '×';
+                        removeBtn.style.cssText = 'position: absolute; top: 5px; right: 5px; background: var(--apple-red); color: white; border: none; border-radius: 50%; width: 20px; height: 20px; cursor: pointer; font-size: 12px;';
+                        removeBtn.onclick = function() {
+                            imageContainer.remove();
+                        };
+                        
+                        imageContainer.appendChild(img);
+                        imageContainer.appendChild(removeBtn);
+                        preview.appendChild(imageContainer);
+                    };
+                    reader.readAsDataURL(file);
+                }
+            }
+        }
+
         // 发表帖子
         function createPost() {
             document.getElementById('createPostModal').classList.add('active');
             // 清空表单
             document.getElementById('postTitle').value = '';
             document.getElementById('postContent').value = '';
-            document.getElementById('postImages').value = '';
+            document.getElementById('postImagePreview').innerHTML = '';
+            document.getElementById('postImageUpload').value = '';
         }
 
         // 关闭发帖模态框
@@ -2460,7 +2481,11 @@
         function submitPost() {
             const title = document.getElementById('postTitle').value.trim();
             const content = document.getElementById('postContent').value.trim();
-            const images = document.getElementById('postImages').value.trim();
+            
+            // 获取上传的图片
+            const preview = document.getElementById('postImagePreview');
+            const imageElements = preview.querySelectorAll('img');
+            const uploadedImages = Array.from(imageElements).map(img => img.src);
 
             if (!title || !content) {
                 showToast('请填写标题和内容', 'error');
@@ -2471,10 +2496,10 @@
                 id: Date.now(),
                 title: title,
                 content: content,
-                author: '用户' + Math.floor(Math.random() * 1000),
+                author: appData.currentUser ? appData.currentUser : '用户' + Math.floor(Math.random() * 1000),
                 avatar: '👤',
                 time: '刚刚',
-                images: images ? images.split(',').map(url => url.trim()).filter(url => url) : [],
+                images: uploadedImages,
                 likes: 0,
                 comments: [],
                 liked: false
@@ -3137,11 +3162,11 @@
 
         // 刷新医院列表
         function refreshHospitals() {
-            showToast('正在刷新医院信息...', 'info');
+            showToast('正在搜索附近宠物医院...', 'info');
             loadNearbyHospitals();
             setTimeout(() => {
-                showToast('刷新完成！', 'success');
-            }, 1000);
+                showToast(`找到 ${appData.hospitals.length} 家附近医院`, 'success');
+            }, 1500);
         }
 
         // 过滤医院
@@ -3208,6 +3233,12 @@
                 // 初始化猫咪列表
                 initDefaultCats();
                 renderCats();
+                
+                // 初始化商品列表
+                if (!appData.products) {
+                    appData.products = [];
+                }
+                renderProducts();
                 
                 // 初始化登录按钮和管理员状态
                 updateLoginButton();
@@ -3342,7 +3373,8 @@
             // 清空表单
             document.getElementById('productName').value = '';
             document.getElementById('productPrice').value = '';
-            document.getElementById('productTaobaoUrl').value = '';
+            document.getElementById('productPlatform').value = 'taobao';
+            document.getElementById('productUrl').value = '';
             document.getElementById('productDescription').value = '';
         }
 
@@ -3354,11 +3386,12 @@
             const name = document.getElementById('productName').value.trim();
             const category = document.getElementById('productCategory').value;
             const price = document.getElementById('productPrice').value.trim();
-            const taobaoUrl = document.getElementById('productTaobaoUrl').value.trim();
+            const platform = document.getElementById('productPlatform').value;
+            const url = document.getElementById('productUrl').value.trim();
             const icon = document.getElementById('productIcon').value;
             const description = document.getElementById('productDescription').value.trim();
 
-            if (!name || !price || !taobaoUrl) {
+            if (!name || !price || !url) {
                 showToast('请填写必要信息', 'error');
                 return;
             }
@@ -3368,20 +3401,117 @@
                 name: name,
                 category: category,
                 price: price,
-                taobaoUrl: taobaoUrl,
+                platform: platform,
+                url: url,
                 icon: icon,
                 description: description || '优质宠物用品',
                 addedBy: appData.currentUser,
                 addedTime: new Date().toLocaleString()
             };
 
-            // 保存到本地存储
-            const products = JSON.parse(localStorage.getItem('customProducts') || '[]');
-            products.push(product);
-            localStorage.setItem('customProducts', JSON.stringify(products));
+            // 初始化产品数组
+            if (!appData.products) {
+                appData.products = [];
+            }
 
+            appData.products.push(product);
+            renderProducts();
             closeShopManager();
             showToast('商品添加成功！', 'success');
+        }
+
+        // 渲染商品列表
+        function renderProducts() {
+            const container = document.getElementById('recommendedProducts');
+            
+            if (!appData.products || appData.products.length === 0) {
+                container.innerHTML = `
+                    <div style="text-align: center; padding: 40px; color: var(--apple-gray-medium);">
+                        <div style="font-size: 48px; margin-bottom: var(--spacing-sm);">🛍️</div>
+                        <p>暂无商品，请联系管理员添加</p>
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = appData.products.map(product => {
+                const platformText = {
+                    'taobao': '淘宝',
+                    'pinduoduo': '拼多多',
+                    'jd': '京东'
+                }[product.platform] || '购买';
+
+                return `
+                    <div class="card">
+                        <div style="padding: var(--spacing-md); text-align: center;">
+                            <div style="font-size: 48px; margin-bottom: var(--spacing-sm);">${product.icon}</div>
+                            <h3>${product.name}</h3>
+                            <p style="color: var(--apple-orange); font-weight: 600;">¥${product.price}</p>
+                            ${product.description ? `<p style="color: var(--apple-gray-medium); font-size: 14px; margin: 10px 0;">${product.description}</p>` : ''}
+                            <button class="btn btn-primary" onclick="openProductUrl('${product.url}', '${product.platform}')">🛒 ${platformText}购买</button>
+                            ${appData.isAdmin ? `
+                                <div style="margin-top: 10px;">
+                                    <button class="btn btn-secondary btn-small" onclick="deleteProduct(${product.id})" style="margin-right: 5px;">删除</button>
+                                </div>
+                            ` : ''}
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // 打开商品链接
+        function openProductUrl(url, platform) {
+            const isMobile = isMobileDevice();
+            
+            if (isMobile) {
+                // 移动端直接跳转
+                if (platform === 'taobao') {
+                    // 尝试打开淘宝APP
+                    const taobaoAppUrl = url.includes('taobao.com') ? url.replace(/^(https?:\/\/)?(m\.)?taobao\.com/, 'taobao://item.taobao.com') : url;
+                    window.location.href = taobaoAppUrl;
+                    
+                    // 延迟跳转网页版
+                    setTimeout(() => {
+                        window.open(url, '_blank');
+                    }, 1000);
+                } else if (platform === 'pinduoduo') {
+                    // 尝试打开拼多多APP
+                    const pddAppUrl = url.includes('yangkeduo.com') || url.includes('pinduoduo.com') ? url.replace(/^(https?:\/\/)?(mobile\.)?(yangkeduo|pinduoduo)\.com/, 'pdd://') : url;
+                    window.location.href = pddAppUrl;
+                    
+                    // 延迟跳转网页版
+                    setTimeout(() => {
+                        window.open(url, '_blank');
+                    }, 1000);
+                } else if (platform === 'jd') {
+                    // 尝试打开京东APP
+                    const jdAppUrl = url.includes('jd.com') ? url.replace(/^(https?:\/\/)?(m\.)?jd\.com/, 'openapp.jdmobile://virtual?params=') : url;
+                    window.location.href = jdAppUrl;
+                    
+                    // 延迟跳转网页版
+                    setTimeout(() => {
+                        window.open(url, '_blank');
+                    }, 1000);
+                } else {
+                    window.open(url, '_blank');
+                }
+            } else {
+                // PC端直接在新标签页打开
+                window.open(url, '_blank');
+            }
+        }
+
+        // 删除商品
+        function deleteProduct(productId) {
+            if (confirm('确定要删除这个商品吗？')) {
+                const index = appData.products.findIndex(p => p.id === productId);
+                if (index > -1) {
+                    appData.products.splice(index, 1);
+                    renderProducts();
+                    showToast('商品删除成功', 'success');
+                }
+            }
         }
 
         // 医院管理功能
