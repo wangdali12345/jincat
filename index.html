@@ -31,6 +31,15 @@
             --apple-white: #fbfbfd;
             --apple-border: #d2d2d7;
             
+            /* 猫咪主题色彩 */
+            --cat-primary: #FF6B9D;
+            --cat-secondary: #C9E4DE;
+            --cat-accent: #FFA07A;
+            --cat-paw: #8B7355;
+            --cat-whisker: #FFB6C1;
+            --cat-bg-gradient: linear-gradient(135deg, #FFF0F5 0%, #F0F8FF 50%, #FFF5EE 100%);
+            --cat-card-shadow: 0 8px 24px rgba(255, 107, 157, 0.15);
+            
             /* 字体系统 */
             --font-family: "SF Pro Display", "SF Pro Text", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
             
@@ -139,11 +148,25 @@
             transition: all 0.3s ease;
             cursor: pointer;
             overflow: hidden;
+            position: relative;
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255, 107, 157, 0.05) 0%, transparent 70%);
+            pointer-events: none;
+            transform: rotate(45deg);
         }
 
         .card:hover {
             transform: translateY(-4px);
-            box-shadow: var(--shadow-medium);
+            box-shadow: var(--cat-card-shadow);
+            border-color: var(--cat-secondary);
         }
 
         .card h3 {
@@ -449,6 +472,129 @@
             .fab {
                 bottom: 85px; /* 避免遮挡底部导航，增加间距 */
                 right: 20px;
+            }
+
+            /* 手机端商城分类优化 */
+            .shop-categories {
+                margin-bottom: var(--spacing-md);
+            }
+
+            .category-section {
+                margin-bottom: var(--spacing-xs);
+            }
+
+            .category-header {
+                padding: var(--spacing-sm) var(--spacing-md);
+            }
+
+            .category-content {
+                padding: 0 var(--spacing-md) var(--spacing-sm);
+            }
+
+            .category-info h4 {
+                font-size: 16px;
+            }
+
+            .tag {
+                font-size: 11px;
+                padding: 3px 6px;
+            }
+
+            /* 手机端按钮优化 */
+            .btn {
+                min-height: 44px;
+                touch-action: manipulation;
+                -webkit-tap-highlight-color: transparent;
+            }
+
+            .btn-small {
+                min-height: 36px;
+                font-size: 14px;
+                padding: 6px 12px;
+            }
+
+            /* 手机端表单优化 */
+            .input, textarea {
+                min-height: 44px;
+                font-size: 16px; /* 防止iOS缩放 */
+                touch-action: manipulation;
+            }
+
+            .form-group {
+                margin-bottom: var(--spacing-md);
+            }
+
+            /* 手机端图片查看器优化 */
+            .image-viewer-content {
+                margin: 10px;
+                max-width: calc(100vw - 20px);
+                max-height: 90vh;
+            }
+
+            .image-viewer-footer {
+                flex-direction: column;
+                gap: var(--spacing-sm);
+            }
+
+            .image-viewer-footer button {
+                width: 100%;
+            }
+
+            /* 手机端卡片优化 */
+            .card {
+                margin-bottom: var(--spacing-sm);
+                border-radius: var(--border-radius-lg);
+            }
+
+            .card:hover {
+                transform: translateY(-2px);
+            }
+
+            /* 手机端头像选择优化 */
+            .avatar-option {
+                width: 45px;
+                height: 45px;
+                font-size: 20px;
+            }
+        }
+
+        /* 超小屏幕优化 */
+        @media (max-width: 480px) {
+            .container {
+                padding: var(--spacing-sm);
+            }
+
+            .nav-content {
+                font-size: 16px;
+            }
+
+            .nav-content span:first-child {
+                font-size: 20px;
+            }
+
+            .category-info .category-icon {
+                font-size: 18px;
+            }
+
+            .category-info h4 {
+                font-size: 14px;
+            }
+
+            .tag {
+                font-size: 10px;
+                padding: 2px 5px;
+            }
+
+            .modal-header h3 {
+                font-size: 18px;
+            }
+
+            .user-info div:first-child {
+                width: 45px;
+                height: 45px;
+                font-size: 18px;
+            }
+        }
                 width: 50px;
                 height: 50px;
                 border-radius: 50%;
@@ -671,6 +817,86 @@
         .category-icon {
             font-size: 48px;
             margin-bottom: var(--spacing-sm);
+        }
+
+        /* 折叠式分类样式 */
+        .shop-categories {
+            margin-bottom: var(--spacing-lg);
+        }
+
+        .category-section {
+            background: white;
+            border-radius: var(--border-radius-md);
+            border: 1px solid var(--apple-border);
+            margin-bottom: var(--spacing-sm);
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .category-section:hover {
+            box-shadow: var(--cat-card-shadow);
+            border-color: var(--cat-secondary);
+        }
+
+        .category-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: var(--spacing-md);
+            cursor: pointer;
+            background: var(--apple-gray-light);
+            transition: background 0.3s ease;
+        }
+
+        .category-header:hover {
+            background: var(--cat-bg-gradient);
+        }
+
+        .category-info {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-md);
+        }
+
+        .category-info .category-icon {
+            font-size: 24px;
+            margin-bottom: 0;
+        }
+
+        .category-info h4 {
+            margin: 0;
+            color: var(--apple-black);
+            font-weight: 600;
+        }
+
+        .category-arrow {
+            font-size: 18px;
+            color: var(--apple-gray-medium);
+            transition: transform 0.3s ease;
+        }
+
+        .category-section.expanded .category-arrow {
+            transform: rotate(180deg);
+        }
+
+        .category-content {
+            padding: 0 var(--spacing-md) var(--spacing-md);
+            display: none;
+            background: var(--apple-white);
+        }
+
+        .category-section.expanded .category-content {
+            display: block;
+        }
+
+        .tag {
+            background: var(--cat-bg-gradient);
+            color: var(--cat-primary);
+            padding: 4px 8px;
+            border-radius: var(--border-radius-sm);
+            font-size: 12px;
+            font-weight: 500;
+            border: 1px solid rgba(255, 107, 157, 0.2);
         }
 
         /* 右下角浮动按钮 */
@@ -914,8 +1140,11 @@
         <div class="container">
             <div class="nav-content">
                 <div style="display: flex; align-items: center; gap: var(--spacing-sm);">
-                    <span style="font-size: 24px;">🐱</span>
-                    <span style="font-weight: 700; font-size: 18px;">金猫之家</span>
+                    <div style="position: relative; font-size: 24px;">
+                        🐱
+                        <div style="position: absolute; top: -3px; right: -8px; font-size: 10px; opacity: 0.7;">🐾</div>
+                    </div>
+                    <div style="font-weight: 700; font-size: 18px; background: var(--cat-bg-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">金猫之家</div>
                 </div>
                 
                 <div class="nav-menu" id="navMenu">
@@ -1376,43 +1605,110 @@
     <div id="shop" class="page">
         <div class="container">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--spacing-md);">
-                <h2>🛍️ 宠物商城</h2>
+                <h2 style="position: relative; display: inline-block;">
+                <span style="position: relative; z-index: 2;">🛍️ 宠物商城</span>
+                <div style="position: absolute; top: -5px; right: -25px; font-size: 16px; opacity: 0.6; transform: rotate(-15deg);">🐾</div>
+            </h2>
                 <div id="shopManageBtn" style="display: none;">
                     <button class="btn btn-primary" onclick="openShopManager()">📝 管理商品</button>
                 </div>
             </div>
             
             <!-- 商品分类 -->
-            <div class="category-grid">
-                <div class="category-card" style="cursor: default;">
-                    <div class="category-icon">🥫</div>
-                    <h4>猫粮</h4>
-                    <p style="color: var(--apple-gray-medium); font-size: 14px;">主食、零食、营养品</p>
+            <div class="shop-categories">
+                <div class="category-section" data-category="food">
+                    <div class="category-header" onclick="toggleCategory('food')">
+                        <div class="category-info">
+                            <span class="category-icon">🥫</span>
+                            <h4>猫粮主食</h4>
+                        </div>
+                        <span class="category-arrow">▼</span>
+                    </div>
+                    <div class="category-content">
+                        <p style="color: var(--apple-gray-medium); font-size: 14px;">主食罐头、猫粮、营养膏、处方粮、宠物奶粉、营养补充剂</p>
+                        <div style="display: flex; gap: 10px; margin-top: 10px;">
+                            <span class="tag">干粮</span>
+                            <span class="tag">湿粮</span>
+                            <span class="tag">零食</span>
+                            <span class="tag">营养品</span>
+                        </div>
+                    </div>
                 </div>
-                <div class="category-card" style="cursor: default;">
-                    <div class="category-icon">🧶</div>
-                    <h4>猫玩具</h4>
-                    <p style="color: var(--apple-gray-medium); font-size: 14px;">逗猫棒、毛线球、益智玩具</p>
+
+                <div class="category-section" data-category="toys">
+                    <div class="category-header" onclick="toggleCategory('toys')">
+                        <div class="category-info">
+                            <span class="category-icon">🧶</span>
+                            <h4>玩具用品</h4>
+                        </div>
+                        <span class="category-arrow">▼</span>
+                    </div>
+                    <div class="category-content">
+                        <p style="color: var(--apple-gray-medium); font-size: 14px;">逗猫棒、激光笔、毛线球、猫爬架、益智玩具、自动玩具</p>
+                        <div style="display: flex; gap: 10px; margin-top: 10px;">
+                            <span class="tag">互动玩具</span>
+                            <span class="tag">智能玩具</span>
+                            <span class="tag">猫抓板</span>
+                            <span class="tag">猫爬架</span>
+                        </div>
+                    </div>
                 </div>
-                <div class="category-card" style="cursor: default;">
-                    <div class="category-icon">🧼</div>
-                    <h4>猫砂</h4>
-                    <p style="color: var(--apple-gray-medium); font-size: 14px;">膨润砂、豆腐砂、水晶砂</p>
+
+                <div class="category-section" data-category="supplies">
+                    <div class="category-header" onclick="toggleCategory('supplies')">
+                        <div class="category-info">
+                            <span class="category-icon">🧼</span>
+                            <h4>日常用品</h4>
+                        </div>
+                        <span class="category-arrow">▼</span>
+                    </div>
+                    <div class="category-content">
+                        <p style="color: var(--apple-gray-medium); font-size: 14px;">猫砂盆、猫砂、食盆水碗、猫窝、猫背包、航空箱</p>
+                        <div style="display: flex; gap: 10px; margin-top: 10px;">
+                            <span class="tag">猫砂</span>
+                            <span class="tag">食盆</span>
+                            <span class="tag">猫窝</span>
+                            <span class="tag">出行用品</span>
+                        </div>
+                    </div>
                 </div>
-                <div class="category-card" style="cursor: default;">
-                    <div class="category-icon">🏠</div>
-                    <h4>猫窝</h4>
-                    <p style="color: var(--apple-gray-medium); font-size: 14px;">猫床、猫帐篷、猫爬架</p>
+
+                <div class="category-section" data-category="grooming">
+                    <div class="category-header" onclick="toggleCategory('grooming')">
+                        <div class="category-info">
+                            <span class="category-icon">🧴</span>
+                            <h4>洗护美容</h4>
+                        </div>
+                        <span class="category-arrow">▼</span>
+                    </div>
+                    <div class="category-content">
+                        <p style="color: var(--apple-gray-medium); font-size: 14px;">猫梳、指甲剪、沐浴露、护毛素、牙膏牙刷、美容工具</p>
+                        <div style="display: flex; gap: 10px; margin-top: 10px;">
+                            <span class="tag">梳毛</span>
+                            <span class="tag">洗护</span>
+                            <span class="tag">指甲护理</span>
+                            <span class="tag">美容</span>
+                        </div>
+                    </div>
                 </div>
-                <div class="category-card" style="cursor: default;">
-                    <div class="category-icon">🧴</div>
-                    <h4>猫护理</h4>
-                    <p style="color: var(--apple-gray-medium); font-size: 14px;">沐浴露、梳子、指甲剪</p>
-                </div>
-                <div class="category-card" style="cursor: default;">
-                    <div class="category-icon">💊</div>
-                    <h4>猫保健品</h4>
-                    <p style="color: var(--apple-gray-medium); font-size: 14px;">维生素、益生菌、驱虫药</p>
+
+                <div class="category-section" data-category="health">
+                    <div class="category-header" onclick="toggleCategory('health')">
+                        <div class="category-info">
+                            <span class="category-icon">💊</span>
+                            <h4>健康保健</h4>
+                        </div>
+                        <span class="category-arrow">▼</span>
+                    </div>
+                    <div class="category-content">
+                        <p style="color: var(--apple-gray-medium); font-size: 14px;">驱虫药、维生素、益生菌、化毛膏、猫用药品、营养膏</p>
+                        <div style="display: flex; gap: 10px; margin-top: 10px;">
+                            <span class="tag">保健品</span>
+                            <span class="tag">驱虫</span>
+                            <span class="tag">药品</span>
+                            <span class="tag">营养品</span>
+                        </div>
+                    </div>
                 </div>
             </div>
 
@@ -4165,6 +4461,31 @@
                     updateUserDisplay();
                 } catch (error) {
                     console.error('加载用户资料失败:', error);
+                }
+            }
+        }
+
+        // 商城分类折叠功能
+        function toggleCategory(categoryId) {
+            const categorySection = document.querySelector(`[data-category="${categoryId}"]`);
+            const allSections = document.querySelectorAll('.category-section');
+            
+            // 关闭其他分类
+            allSections.forEach(section => {
+                if (section !== categorySection) {
+                    section.classList.remove('expanded');
+                }
+            });
+            
+            // 切换当前分类
+            categorySection.classList.toggle('expanded');
+            
+            // 为移动端优化：折叠分类后滚动到顶部
+            if (window.innerWidth <= 768) {
+                if (categorySection.classList.contains('expanded')) {
+                    setTimeout(() => {
+                        categorySection.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                    }, 100);
                 }
             }
         }
