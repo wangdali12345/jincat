@@ -3060,6 +3060,10 @@
                           appData.currentLocation.lng > 113 && appData.currentLocation.lng < 115) {
                     city = '深圳市';
                     districts = ['福田区', '南山区', '罗湖区', '宝安区', '龙岗区', '龙华区', '坪山区', '光明区'];
+                } else if (appData.currentLocation.lat > 31 && appData.currentLocation.lat < 31.5 && 
+                          appData.currentLocation.lng > 120.4 && appData.currentLocation.lng < 121) {
+                    city = '苏州市';
+                    districts = ['姑苏区', '虎丘区', '吴中区', '相城区', '吴江区', '昆山市', '太仓市', '常熟市'];
                 } else if (appData.currentLocation.lat > 30 && appData.currentLocation.lat < 31 && 
                           appData.currentLocation.lng > 120 && appData.currentLocation.lng < 121) {
                     city = '杭州市';
@@ -3071,11 +3075,19 @@
                 const roads = ['路', '街', '大道', '巷', '广场', '中心'];
                 const numbers = Math.floor(Math.random() * 999) + 1;
                 
+                // 根据城市设置对应的电话区号
+                let phonePrefix = '0571'; // 默认杭州
+                if (city === '北京市') phonePrefix = '010';
+                else if (city === '上海市') phonePrefix = '021';
+                else if (city === '深圳市') phonePrefix = '0755';
+                else if (city === '苏州市') phonePrefix = '0512';
+                else if (city === '杭州市') phonePrefix = '0571';
+                
                 return {
                     id: 'nearby_' + (index + 1),
                     name: template.prefix + template.suffix,
                     address: `${city}${districts[index % districts.length]}${roads[index % roads.length]}${numbers}号`,
-                    phone: `0571-${Math.floor(Math.random() * 90000000) + 10000000}`,
+                    phone: `${phonePrefix}-${Math.floor(Math.random() * 90000000) + 10000000}`,
                     lat: lat,
                     lng: lng,
                     rating: parseFloat((template.baseRating + (Math.random() - 0.5)).toFixed(1)),
