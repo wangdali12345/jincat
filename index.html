@@ -1014,6 +1014,11 @@
                 <div class="form-group">
                     <label>医院地址</label>
                     <input type="text" class="input" id="hospitalAddress" placeholder="请输入详细地址...">
+                    ${appData.currentLocation ? `
+                        <button type="button" class="btn btn-secondary" onclick="fillCurrentCityAddress()" style="margin-top: 5px; font-size: 12px;">
+                            📍 使用当前城市地址
+                        </button>
+                    ` : ''}
                 </div>
                 <div class="form-group">
                     <label>联系电话</label>
@@ -1021,11 +1026,11 @@
                 </div>
                 <div class="form-group">
                     <label>经度（可选）</label>
-                    <input type="text" class="input" id="hospitalLng" placeholder="如：120.1551">
+                    <input type="text" class="input" id="hospitalLng" placeholder="留空将使用当前定位位置">
                 </div>
                 <div class="form-group">
                     <label>纬度（可选）</label>
-                    <input type="text" class="input" id="hospitalLat" placeholder="如：30.2741">
+                    <input type="text" class="input" id="hospitalLat" placeholder="留空将使用当前定位位置">
                 </div>
                 <div class="form-group">
                     <label>医院简介</label>
@@ -2955,7 +2960,7 @@
             }
         }
 
-        // 渲染推荐医院（管理员上传）
+        // 渲染推荐医院（管理员上传，根据当前位置筛选附近）
         function renderRecommendedHospitals() {
             const container = document.getElementById('recommendedHospitalList');
             
@@ -2969,9 +2974,25 @@
                 return;
             }
 
-            // 计算距离并排序管理员上传的医院
-            const hospitalsWithDistance = appData.hospitals.map(hospital => {
-                if (appData.currentLocation) {
+            // 获取当前城市信息
+            let currentCity = '未知城市';
+            if (appData.currentLocation) {
+                currentCity = getCityByLocation(appData.currentLocation.lat, appData.currentLocation.lng);
+            }
+
+            // 筛选当前城市的推荐医院（50km范围内）
+            let filteredHospitals = appData.hospitals;
+            if (appData.currentLocation) {
+                filteredHospitals = appData.hospitals.filter(hospital => {
+                    const distance = calculateDistance(
+                        appData.currentLocation.lat,
+                        appData.currentLocation.lng,
+                        hospital.lat,
+                        hospital.lng
+                    );
+                    // 只显示50km内的推荐医院
+                    return distance <= 50;
+                }).map(hospital => {
                     const distance = calculateDistance(
                         appData.currentLocation.lat,
                         appData.currentLocation.lng,
@@ -2983,18 +3004,32 @@
                         distance: distance,
                         distanceText: distance < 1 ? `${(distance * 1000).toFixed(0)}m` : `${distance.toFixed(1)}km`
                     };
-                }
-                return hospital;
-            }).sort((a, b) => (a.distance || 0) - (b.distance || 0));
+                }).sort((a, b) => a.distance - b.distance);
+            }
 
-            container.innerHTML = hospitalsWithDistance.map(hospital => `
+            if (filteredHospitals.length === 0) {
+                container.innerHTML = `
+                    <div style="text-align: center; padding: 20px; color: var(--apple-gray-medium);">
+                        <div style="font-size: 32px; margin-bottom: var(--spacing-sm);">🏥</div>
+                        <p>${currentCity}附近暂无推荐医院</p>
+                        <p style="font-size: 12px; margin-top: 8px;">请联系管理员添加${currentCity}的推荐医院</p>
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = `
+                <div style="margin-bottom: 15px; padding: 10px; background: var(--apple-blue-light); border-radius: 8px; text-align: center; color: var(--apple-blue-dark);">
+                    📍 ${currentCity}附近推荐医院 (${filteredHospitals.length}家)
+                </div>
+            ` + filteredHospitals.map(hospital => `
                 <div class="hospital-card">
                     <div class="hospital-header">
                         <div class="hospital-name">⭐ ${hospital.name}</div>
                         <div class="hospital-info">
                             <div>📍 ${hospital.address}</div>
                             <div>📞 ${hospital.phone}</div>
-                            ${hospital.distanceText ? `<div>🚶 距离 ${hospital.distanceText}</div>` : ''}
+                            <div>🚶 距离 ${hospital.distanceText}</div>
                         </div>
                         <div class="hospital-rating">
                             <span class="rating-stars">${'⭐'.repeat(Math.floor(hospital.rating))}</span>
@@ -3011,6 +3046,23 @@
                     </div>
                 </div>
             `).join('');
+        }
+
+        // 根据经纬度获取城市名称
+        function getCityByLocation(lat, lng) {
+            if (lat > 39 && lat < 41 && lng > 116 && lng < 117) {
+                return '北京';
+            } else if (lat > 31 && lat < 32 && lng > 121 && lng < 122) {
+                return '上海';
+            } else if (lat > 22 && lat < 24 && lng > 113 && lng < 115) {
+                return '深圳';
+            } else if (lat > 31 && lat < 31.5 && lng > 120.4 && lng < 121) {
+                return '苏州';
+            } else if (lat > 30 && lat < 31 && lng > 120 && lng < 121) {
+                return '杭州';
+            } else {
+                return '未知城市';
+            }
         }
 
         // 生成附近医院数据（基于地理位置）
@@ -3736,15 +3788,66 @@
         }
 
         // 医院管理功能
+        // 填充当前城市地址示例
+        function fillCurrentCityAddress() {
+            if (!appData.currentLocation) {
+                showToast('请先定位当前位置', 'error');
+                return;
+            }
+            
+            const cityName = getCityByLocation(appData.currentLocation.lat, appData.currentLocation.lng);
+            let districts, sampleAddress;
+            
+            if (cityName === '北京') {
+                districts = ['朝阳区', '海淀区', '东城区', '西城区'];
+                sampleAddress = `${cityName}${districts[Math.floor(Math.random() * districts.length)]}街道${Math.floor(Math.random() * 999) + 1}号`;
+            } else if (cityName === '上海') {
+                districts = ['浦东新区', '黄浦区', '徐汇区', '静安区'];
+                sampleAddress = `${cityName}${districts[Math.floor(Math.random() * districts.length)]}路${Math.floor(Math.random() * 999) + 1}号`;
+            } else if (cityName === '深圳') {
+                districts = ['福田区', '南山区', '罗湖区', '宝安区'];
+                sampleAddress = `${cityName}${districts[Math.floor(Math.random() * districts.length)]}大道${Math.floor(Math.random() * 999) + 1}号`;
+            } else if (cityName === '苏州') {
+                districts = ['姑苏区', '虎丘区', '吴中区', '相城区'];
+                sampleAddress = `${cityName}${districts[Math.floor(Math.random() * districts.length)]}街${Math.floor(Math.random() * 999) + 1}号`;
+            } else if (cityName === '杭州') {
+                districts = ['西湖区', '拱墅区', '滨江区', '上城区'];
+                sampleAddress = `${cityName}${districts[Math.floor(Math.random() * districts.length)]}路${Math.floor(Math.random() * 999) + 1}号`;
+            } else {
+                sampleAddress = `${cityName}中心区街道${Math.floor(Math.random() * 999) + 1}号`;
+            }
+            
+            document.getElementById('hospitalAddress').value = sampleAddress;
+            
+            // 设置对应的电话区号
+            let phonePrefix = '0571'; // 默认杭州
+            if (cityName === '北京') phonePrefix = '010';
+            else if (cityName === '上海') phonePrefix = '021';
+            else if (cityName === '深圳') phonePrefix = '0755';
+            else if (cityName === '苏州') phonePrefix = '0512';
+            else if (cityName === '杭州') phonePrefix = '0571';
+            
+            document.getElementById('hospitalPhone').value = `${phonePrefix}-${Math.floor(Math.random() * 90000000) + 10000000}`;
+            
+            showToast(`已填充${cityName}地址示例`, 'success');
+        }
+
         function openHospitalManager() {
             document.getElementById('hospitalManagerModal').classList.add('active');
             // 清空表单
             document.getElementById('hospitalName').value = '';
             document.getElementById('hospitalAddress').value = '';
             document.getElementById('hospitalPhone').value = '';
-            document.getElementById('hospitalLng').value = '';
-            document.getElementById('hospitalLat').value = '';
             document.getElementById('hospitalDescription').value = '';
+            
+            // 如果有当前定位，自动填充坐标
+            if (appData.currentLocation) {
+                document.getElementById('hospitalLng').value = appData.currentLocation.lng.toFixed(6);
+                document.getElementById('hospitalLat').value = appData.currentLocation.lat.toFixed(6);
+            } else {
+                document.getElementById('hospitalLng').value = '';
+                document.getElementById('hospitalLat').value = '';
+            }
         }
 
         function closeHospitalManager() {
@@ -3755,13 +3858,24 @@
             const name = document.getElementById('hospitalName').value.trim();
             const address = document.getElementById('hospitalAddress').value.trim();
             const phone = document.getElementById('hospitalPhone').value.trim();
-            const lng = parseFloat(document.getElementById('hospitalLng').value) || 120.1551;
-            const lat = parseFloat(document.getElementById('hospitalLat').value) || 30.2741;
             const description = document.getElementById('hospitalDescription').value.trim();
 
             if (!name || !address || !phone) {
                 showToast('请填写必要信息', 'error');
                 return;
+            }
+
+            // 使用当前定位位置作为默认坐标，如果没有定位则使用输入的坐标
+            let lng, lat;
+            const inputLng = parseFloat(document.getElementById('hospitalLng').value);
+            const inputLat = parseFloat(document.getElementById('hospitalLat').value);
+            
+            if (appData.currentLocation && (!inputLng || !inputLat)) {
+                lng = appData.currentLocation.lng;
+                lat = appData.currentLocation.lat;
+            } else {
+                lng = inputLng || 120.1551;
+                lat = inputLat || 30.2741;
             }
 
             const hospital = {
@@ -3784,7 +3898,8 @@
             appData.hospitals.unshift(hospital);
             renderHospitals();
             closeHospitalManager();
-            showToast('医院添加成功！', 'success');
+            const cityName = getCityByLocation(lat, lng);
+            showToast(`医院添加成功！将在${cityName}附近显示给用户`, 'success');
         }
     </script>
 </body>
