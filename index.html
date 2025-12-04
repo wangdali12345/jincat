@@ -1426,6 +1426,11 @@
                         <span class="menu-text">版本信息</span>
                         <span class="menu-arrow">→</span>
                     </div>
+                    <div class="menu-item" onclick="checkAdminStatus()">
+                        <span class="menu-icon">🔍</span>
+                        <span class="menu-text">检查状态</span>
+                        <span class="menu-arrow">→</span>
+                    </div>
                 </div>
             </div>
         </div>
@@ -1575,7 +1580,15 @@
                 // 4. 滚动到顶部
                 window.scrollTo(0, 0);
                 
-                // 5. 显示成功提示
+                // 5. 检查并启用管理员功能（针对每个页面）
+                if (appData.isAdmin) {
+                    console.log('页面切换时检查管理员状态，启用相关功能...');
+                    setTimeout(() => {
+                        enableAdminFeatures();
+                    }, 100);
+                }
+                
+                // 6. 显示成功提示
                 console.log('✅ 页面切换完成:', pageId);
                 
             } catch (error) {
@@ -1800,12 +1813,26 @@
                 document.getElementById('username').value = '';
                 document.getElementById('password').value = '';
                 
-                // 更新界面状态
+                // 更新界面状态 - 顺序很重要
+                console.log('开始更新管理员状态...');
                 updateLoginButton();
+                console.log('Login按钮更新完成');
+                
                 enableAdminFeatures();
+                console.log('管理员功能启用完成');
+                
+                updateProfileMenu();
+                console.log('个人中心菜单更新完成');
                 
                 showToast('管理员登录成功！', 'success');
-                console.log('管理员登录成功，功能已启用');
+                console.log('管理员登录成功，所有功能已启用', appData);
+                
+                // 延迟重新渲染页面，确保状态更新
+                setTimeout(() => {
+                    renderCats();
+                    renderPosts();
+                    console.log('页面重新渲染完成');
+                }, 100);
             } else {
                 showToast('账号或密码错误，只有管理员可以登录', 'error');
                 // 清空密码输入框
@@ -1866,20 +1893,38 @@
         function enableAdminFeatures() {
             // 管理员可以修改的元素添加编辑功能
             console.log('管理员功能已启用');
+            console.log('当前状态:', appData);
+            
+            // 强制设置管理员状态
+            appData.isAdmin = true;
+            appData.isLoggedIn = true;
+            appData.currentUser = '管理员';
             
             // 启用猫咪管理页面
             const catManagementButtons = document.getElementById('catManagementButtons');
             const catUserHint = document.getElementById('catUserHint');
-            if (catManagementButtons) catManagementButtons.style.display = 'block';
-            if (catUserHint) catUserHint.style.display = 'none';
+            if (catManagementButtons) {
+                catManagementButtons.style.display = 'block';
+                console.log('猫咪管理按钮已显示');
+            }
+            if (catUserHint) {
+                catUserHint.style.display = 'none';
+                console.log('普通用户提示已隐藏');
+            }
             
             // 启用商城管理功能
             const shopManageBtn = document.getElementById('shopManageBtn');
-            if (shopManageBtn) shopManageBtn.style.display = 'block';
+            if (shopManageBtn) {
+                shopManageBtn.style.display = 'block';
+                console.log('商城管理按钮已显示');
+            }
             
             // 启用医院管理功能
             const hospitalManageBtn = document.getElementById('hospitalManageBtn');
-            if (hospitalManageBtn) hospitalManageBtn.style.display = 'block';
+            if (hospitalManageBtn) {
+                hospitalManageBtn.style.display = 'block';
+                console.log('医院管理按钮已显示');
+            }
             
             // 启用论坛管理功能
             enableForumAdminFeatures();
@@ -1890,12 +1935,16 @@
             updateProfileMenu();
             
             showToast('管理员功能已全部启用', 'success');
+            console.log('所有管理员功能启用完成');
         }
 
         // 论坛管理功能
         function enableForumAdminFeatures() {
             const forumManageBtn = document.getElementById('forumManageBtn');
-            if (forumManageBtn) forumManageBtn.style.display = 'block';
+            if (forumManageBtn) {
+                forumManageBtn.style.display = 'block';
+                console.log('论坛管理按钮已显示');
+            }
         }
 
         function disableForumAdminFeatures() {
@@ -3165,7 +3214,12 @@
                 
                 // 如果已登录管理员，启用所有功能
                 if (appData.isAdmin) {
-                    enableAdminFeatures();
+                    console.log('检测到管理员状态，正在启用所有功能...');
+                    setTimeout(() => {
+                        enableAdminFeatures();
+                    }, 500);
+                } else {
+                    console.log('当前未以管理员身份登录');
                 }
                 
                 // 专门为登录按钮添加事件监听器（备用方案）
@@ -3243,6 +3297,29 @@
 
         function showVersion() {
             showToast('版本：1.0.0 | 更新时间：2024年', 'info');
+        }
+
+        function checkAdminStatus() {
+            const status = `
+                当前用户: ${appData.currentUser || '未登录'}
+                登录状态: ${appData.isLoggedIn ? '已登录' : '未登录'}
+                管理员权限: ${appData.isAdmin ? '是' : '否'}
+            `;
+            console.log('=== 当前状态检查 ===');
+            console.log(status);
+            console.log('=== appData 完整信息 ===');
+            console.log(JSON.stringify(appData, null, 2));
+            
+            // 显示详细信息
+            alert(status);
+            
+            // 强制重新启用管理员功能
+            if (appData.isAdmin) {
+                console.log('检测到管理员权限，正在重新启用所有功能...');
+                enableAdminFeatures();
+            } else {
+                showToast('当前未以管理员身份登录', 'info');
+            }
         }
 
         // 更新管理员菜单显示
