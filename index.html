@@ -881,6 +881,31 @@
         .post-image:hover {
             transform: scale(1.02);
         }
+
+        /* 头像选择样式 */
+        .avatar-option {
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 2px solid var(--apple-border);
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 20px;
+            background: white;
+            transition: all 0.2s ease;
+        }
+
+        .avatar-option:hover {
+            border-color: var(--apple-blue);
+            transform: scale(1.1);
+        }
+
+        .avatar-option.selected {
+            border-color: var(--apple-blue);
+            background: var(--apple-blue-light);
+        }
     </style>
 </head>
 <body>
@@ -1410,12 +1435,15 @@
             <!-- 用户信息卡片 -->
             <div class="card" style="margin-bottom: var(--spacing-lg);">
                 <div style="padding: var(--spacing-md); display: flex; align-items: center; gap: var(--spacing-md);">
-                    <div style="width: 60px; height: 60px; background: linear-gradient(135deg, var(--apple-blue), var(--apple-purple)); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 24px; color: white;">
+                    <div id="userAvatar" style="width: 60px; height: 60px; background: linear-gradient(135deg, var(--apple-blue), var(--apple-purple)); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 24px; color: white; cursor: pointer;" onclick="openUserProfile()">
                         👤
                     </div>
                     <div style="flex: 1;">
                         <h3 id="userName">游客用户</h3>
-                        <p style="color: var(--apple-gray-medium); font-size: 14px;">欢迎来到金猫之家</p>
+                        <p id="userStatus" style="color: var(--apple-gray-medium); font-size: 14px;">欢迎来到金猫之家</p>
+                        <button class="btn btn-secondary" onclick="openUserProfile()" style="margin-top: 8px; font-size: 12px; padding: 4px 8px;">
+                            ✏️ 编辑资料
+                        </button>
                     </div>
                 </div>
             </div>
@@ -1591,6 +1619,60 @@
         </div>
     </div>
 
+    <!-- 用户资料编辑模态框 -->
+    <div id="userProfileModal" class="modal-overlay" onclick="if(event.target === this) closeUserProfile()">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>编辑个人资料</h3>
+                <button class="btn btn-secondary" onclick="closeUserProfile()">×</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>用户名</label>
+                    <input type="text" class="input" id="profileUserName" placeholder="请输入用户名..." maxlength="20">
+                </div>
+                <div class="form-group">
+                    <label>个性签名</label>
+                    <textarea class="input" id="profileBio" rows="3" placeholder="介绍一下自己..." maxlength="100"></textarea>
+                </div>
+                <div class="form-group">
+                    <label>头像选择</label>
+                    <div style="display: grid; grid-template-columns: repeat(6, 1fr); gap: 10px; margin-bottom: 15px;">
+                        <div class="avatar-option" data-avatar="😺" onclick="selectAvatar('😺')">😺</div>
+                        <div class="avatar-option" data-avatar="😸" onclick="selectAvatar('😸')">😸</div>
+                        <div class="avatar-option" data-avatar="😹" onclick="selectAvatar('😹')">😹</div>
+                        <div class="avatar-option" data-avatar="😻" onclick="selectAvatar('😻')">😻</div>
+                        <div class="avatar-option" data-avatar="😼" onclick="selectAvatar('😼')">😼</div>
+                        <div class="avatar-option" data-avatar="😽" onclick="selectAvatar('😽')">😽</div>
+                        <div class="avatar-option" data-avatar="🙀" onclick="selectAvatar('🙀')">🙀</div>
+                        <div class="avatar-option" data-avatar="😿" onclick="selectAvatar('😿')">😿</div>
+                        <div class="avatar-option" data-avatar="🐱" onclick="selectAvatar('🐱')">🐱</div>
+                        <div class="avatar-option" data-avatar="🐈" onclick="selectAvatar('🐈')">🐈</div>
+                        <div class="avatar-option" data-avatar="🐈‍⬛" onclick="selectAvatar('🐈‍⬛')">🐈‍⬛</div>
+                        <div class="avatar-option" data-avatar="🦁" onclick="selectAvatar('🦁')">🦁</div>
+                        <div class="avatar-option" data-avatar="👤" onclick="selectAvatar('👤')">👤</div>
+                        <div class="avatar-option" data-avatar="👨" onclick="selectAvatar('👨')">👨</div>
+                        <div class="avatar-option" data-avatar="👩" onclick="selectAvatar('👩')">👩</div>
+                        <div class="avatar-option" data-avatar="🧑" onclick="selectAvatar('🧑')">🧑</div>
+                        <div class="avatar-option" data-avatar="👦" onclick="selectAvatar('👦')">👦</div>
+                        <div class="avatar-option" data-avatar="👧" onclick="selectAvatar('👧')">👧</div>
+                        <div class="avatar-option" data-avatar="🐶" onclick="selectAvatar('🐶')">🐶</div>
+                        <div class="avatar-option" data-avatar="🐕" onclick="selectAvatar('🐕')">🐕</div>
+                        <div class="avatar-option" data-avatar="🦊" onclick="selectAvatar('🦊')">🦊</div>
+                        <div class="avatar-option" data-avatar="🐰" onclick="selectAvatar('🐰')">🐰</div>
+                    </div>
+                    <div style="text-align: center; margin-top: 10px;">
+                        <small style="color: var(--apple-gray-medium);">当前选择：<span id="currentAvatar" style="font-size: 24px;">😺</span></small>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeUserProfile()">取消</button>
+                <button class="btn btn-primary" onclick="saveUserProfile()">保存</button>
+            </div>
+        </div>
+    </div>
+
     <script>
         // 应用数据
         const appData = {
@@ -1603,6 +1685,7 @@
             messages: [],
             currentLocation: null,
             currentUser: null,
+            userProfile: null, // 普通用户资料
             isLoggedIn: false,
             isAdmin: false
         };
@@ -2572,12 +2655,24 @@
                 return;
             }
 
+            // 使用用户资料信息
+            let userName = '用户' + Math.floor(Math.random() * 1000);
+            let userAvatar = '👤';
+            
+            if (appData.userProfile) {
+                userName = appData.userProfile.userName;
+                userAvatar = appData.userProfile.avatar;
+            } else if (appData.currentUser) {
+                userName = appData.currentUser;
+                userAvatar = '👤';
+            }
+
             const post = {
                 id: Date.now(),
                 title: title,
                 content: content,
-                author: appData.currentUser ? appData.currentUser : '用户' + Math.floor(Math.random() * 1000),
-                avatar: '👤',
+                author: userName,
+                avatar: userAvatar,
                 time: '刚刚',
                 images: uploadedImages,
                 likes: 0,
@@ -3580,6 +3675,9 @@
                 // 初始化登录按钮和管理员状态
                 updateLoginButton();
                 
+                // 初始化用户资料
+                initUserProfile();
+                
                 // 如果已登录管理员，启用所有功能
                 if (appData.isAdmin) {
                     console.log('检测到管理员状态，正在启用所有功能...');
@@ -3964,6 +4062,112 @@
                 closeImageViewer();
             }
         });
+
+        // 用户资料管理功能
+        let selectedAvatar = '😺';
+
+        function openUserProfile() {
+            const modal = document.getElementById('userProfileModal');
+            modal.classList.add('active');
+            
+            // 加载当前用户资料
+            if (appData.userProfile) {
+                document.getElementById('profileUserName').value = appData.userProfile.userName || '';
+                document.getElementById('profileBio').value = appData.userProfile.bio || '';
+                selectAvatar(appData.userProfile.avatar || '😺');
+            } else {
+                document.getElementById('profileUserName').value = '';
+                document.getElementById('profileBio').value = '';
+                selectAvatar('😺');
+            }
+            
+            // 阻止背景滚动
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeUserProfile() {
+            const modal = document.getElementById('userProfileModal');
+            modal.classList.remove('active');
+            
+            // 恢复背景滚动
+            document.body.style.overflow = '';
+        }
+
+        function selectAvatar(avatar) {
+            selectedAvatar = avatar;
+            document.getElementById('currentAvatar').textContent = avatar;
+            
+            // 更新选中状态
+            document.querySelectorAll('.avatar-option').forEach(option => {
+                option.classList.remove('selected');
+                if (option.dataset.avatar === avatar) {
+                    option.classList.add('selected');
+                }
+            });
+        }
+
+        function saveUserProfile() {
+            const userName = document.getElementById('profileUserName').value.trim();
+            const bio = document.getElementById('profileBio').value.trim();
+            
+            if (!userName) {
+                showToast('请输入用户名', 'error');
+                return;
+            }
+            
+            // 保存用户资料
+            appData.userProfile = {
+                userName: userName,
+                avatar: selectedAvatar,
+                bio: bio,
+                createdAt: appData.userProfile?.createdAt || new Date().toISOString(),
+                updatedAt: new Date().toISOString()
+            };
+            
+            // 保存到localStorage
+            localStorage.setItem('userProfile', JSON.stringify(appData.userProfile));
+            
+            // 更新界面显示
+            updateUserDisplay();
+            
+            // 关闭模态框
+            closeUserProfile();
+            
+            showToast('个人资料保存成功！', 'success');
+        }
+
+        function updateUserDisplay() {
+            if (appData.userProfile) {
+                // 更新用户名
+                document.getElementById('userName').textContent = appData.userProfile.userName;
+                
+                // 更新头像
+                const avatarElement = document.getElementById('userAvatar');
+                avatarElement.textContent = appData.userProfile.avatar;
+                avatarElement.style.background = 'linear-gradient(135deg, var(--apple-blue), var(--apple-purple))';
+                
+                // 更新状态文本
+                const statusText = appData.userProfile.bio || '欢迎来到金猫之家';
+                document.getElementById('userStatus').textContent = statusText;
+                
+                // 更新当前用户信息
+                appData.currentUser = appData.userProfile.userName;
+                appData.isLoggedIn = true;
+            }
+        }
+
+        // 初始化用户资料
+        function initUserProfile() {
+            const savedProfile = localStorage.getItem('userProfile');
+            if (savedProfile) {
+                try {
+                    appData.userProfile = JSON.parse(savedProfile);
+                    updateUserDisplay();
+                } catch (error) {
+                    console.error('加载用户资料失败:', error);
+                }
+            }
+        }
 
         function openHospitalManager() {
             document.getElementById('hospitalManagerModal').classList.add('active');
