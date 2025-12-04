@@ -1144,7 +1144,7 @@
                         🐱
                         <div style="position: absolute; top: -3px; right: -8px; font-size: 10px; opacity: 0.7;">🐾</div>
                     </div>
-                    <div style="font-weight: 700; font-size: 18px; background: var(--cat-bg-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">金猫之家</div>
+                    <div style="font-weight: 700; font-size: 20px; color: var(--cat-primary); text-shadow: 0 1px 2px rgba(255, 107, 157, 0.2);">金猫之家</div>
                 </div>
                 
                 <div class="nav-menu" id="navMenu">
@@ -3365,8 +3365,11 @@
         // 打开外部地图
         function openExternalMap() {
             if (appData.currentLocation) {
-                const mapUrl = `https://uri.amap.com/navigation?to=${appData.currentLocation.lng},${appData.currentLocation.lat},当前位置&mode=car`;
+                // 使用高德地图导航到当前位置
+                const mapUrl = `https://uri.amap.com/navigation?to=${appData.currentLocation.lng},${appData.currentLocation.lat},我的位置&mode=car`;
                 window.open(mapUrl, '_blank');
+            } else {
+                showToast('请先获取当前位置', 'warning');
             }
         }
 
@@ -3772,8 +3775,12 @@
             if (hospital) {
                 showToast(`正在跳转到高德地图导航到 ${hospital.name}...`, 'info');
                 
+                // 确保坐标格式正确
+                const fromLng = appData.currentLocation.lng || 120.1551;
+                const fromLat = appData.currentLocation.lat || 30.2741;
+                
                 // 构建高德地图导航URL，目的地为选中的医院
-                const gaodeUrl = `https://uri.amap.com/navigation?to=${hospital.lng},${hospital.lat},${encodeURIComponent(hospital.name)}&mode=car&coordinate=${appData.currentLocation.lng},${appData.currentLocation.lat}`;
+                const gaodeUrl = `https://uri.amap.com/navigation?to=${hospital.lng},${hospital.lat},${encodeURIComponent(hospital.name)}&mode=car&from=${fromLng},${fromLat},我的位置`;
                 
                 // 延迟跳转，让提示先显示
                 setTimeout(() => {
@@ -3788,8 +3795,12 @@
             if (hospital) {
                 showToast(`正在跳转到高德地图导航到 ${hospital.name}...`, 'info');
                 
+                // 确保坐标格式正确
+                const fromLng = appData.currentLocation.lng || 120.1551;
+                const fromLat = appData.currentLocation.lat || 30.2741;
+                
                 // 构建高德地图导航URL，目的地为选中的医院
-                const gaodeUrl = `https://uri.amap.com/navigation?to=${hospital.lng},${hospital.lat},${encodeURIComponent(hospital.name)}&mode=car&coordinate=${appData.currentLocation.lng},${appData.currentLocation.lat}`;
+                const gaodeUrl = `https://uri.amap.com/navigation?to=${hospital.lng},${hospital.lat},${encodeURIComponent(hospital.name)}&mode=car&from=${fromLng},${fromLat},我的位置`;
                 
                 // 延迟跳转，让提示先显示
                 setTimeout(() => {
