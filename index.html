@@ -313,10 +313,24 @@
             border-radius: var(--border-radius-sm);
             transition: background-color 0.2s ease;
             margin-bottom: var(--spacing-xs);
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+            position: relative;
         }
 
         .menu-item:hover {
             background-color: var(--apple-gray-light);
+        }
+
+        .menu-item:hover::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: rgba(0, 113, 227, 0.05);
+            border-radius: var(--border-radius-sm);
+            pointer-events: none;
         }
 
         .menu-item:last-child {
@@ -1253,12 +1267,11 @@
                 <div class="form-group">
                     <label>商品分类</label>
                     <select class="input" id="productCategory">
-                        <option value="猫粮">猫粮</option>
-                        <option value="猫玩具">猫玩具</option>
-                        <option value="猫砂">猫砂</option>
-                        <option value="猫窝">猫窝</option>
-                        <option value="猫护理">猫护理</option>
-                        <option value="猫保健品">猫保健品</option>
+                        <option value="food">猫粮主食</option>
+                        <option value="toys">玩具用品</option>
+                        <option value="supplies">日常用品</option>
+                        <option value="grooming">洗护美容</option>
+                        <option value="health">健康保健</option>
                     </select>
                 </div>
                 <div class="form-group">
@@ -1431,7 +1444,10 @@
 
             <!-- 搜索栏 -->
             <div style="margin-bottom: var(--spacing-md);">
-                <input type="text" class="input" placeholder="搜索医院名称或地址..." id="hospitalSearch">
+                <div style="display: flex; gap: var(--spacing-sm);">
+                    <input type="text" class="input" placeholder="搜索医院名称或地址..." id="hospitalSearch" style="flex: 1;" onkeypress="if(event.key === 'Enter') searchNearbyHospitals()">
+                    <button class="btn btn-primary" onclick="searchNearbyHospitals()">🔍 搜索</button>
+                </div>
             </div>
             
             <!-- 推荐医院 - 管理员上传 -->
@@ -1632,6 +1648,11 @@
                             <span class="tag">零食</span>
                             <span class="tag">营养品</span>
                         </div>
+                        <div class="product-grid grid-3" style="margin-top: 20px;">
+                            <div style="grid-column: 1 / -1; text-align: center; padding: 20px; color: var(--apple-gray-medium);">
+                                <p>暂无猫粮主食商品</p>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
@@ -1650,6 +1671,11 @@
                             <span class="tag">智能玩具</span>
                             <span class="tag">猫抓板</span>
                             <span class="tag">猫爬架</span>
+                        </div>
+                        <div class="product-grid grid-3" style="margin-top: 20px;">
+                            <div style="grid-column: 1 / -1; text-align: center; padding: 20px; color: var(--apple-gray-medium);">
+                                <p>暂无玩具用品商品</p>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -1670,6 +1696,11 @@
                             <span class="tag">猫窝</span>
                             <span class="tag">出行用品</span>
                         </div>
+                        <div class="product-grid grid-3" style="margin-top: 20px;">
+                            <div style="grid-column: 1 / -1; text-align: center; padding: 20px; color: var(--apple-gray-medium);">
+                                <p>暂无日常用品商品</p>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
@@ -1689,6 +1720,11 @@
                             <span class="tag">指甲护理</span>
                             <span class="tag">美容</span>
                         </div>
+                        <div class="product-grid grid-3" style="margin-top: 20px;">
+                            <div style="grid-column: 1 / -1; text-align: center; padding: 20px; color: var(--apple-gray-medium);">
+                                <p>暂无洗护美容商品</p>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
@@ -1707,6 +1743,11 @@
                             <span class="tag">驱虫</span>
                             <span class="tag">药品</span>
                             <span class="tag">营养品</span>
+                        </div>
+                        <div class="product-grid grid-3" style="margin-top: 20px;">
+                            <div style="grid-column: 1 / -1; text-align: center; padding: 20px; color: var(--apple-gray-medium);">
+                                <p>暂无健康保健商品</p>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -1772,17 +1813,17 @@
             <div class="card" style="margin-bottom: var(--spacing-lg);">
                 <div style="padding: var(--spacing-md);">
                     <h3 style="margin-bottom: var(--spacing-md);">🛠️ 用户服务</h3>
-                    <div class="menu-item" onclick="showAddressManager()">
+                    <div class="menu-item" onclick="showAddressManager(event)" onmousedown="showAddressManager(event)" style="cursor: pointer; user-select: none;">
                         <span class="menu-icon">📍</span>
                         <span class="menu-text">地址管理</span>
                         <span class="menu-arrow">→</span>
                     </div>
-                    <div class="menu-item" onclick="showOrderManager()">
+                    <div class="menu-item" onclick="showOrderManager(event)" onmousedown="showOrderManager(event)" style="cursor: pointer; user-select: none;">
                         <span class="menu-icon">📦</span>
                         <span class="menu-text">我的订单</span>
                         <span class="menu-arrow">→</span>
                     </div>
-                    <div class="menu-item" onclick="showSettings()">
+                    <div class="menu-item" onclick="showSettings(event)" onmousedown="showSettings(event)" style="cursor: pointer; user-select: none;">
                         <span class="menu-icon">⚙️</span>
                         <span class="menu-text">设置</span>
                         <span class="menu-arrow">→</span>
@@ -1794,17 +1835,17 @@
             <div class="card">
                 <div style="padding: var(--spacing-md);">
                     <h3 style="margin-bottom: var(--spacing-md);">ℹ️ 关于</h3>
-                    <div class="menu-item" onclick="showAbout()">
+                    <div class="menu-item" onclick="showAbout(event)" onmousedown="showAbout(event)" style="cursor: pointer; user-select: none;">
                         <span class="menu-icon">🐱</span>
                         <span class="menu-text">关于金猫之家</span>
                         <span class="menu-arrow">→</span>
                     </div>
-                    <div class="menu-item" onclick="showVersion()">
+                    <div class="menu-item" onclick="showVersion(event)" onmousedown="showVersion(event)" style="cursor: pointer; user-select: none;">
                         <span class="menu-icon">📱</span>
                         <span class="menu-text">版本信息</span>
                         <span class="menu-arrow">→</span>
                     </div>
-                    <div class="menu-item" onclick="checkAdminStatus()">
+                    <div class="menu-item" onclick="checkAdminStatus(event)" onmousedown="checkAdminStatus(event)" style="cursor: pointer; user-select: none;">
                         <span class="menu-icon">🔍</span>
                         <span class="menu-text">检查状态</span>
                         <span class="menu-arrow">→</span>
@@ -1983,7 +2024,9 @@
             currentUser: null,
             userProfile: null, // 普通用户资料
             isLoggedIn: false,
-            isAdmin: false
+            isAdmin: false,
+            map: null, // 地图实例
+            hospitalMarkers: [] // 医院标记数组
         };
 
         // 管理员账号信息
@@ -2064,6 +2107,145 @@
         // 添加猫咪
         function addCat() {
             showToast('添加猫咪功能开发中...', 'info');
+        }
+
+        // 搜索附近医院
+        function searchNearbyHospitals() {
+            const searchTerm = document.getElementById('hospitalSearch').value.trim();
+            
+            if (!searchTerm) {
+                showToast('请输入搜索关键词', 'warning');
+                return;
+            }
+            
+            // 首先获取位置
+            loadNearbyHospitalsWithSearch(searchTerm);
+        }
+
+        // 带搜索关键词加载附近医院
+        function loadNearbyHospitalsWithSearch(searchTerm) {
+            showToast('正在搜索附近的宠物医院...', 'info');
+            
+            // 首先尝试获取用户真实位置
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(
+                    function(position) {
+                        // 成功获取位置
+                        appData.currentLocation = {
+                            lat: position.coords.latitude,
+                            lng: position.coords.longitude
+                        };
+                        console.log('获取到真实位置:', appData.currentLocation);
+                        
+                        // 根据搜索词生成匹配的医院
+                        generateSearchNearbyHospitals(searchTerm);
+                    },
+                    function(error) {
+                        // 定位失败，使用默认位置
+                        console.warn('定位失败，使用默认位置:', error.message);
+                        appData.currentLocation = {
+                            lat: 30.2741,
+                            lng: 120.1551
+                        };
+                        
+                        // 根据搜索词生成匹配的医院
+                        generateSearchNearbyHospitals(searchTerm);
+                    },
+                    {
+                        enableHighAccuracy: true,
+                        timeout: 5000,
+                        maximumAge: 0
+                    }
+                );
+            } else {
+                // 浏览器不支持定位
+                appData.currentLocation = {
+                    lat: 30.2741,
+                    lng: 120.1551
+                };
+                
+                // 根据搜索词生成匹配的医院
+                generateSearchNearbyHospitals(searchTerm);
+            }
+        }
+
+        // 生成搜索结果附近的医院
+        function generateSearchNearbyHospitals(searchTerm) {
+            const currentCity = getCityByLocation(appData.currentLocation.lat, appData.currentLocation.lng);
+            
+            // 基于搜索词生成相关的医院
+            const hospitalTemplates = {
+                '宠物医院': [
+                    { name: `${currentCity}市宠物医院`, baseName: '市宠物医院' },
+                    { name: `${currentCity}爱宠医院`, baseName: '爱宠医院' },
+                    { name: `${currentCity}瑞鹏宠物医院`, baseName: '瑞鹏宠物医院' },
+                    { name: `${currentCity}宠福鑫医院`, baseName: '宠福鑫医院' }
+                ],
+                '猫科': [
+                    { name: `${currentCity}猫科专科医院`, baseName: '猫科专科医院' },
+                    { name: `${currentCity}猫咪专科诊所`, baseName: '猫咪专科诊所' },
+                    { name: `${currentCity}爱猫医院`, baseName: '爱猫医院' }
+                ],
+                '24小时': [
+                    { name: `${currentCity}24小时宠物医院`, baseName: '24小时宠物医院' },
+                    { name: `${currentCity}急诊宠物医院`, baseName: '急诊宠物医院' },
+                    { name: `${currentCity}夜间宠物医院`, baseName: '夜间宠物医院' }
+                ]
+            };
+            
+            let selectedTemplates = [];
+            
+            // 根据搜索词选择模板
+            for (const [key, templates] of Object.entries(hospitalTemplates)) {
+                if (searchTerm.includes(key)) {
+                    selectedTemplates = selectedTemplates.concat(templates);
+                }
+            }
+            
+            // 如果没有匹配的模板，使用通用医院模板
+            if (selectedTemplates.length === 0) {
+                selectedTemplates = [
+                    { name: `${currentCity}${searchTerm}宠物医院`, baseName: searchTerm },
+                    { name: `${currentCity}${searchTerm}医院`, baseName: searchTerm },
+                    { name: `${currentCity}爱${searchTerm}医院`, baseName: searchTerm }
+                ];
+            }
+            
+            appData.nearbyHospitals = [];
+            
+            selectedTemplates.forEach((template, index) => {
+                const angle = (index / selectedTemplates.length) * 2 * Math.PI;
+                const distance = 2 + Math.random() * 8; // 2-10公里
+                
+                const hospital = {
+                    id: 'nearby_' + Date.now() + '_' + index,
+                    name: template.name,
+                    address: `${currentCity}某区某街道${Math.floor(Math.random() * 999) + 1}号`,
+                    phone: `05${Math.floor(Math.random() * 90) + 10}-${Math.floor(Math.random() * 90000000) + 10000000}`,
+                    lat: appData.currentLocation.lat + (distance * Math.cos(angle)) / 111,
+                    lng: appData.currentLocation.lng + (distance * Math.sin(angle)) / (111 * Math.cos(appData.currentLocation.lat * Math.PI / 180)),
+                    distance: distance,
+                    distanceText: `${distance.toFixed(1)}km`,
+                    rating: 4.0 + Math.random() * 1.0,
+                    reviews: [],
+                    city: currentCity,
+                    tags: ['搜索结果', '宠物医院', '24小时服务'],
+                    description: `专业的${template.baseName}，提供全面的宠物医疗服务`,
+                    images: []
+                };
+                
+                hospital.reviews = generateMockReviews();
+                appData.nearbyHospitals.push(hospital);
+            });
+            
+            // 渲染搜索结果
+            renderNearbyHospitals();
+            renderRecommendedHospitals();
+            
+            // 在地图上显示医院标记
+            updateMapWithHospitals();
+            
+            showToast(`搜索完成，找到 ${appData.nearbyHospitals.length} 家${searchTerm}相关的宠物医院`, 'success');
         }
 
         // 搜索医院
@@ -3251,7 +3433,8 @@
             if (typeof AMap !== 'undefined') {
                 // 使用真正的高德地图
                 try {
-                    const map = new AMap.Map('mapContainer', {
+                    // 创建地图实例
+                    appData.map = new AMap.Map('mapContainer', {
                         zoom: 13,
                         center: [appData.currentLocation.lng, appData.currentLocation.lat]
                     });
@@ -3259,44 +3442,17 @@
                     // 添加当前位置标记
                     const currentMarker = new AMap.Marker({
                         position: [appData.currentLocation.lng, appData.currentLocation.lat],
-                        title: '当前位置'
+                        title: '当前位置',
+                        icon: new AMap.Icon({
+                            size: new AMap.Size(25, 34),
+                            image: 'https://webapi.amap.com/theme/v1.3/markers/n/mark_b.png'
+                        })
                     });
 
-                    map.add(currentMarker);
+                    appData.map.add(currentMarker);
 
-                    // 添加推荐医院标记（管理员上传的）
-                    appData.hospitals.forEach((hospital, index) => {
-                        const hospitalPosition = [hospital.lng, hospital.lat];
-                        
-                        const marker = new AMap.Marker({
-                            position: hospitalPosition,
-                            title: hospital.name,
-                            content: '<div style="font-size: 20px;">⭐</div>'
-                        });
-
-                        marker.on('click', function() {
-                            selectHospital(hospital.id);
-                        });
-
-                        map.add(marker);
-                    });
-
-                    // 添加附近医院标记（基于地理位置）
-                    appData.nearbyHospitals.forEach((hospital, index) => {
-                        const hospitalPosition = [hospital.lng, hospital.lat];
-                        
-                        const marker = new AMap.Marker({
-                            position: hospitalPosition,
-                            title: hospital.name,
-                            content: '<div style="font-size: 20px;">📍</div>'
-                        });
-
-                        marker.on('click', function() {
-                            selectNearbyHospital(hospital.id);
-                        });
-
-                        map.add(marker);
-                    });
+                    // 添加医院标记
+                    updateMapWithHospitals();
 
                     const totalHospitals = (appData.hospitals ? appData.hospitals.length : 0) + (appData.nearbyHospitals ? appData.nearbyHospitals.length : 0);
                     if (totalHospitals > 0) {
@@ -3312,6 +3468,66 @@
             } else {
                 // 高德API未加载，显示备用地图
                 showFallbackMap();
+            }
+        }
+
+        // 在地图上显示医院标记
+        function updateMapWithHospitals() {
+            if (!appData.map) {
+                return;
+            }
+            
+            // 清除现有医院标记
+            if (appData.hospitalMarkers && appData.hospitalMarkers.length > 0) {
+                appData.hospitalMarkers.forEach(marker => {
+                    appData.map.remove(marker);
+                });
+            }
+            
+            appData.hospitalMarkers = [];
+            
+            // 添加推荐医院标记（管理员上传的）
+            if (appData.hospitals && appData.hospitals.length > 0) {
+                appData.hospitals.forEach(hospital => {
+                    const marker = new AMap.Marker({
+                        position: [hospital.lng, hospital.lat],
+                        title: hospital.name,
+                        icon: new AMap.Icon({
+                            size: new AMap.Size(25, 34),
+                            image: 'https://webapi.amap.com/theme/v1.3/markers/n/mark_r.png'
+                        })
+                    });
+                    
+                    // 添加点击事件
+                    marker.on('click', function() {
+                        selectHospital(hospital.id);
+                    });
+                    
+                    appData.map.add(marker);
+                    appData.hospitalMarkers.push(marker);
+                });
+            }
+            
+            // 添加附近医院标记（基于地理位置）
+            if (appData.nearbyHospitals && appData.nearbyHospitals.length > 0) {
+                appData.nearbyHospitals.forEach(hospital => {
+                    const marker = new AMap.Marker({
+                        position: [hospital.lng, hospital.lat],
+                        title: hospital.name,
+                        icon: new AMap.Icon({
+                            size: new AMap.Size(25, 34),
+                            image: 'https://webapi.amap.com/theme/v1.3/markers/n/mark_g.png'
+                        })
+                    });
+                    
+                    // 添加点击事件
+                    marker.on('click', function() {
+                        selectNearbyHospital(hospital.id);
+                    });
+                    
+                    appData.map.add(marker);
+                    appData.hospitalMarkers.push(marker);
+                });
             }
         }
 
@@ -4049,26 +4265,31 @@
         });
 
         // 个人中心相关功能
-        function showAddressManager() {
+        function showAddressManager(event) {
+            if (event) event.preventDefault();
             showToast('地址管理功能开发中...', 'info');
             // 这里可以添加地址管理模态框
         }
 
-        function showOrderManager() {
+        function showOrderManager(event) {
+            if (event) event.preventDefault();
             showToast('订单管理功能开发中...', 'info');
             // 这里可以添加订单管理模态框
         }
 
-        function showSettings() {
+        function showSettings(event) {
+            if (event) event.preventDefault();
             showToast('设置功能开发中...', 'info');
             // 这里可以添加设置模态框
         }
 
-        function showAbout() {
+        function showAbout(event) {
+            if (event) event.preventDefault();
             showToast('金猫之家 v1.0 - 杭州自家小猫咪-李先生的宠物社区平台', 'info');
         }
 
-        function showVersion() {
+        function showVersion(event) {
+            if (event) event.preventDefault();
             showToast('版本：1.0.0 | 更新时间：2024年', 'info');
         }
 
@@ -4162,11 +4383,64 @@
             showToast('商品添加成功！', 'success');
         }
 
-        // 渲染商品列表
+        // 渲染商品列表 - 按分类显示
         function renderProducts() {
-            const container = document.getElementById('recommendedProducts');
+            const categories = ['food', 'toys', 'supplies', 'grooming', 'health'];
             
-            if (!appData.products || appData.products.length === 0) {
+            // 渲染各分类商品
+            categories.forEach(category => {
+                const container = document.querySelector(`[data-category="${category}"] .product-grid`);
+                if (!container) return;
+                
+                const categoryProducts = appData.products ? appData.products.filter(p => p.category === category) : [];
+                
+                if (categoryProducts.length === 0) {
+                    container.innerHTML = `
+                        <div style="grid-column: 1 / -1; text-align: center; padding: 20px; color: var(--apple-gray-medium);">
+                            <p>暂无${getCategoryName(category)}商品</p>
+                        </div>
+                    `;
+                    return;
+                }
+                
+                container.innerHTML = categoryProducts.map(product => {
+                    const platformText = {
+                        'taobao': '淘宝',
+                        'pinduoduo': '拼多多',
+                        'jd': '京东'
+                    }[product.platform] || '购买';
+
+                    return `
+                        <div class="card">
+                            <div style="padding: var(--spacing-md); text-align: center;">
+                                <div style="font-size: 36px; margin-bottom: var(--spacing-sm);">${product.icon}</div>
+                                <h4 style="font-size: 16px; margin-bottom: 8px;">${product.name}</h4>
+                                <p style="color: var(--apple-orange); font-weight: 600; font-size: 18px;">¥${product.price}</p>
+                                ${product.description ? `<p style="color: var(--apple-gray-medium); font-size: 12px; margin: 8px 0;">${product.description}</p>` : ''}
+                                <button class="btn btn-primary" onclick="openProductUrl('${product.url}', '${product.platform}')" style="font-size: 12px; padding: 8px 16px;">🛒 ${platformText}</button>
+                                ${appData.isAdmin ? `
+                                    <div style="margin-top: 8px;">
+                                        <button class="btn btn-secondary btn-small" onclick="deleteProduct(${product.id})" style="font-size: 11px; padding: 4px 8px;">删除</button>
+                                    </div>
+                                ` : ''}
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+            });
+
+            // 渲染精选商品区域 - 显示所有管理员添加的商品
+            renderFeaturedProducts();
+        }
+
+        // 渲染精选商品
+        function renderFeaturedProducts() {
+            const container = document.getElementById('recommendedProducts');
+            if (!container) return;
+            
+            const allProducts = appData.products || [];
+            
+            if (allProducts.length === 0) {
                 container.innerHTML = `
                     <div style="text-align: center; padding: 40px; color: var(--apple-gray-medium);">
                         <div style="font-size: 48px; margin-bottom: var(--spacing-sm);">🛍️</div>
@@ -4175,31 +4449,57 @@
                 `;
                 return;
             }
-
-            container.innerHTML = appData.products.map(product => {
+            
+            // 显示所有管理员添加的商品，按添加时间倒序
+            const sortedProducts = allProducts.sort((a, b) => b.id - a.id);
+            
+            container.innerHTML = sortedProducts.slice(0, 6).map(product => {
                 const platformText = {
                     'taobao': '淘宝',
                     'pinduoduo': '拼多多',
                     'jd': '京东'
                 }[product.platform] || '购买';
 
+                const categoryBadge = {
+                    'food': '🥫 粮食',
+                    'toys': '🧶 玩具',
+                    'supplies': '🧼 用品',
+                    'grooming': '🧴 美容',
+                    'health': '💊 保健'
+                }[product.category] || '📦 其他';
+
                 return `
-                    <div class="card">
+                    <div class="card" style="position: relative;">
                         <div style="padding: var(--spacing-md); text-align: center;">
-                            <div style="font-size: 48px; margin-bottom: var(--spacing-sm);">${product.icon}</div>
-                            <h3>${product.name}</h3>
-                            <p style="color: var(--apple-orange); font-weight: 600;">¥${product.price}</p>
-                            ${product.description ? `<p style="color: var(--apple-gray-medium); font-size: 14px; margin: 10px 0;">${product.description}</p>` : ''}
-                            <button class="btn btn-primary" onclick="openProductUrl('${product.url}', '${product.platform}')">🛒 ${platformText}购买</button>
+                            <div style="position: absolute; top: 8px; right: 8px; background: var(--cat-primary); color: white; font-size: 10px; padding: 2px 6px; border-radius: 10px;">
+                                ${categoryBadge}
+                            </div>
+                            <div style="font-size: 36px; margin-bottom: var(--spacing-sm);">${product.icon}</div>
+                            <h4 style="font-size: 16px; margin-bottom: 8px;">${product.name}</h4>
+                            <p style="color: var(--apple-orange); font-weight: 600; font-size: 18px;">¥${product.price}</p>
+                            ${product.description ? `<p style="color: var(--apple-gray-medium); font-size: 12px; margin: 8px 0;">${product.description}</p>` : ''}
+                            <button class="btn btn-primary" onclick="openProductUrl('${product.url}', '${product.platform}')" style="font-size: 12px; padding: 8px 16px;">🛒 ${platformText}</button>
                             ${appData.isAdmin ? `
-                                <div style="margin-top: 10px;">
-                                    <button class="btn btn-secondary btn-small" onclick="deleteProduct(${product.id})" style="margin-right: 5px;">删除</button>
+                                <div style="margin-top: 8px;">
+                                    <button class="btn btn-secondary btn-small" onclick="deleteProduct(${product.id})" style="font-size: 11px; padding: 4px 8px;">删除</button>
                                 </div>
                             ` : ''}
                         </div>
                     </div>
                 `;
             }).join('');
+        }
+
+        // 获取分类名称
+        function getCategoryName(category) {
+            const names = {
+                'food': '猫粮主食',
+                'toys': '玩具用品',
+                'supplies': '日常用品',
+                'grooming': '洗护美容',
+                'health': '健康保健'
+            };
+            return names[category] || '商品';
         }
 
         // 打开商品链接
