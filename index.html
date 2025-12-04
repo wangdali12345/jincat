@@ -834,6 +834,53 @@
         #loginModal.modal-overlay.active {
             z-index: 10001 !important;
         }
+
+        /* 图片查看器样式 */
+        .image-viewer-content {
+            max-width: 90vw;
+            max-height: 95vh;
+            background: white;
+            border-radius: var(--border-radius-md);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .image-viewer-header {
+            padding: var(--spacing-md);
+            border-bottom: 1px solid var(--apple-border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .image-viewer-body {
+            padding: var(--spacing-md);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex: 1;
+            background: #f8f9fa;
+        }
+
+        .image-viewer-footer {
+            padding: var(--spacing-md);
+            border-top: 1px solid var(--apple-border);
+            display: flex;
+            gap: var(--spacing-sm);
+            justify-content: center;
+        }
+
+        /* 帖子图片悬停效果 */
+        .post-image {
+            cursor: pointer;
+            transition: transform 0.2s ease;
+        }
+
+        .post-image:hover {
+            transform: scale(1.02);
+        }
     </style>
 </head>
 <body>
@@ -1523,6 +1570,23 @@
             <div class="modal-footer">
                 <button class="btn btn-secondary" onclick="closeLoginModal()">取消</button>
                 <button class="btn btn-primary" onclick="handleLogin()">管理员登录</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 图片查看器模态框 -->
+    <div id="imageViewerModal" class="modal-overlay" onclick="closeImageViewer(event)">
+        <div class="image-viewer-content">
+            <div class="image-viewer-header">
+                <h3>图片查看</h3>
+                <button class="btn btn-secondary" onclick="closeImageViewer()">×</button>
+            </div>
+            <div class="image-viewer-body">
+                <img id="viewerImage" src="" alt="查看图片" style="max-width: 100%; max-height: 80vh; border-radius: var(--border-radius-sm);">
+            </div>
+            <div class="image-viewer-footer">
+                <button class="btn btn-primary" onclick="downloadImage()">💾 下载图片</button>
+                <button class="btn btn-secondary" onclick="shareImage()">🔗 复制链接</button>
             </div>
         </div>
     </div>
@@ -2633,7 +2697,7 @@
                         <p>${post.content}</p>
                         ${post.images.length > 0 ? `
                             <div class="post-images">
-                                ${post.images.map(image => `<img src="${image}" class="post-image" alt="帖子图片">`).join('')}
+                                ${post.images.map(image => `<img src="${image}" class="post-image" alt="帖子图片" onclick="openImageViewer('${image}', ${post.id})">`).join('')}
                             </div>
                         ` : ''}
                     </div>
@@ -3832,6 +3896,75 @@
             showToast(`已填充${cityName}地址示例`, 'success');
         }
 
+        // 图片查看器功能
+        let currentImageUrl = '';
+
+        function openImageViewer(imageUrl, postId) {
+            currentImageUrl = imageUrl;
+            const modal = document.getElementById('imageViewerModal');
+            const viewerImage = document.getElementById('viewerImage');
+            
+            viewerImage.src = imageUrl;
+            modal.classList.add('active');
+            
+            // 阻止背景滚动
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeImageViewer(event) {
+            // 如果点击的是背景或关闭按钮，则关闭
+            if (!event || event.target.id === 'imageViewerModal' || event.target.tagName === 'BUTTON') {
+                const modal = document.getElementById('imageViewerModal');
+                modal.classList.remove('active');
+                
+                // 恢复背景滚动
+                document.body.style.overflow = '';
+                
+                // 清空图片src
+                document.getElementById('viewerImage').src = '';
+                currentImageUrl = '';
+            }
+        }
+
+        function downloadImage() {
+            if (!currentImageUrl) return;
+            
+            const link = document.createElement('a');
+            link.href = currentImageUrl;
+            link.download = '猫咪图片_' + Date.now() + '.jpg';
+            link.target = '_blank';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            
+            showToast('图片下载已开始', 'success');
+        }
+
+        function shareImage() {
+            if (!currentImageUrl) return;
+            
+            // 复制图片链接到剪贴板
+            navigator.clipboard.writeText(currentImageUrl).then(() => {
+                showToast('图片链接已复制到剪贴板', 'success');
+            }).catch(() => {
+                // 降级方案
+                const textArea = document.createElement('textarea');
+                textArea.value = currentImageUrl;
+                document.body.appendChild(textArea);
+                textArea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textArea);
+                showToast('图片链接已复制到剪贴板', 'success');
+            });
+        }
+
+        // 键盘事件：ESC关闭图片查看器
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape' && document.getElementById('imageViewerModal').classList.contains('active')) {
+                closeImageViewer();
+            }
+        });
+
         function openHospitalManager() {
             document.getElementById('hospitalManagerModal').classList.add('active');
             // 清空表单
@@ -3896,7 +4029,7 @@
 
             // 添加到现有医院列表
             appData.hospitals.unshift(hospital);
-            renderHospitals();
+            renderRecommendedHospitals();
             closeHospitalManager();
             const cityName = getCityByLocation(lat, lng);
             showToast(`医院添加成功！将在${cityName}附近显示给用户`, 'success');
