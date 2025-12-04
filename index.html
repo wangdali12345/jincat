@@ -1128,11 +1128,21 @@
                 <input type="text" class="input" placeholder="搜索医院名称或地址..." id="hospitalSearch">
             </div>
             
-            <!-- 医院列表 -->
-            <div id="hospitalList">
+            <!-- 推荐医院 - 管理员上传 -->
+            <h3 style="margin-bottom: var(--spacing-md);">⭐ 推荐医院</h3>
+            <div id="recommendedHospitalList">
+                <div style="text-align: center; padding: 20px; color: var(--apple-gray-medium);">
+                    <div style="font-size: 32px; margin-bottom: var(--spacing-sm);">🏥</div>
+                    <p>暂无推荐医院，请联系管理员添加</p>
+                </div>
+            </div>
+            
+            <!-- 附近医院 - 基于地理位置 -->
+            <h3 style="margin: var(--spacing-lg) 0 var(--spacing-md);">📍 附近医院</h3>
+            <div id="nearbyHospitalList">
                 <div style="text-align: center; padding: 40px; color: var(--apple-gray-medium);">
-                    <div style="font-size: 48px; margin-bottom: var(--spacing-sm);">🏥</div>
-                    <p>暂无医院信息，请联系管理员添加</p>
+                    <div style="font-size: 48px; margin-bottom: var(--spacing-sm);">🗺️</div>
+                    <p>请点击"定位"按钮搜索附近宠物医院</p>
                 </div>
             </div>
         </div>
@@ -1516,7 +1526,8 @@
         // 应用数据
         const appData = {
             cats: [],
-            hospitals: [],
+            hospitals: [], // 管理员上传的推荐医院
+            nearbyHospitals: [], // 基于地理位置的附近医院
             posts: [],
             products: [],
             reviews: {},
@@ -2793,15 +2804,14 @@
 
                     map.add(currentMarker);
 
-                    // 添加所有医院标记
+                    // 添加推荐医院标记（管理员上传的）
                     appData.hospitals.forEach((hospital, index) => {
-                        // 使用真实的医院坐标
                         const hospitalPosition = [hospital.lng, hospital.lat];
                         
                         const marker = new AMap.Marker({
                             position: hospitalPosition,
                             title: hospital.name,
-                            content: '<div style="font-size: 20px;">🏥</div>'
+                            content: '<div style="font-size: 20px;">⭐</div>'
                         });
 
                         marker.on('click', function() {
@@ -2811,8 +2821,26 @@
                         map.add(marker);
                     });
 
-                    if (appData.hospitals && appData.hospitals.length > 0) {
-                        showToast('地图加载成功！显示 ' + appData.hospitals.length + ' 家医院', 'success');
+                    // 添加附近医院标记（基于地理位置）
+                    appData.nearbyHospitals.forEach((hospital, index) => {
+                        const hospitalPosition = [hospital.lng, hospital.lat];
+                        
+                        const marker = new AMap.Marker({
+                            position: hospitalPosition,
+                            title: hospital.name,
+                            content: '<div style="font-size: 20px;">📍</div>'
+                        });
+
+                        marker.on('click', function() {
+                            selectNearbyHospital(hospital.id);
+                        });
+
+                        map.add(marker);
+                    });
+
+                    const totalHospitals = (appData.hospitals ? appData.hospitals.length : 0) + (appData.nearbyHospitals ? appData.nearbyHospitals.length : 0);
+                    if (totalHospitals > 0) {
+                        showToast('地图加载成功！显示 ' + totalHospitals + ' 家医院', 'success');
                     } else {
                         showToast('地图加载成功！暂无医院信息', 'info');
                     }
@@ -2836,18 +2864,32 @@
                     <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 48px;">📍</div>
                     <div style="position: absolute; top: 20px; left: 10px; background: white; padding: 10px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
                         <div style="font-weight: 600;">🗺️ 地图视图</div>
-                        <div style="font-size: 12px; color: #666;">${appData.hospitals ? appData.hospitals.length : 0} 家医院</div>
+                        <div style="font-size: 12px; color: #666;">${(appData.hospitals ? appData.hospitals.length : 0) + (appData.nearbyHospitals ? appData.nearbyHospitals.length : 0)} 家医院</div>
                         <div style="font-size: 10px; color: #999; margin-top: 4px;">点击打开外部地图</div>
                     </div>
-                    ${appData.hospitals && appData.hospitals.length > 0 ? appData.hospitals.slice(0, 3).map((hospital, index) => {
+                    <!-- 推荐医院标记 -->
+                    ${appData.hospitals && appData.hospitals.length > 0 ? appData.hospitals.slice(0, 2).map((hospital, index) => {
                         const positions = [
                             { top: '30%', left: '20%' },
-                            { top: '60%', left: '70%' },
-                            { top: '40%', left: '40%' }
+                            { top: '50%', left: '30%' }
                         ];
                         return `
                             <div style="position: absolute; ${positions[index].top}; ${positions[index].left}; transform: translate(-50%, -50%); cursor: pointer;" onclick="event.stopPropagation(); selectHospital(${hospital.id})">
-                                <div style="font-size: 24px;">🏥</div>
+                                <div style="font-size: 24px;">⭐</div>
+                                <div style="background: white; padding: 4px 8px; border-radius: 4px; font-size: 12px; white-space: nowrap; box-shadow: 0 2px 4px rgba(0,0,0,0.2);">
+                                    ${hospital.name}
+                                </div>
+                            </div>
+                        `;
+                    }).join('') : ''}
+                    <!-- 附近医院标记 -->
+                    ${appData.nearbyHospitals && appData.nearbyHospitals.length > 0 ? appData.nearbyHospitals.slice(0, 1).map((hospital, index) => {
+                        const positions = [
+                            { top: '60%', left: '70%' }
+                        ];
+                        return `
+                            <div style="position: absolute; ${positions[index].top}; ${positions[index].left}; transform: translate(-50%, -50%); cursor: pointer;" onclick="event.stopPropagation(); selectNearbyHospital('${hospital.id}')">
+                                <div style="font-size: 24px;">📍</div>
                                 <div style="background: white; padding: 4px 8px; border-radius: 4px; font-size: 12px; white-space: nowrap; box-shadow: 0 2px 4px rgba(0,0,0,0.2);">
                                     ${hospital.name}
                                 </div>
@@ -2880,7 +2922,9 @@
                             lng: position.coords.longitude
                         };
                         console.log('获取到真实位置:', appData.currentLocation);
-                        renderAdminHospitals();
+                        // 同时渲染推荐医院和生成附近医院
+                        renderRecommendedHospitals();
+                        generateNearbyHospitals();
                     },
                     function(error) {
                         // 定位失败，使用默认位置
@@ -2889,7 +2933,9 @@
                             lat: 30.2741,
                             lng: 120.1551
                         };
-                        renderAdminHospitals();
+                        // 同时渲染推荐医院和生成附近医院
+                        renderRecommendedHospitals();
+                        generateNearbyHospitals();
                     },
                     {
                         enableHighAccuracy: true,
@@ -2903,26 +2949,142 @@
                     lat: 30.2741,
                     lng: 120.1551
                 };
-                renderAdminHospitals();
+                // 同时渲染推荐医院和生成附近医院
+                renderRecommendedHospitals();
+                generateNearbyHospitals();
             }
         }
 
-        // 渲染管理员上传的医院
-        function renderAdminHospitals() {
-            // 如果没有管理员上传的医院，显示提示
+        // 渲染推荐医院（管理员上传）
+        function renderRecommendedHospitals() {
+            const container = document.getElementById('recommendedHospitalList');
+            
             if (!appData.hospitals || appData.hospitals.length === 0) {
-                document.getElementById('hospitalList').innerHTML = `
-                    <div style="text-align: center; padding: 40px; color: var(--apple-gray-medium);">
-                        <div style="font-size: 48px; margin-bottom: var(--spacing-sm);">🏥</div>
-                        <p>暂无医院信息，请联系管理员添加</p>
+                container.innerHTML = `
+                    <div style="text-align: center; padding: 20px; color: var(--apple-gray-medium);">
+                        <div style="font-size: 32px; margin-bottom: var(--spacing-sm);">🏥</div>
+                        <p>暂无推荐医院，请联系管理员添加</p>
                     </div>
                 `;
-                initMap();
                 return;
             }
 
             // 计算距离并排序管理员上传的医院
             const hospitalsWithDistance = appData.hospitals.map(hospital => {
+                if (appData.currentLocation) {
+                    const distance = calculateDistance(
+                        appData.currentLocation.lat,
+                        appData.currentLocation.lng,
+                        hospital.lat,
+                        hospital.lng
+                    );
+                    return {
+                        ...hospital,
+                        distance: distance,
+                        distanceText: distance < 1 ? `${(distance * 1000).toFixed(0)}m` : `${distance.toFixed(1)}km`
+                    };
+                }
+                return hospital;
+            }).sort((a, b) => (a.distance || 0) - (b.distance || 0));
+
+            container.innerHTML = hospitalsWithDistance.map(hospital => `
+                <div class="hospital-card">
+                    <div class="hospital-header">
+                        <div class="hospital-name">⭐ ${hospital.name}</div>
+                        <div class="hospital-info">
+                            <div>📍 ${hospital.address}</div>
+                            <div>📞 ${hospital.phone}</div>
+                            ${hospital.distanceText ? `<div>🚶 距离 ${hospital.distanceText}</div>` : ''}
+                        </div>
+                        <div class="hospital-rating">
+                            <span class="rating-stars">${'⭐'.repeat(Math.floor(hospital.rating))}</span>
+                            <span>${hospital.rating} 分</span>
+                            <span style="color: var(--apple-gray-medium);">(${hospital.reviews.length} 条评价)</span>
+                        </div>
+                    </div>
+                    <div class="hospital-actions">
+                        <button class="btn btn-primary btn-small" onclick="selectHospital(${hospital.id})">🧭 导航</button>
+                        <button class="btn btn-secondary btn-small" onclick="openGaodeMap(${hospital.id})">🗺️ 高德</button>
+                        ${appData.isAdmin ? `
+                            <button class="btn btn-secondary btn-small" onclick="deleteHospital(${hospital.id})">🗑️ 删除</button>
+                        ` : ''}
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // 生成附近医院数据（基于地理位置）
+        function generateNearbyHospitals() {
+            // 清空附近医院数据
+            appData.nearbyHospitals = [];
+            
+            const hospitalPrefixes = ['爱心', '协和', '萌宠', '守护', '阳光', '蓝天', '希望', '康乐', '健康', '宠爱'];
+            const hospitalSuffixes = ['宠物医院', '动物医院', '宠物诊所', '兽医院', '宠物中心'];
+            
+            const hospitalTemplates = [];
+            
+            // 生成7个随机医院
+            for (let i = 0; i < 7; i++) {
+                const randomPrefix = hospitalPrefixes[Math.floor(Math.random() * hospitalPrefixes.length)];
+                const randomSuffix = hospitalSuffixes[Math.floor(Math.random() * hospitalSuffixes.length)];
+                hospitalTemplates.push({
+                    prefix: randomPrefix,
+                    suffix: randomSuffix,
+                    baseRating: 3.5 + Math.random() * 1.5 // 3.5-5.0之间的随机评分
+                });
+            }
+
+            // 基于当前位置生成医院数据
+            const hospitalData = hospitalTemplates.map((template, index) => {
+                // 在用户位置周围随机分布医院
+                const angle = (Math.PI * 2 * index) / hospitalTemplates.length;
+                const distance = 0.5 + Math.random() * 5; // 0.5km - 5.5km 范围内
+                
+                const lat = appData.currentLocation.lat + distance * Math.sin(angle) / 111;
+                const lng = appData.currentLocation.lng + distance * Math.cos(angle) / (111 * Math.cos(appData.currentLocation.lat * Math.PI / 180));
+                
+                // 根据当前位置生成更真实的地址
+                let city = '杭州市';
+                let districts;
+                
+                // 根据经纬度判断城市
+                if (appData.currentLocation.lat > 39 && appData.currentLocation.lat < 41 && 
+                    appData.currentLocation.lng > 116 && appData.currentLocation.lng < 117) {
+                    city = '北京市';
+                    districts = ['朝阳区', '海淀区', '东城区', '西城区', '丰台区', '石景山区', '通州区', '昌平区'];
+                } else if (appData.currentLocation.lat > 31 && appData.currentLocation.lat < 32 && 
+                          appData.currentLocation.lng > 121 && appData.currentLocation.lng < 122) {
+                    city = '上海市';
+                    districts = ['浦东新区', '黄浦区', '徐汇区', '长宁区', '静安区', '普陀区', '虹口区', '杨浦区'];
+                } else if (appData.currentLocation.lat > 22 && appData.currentLocation.lat < 24 && 
+                          appData.currentLocation.lng > 113 && appData.currentLocation.lng < 115) {
+                    city = '深圳市';
+                    districts = ['福田区', '南山区', '罗湖区', '宝安区', '龙岗区', '龙华区', '坪山区', '光明区'];
+                } else if (appData.currentLocation.lat > 30 && appData.currentLocation.lat < 31 && 
+                          appData.currentLocation.lng > 120 && appData.currentLocation.lng < 121) {
+                    city = '杭州市';
+                    districts = ['江干区', '西湖区', '拱墅区', '滨江区', '上城区', '下城区', '余杭区', '萧山区'];
+                } else {
+                    districts = ['中心区', '东区', '西区', '南区', '北区', '新区', '开发区', '高新区'];
+                }
+                
+                const roads = ['路', '街', '大道', '巷', '广场', '中心'];
+                const numbers = Math.floor(Math.random() * 999) + 1;
+                
+                return {
+                    id: 'nearby_' + (index + 1),
+                    name: template.prefix + template.suffix,
+                    address: `${city}${districts[index % districts.length]}${roads[index % roads.length]}${numbers}号`,
+                    phone: `0571-${Math.floor(Math.random() * 90000000) + 10000000}`,
+                    lat: lat,
+                    lng: lng,
+                    rating: parseFloat((template.baseRating + (Math.random() - 0.5)).toFixed(1)),
+                    reviews: generateMockReviews()
+                };
+            });
+
+            // 计算距离并排序
+            appData.nearbyHospitals = hospitalData.map(hospital => {
                 const distance = calculateDistance(
                     appData.currentLocation.lat,
                     appData.currentLocation.lng,
@@ -2937,12 +3099,45 @@
                 };
             }).sort((a, b) => a.distance - b.distance);
 
-            // 更新医院数据
-            appData.hospitals = hospitalsWithDistance;
+            renderNearbyHospitals();
+            showToast(`找到 ${appData.nearbyHospitals.length} 家附近医院`, 'info');
+        }
+
+        // 渲染附近医院列表
+        function renderNearbyHospitals() {
+            const container = document.getElementById('nearbyHospitalList');
             
-            renderHospitals();
-            initMap();
-            showToast(`显示 ${appData.hospitals.length} 家医院`, 'info');
+            if (!appData.nearbyHospitals || appData.nearbyHospitals.length === 0) {
+                container.innerHTML = `
+                    <div style="text-align: center; padding: 40px; color: var(--apple-gray-medium);">
+                        <div style="font-size: 48px; margin-bottom: var(--spacing-sm);">🗺️</div>
+                        <p>请点击"定位"按钮搜索附近宠物医院</p>
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = appData.nearbyHospitals.map(hospital => `
+                <div class="hospital-card">
+                    <div class="hospital-header">
+                        <div class="hospital-name">📍 ${hospital.name}</div>
+                        <div class="hospital-info">
+                            <div>📍 ${hospital.address}</div>
+                            <div>📞 ${hospital.phone}</div>
+                            <div>🚶 距离 ${hospital.distanceText}</div>
+                        </div>
+                        <div class="hospital-rating">
+                            <span class="rating-stars">${'⭐'.repeat(Math.floor(hospital.rating))}</span>
+                            <span>${hospital.rating} 分</span>
+                            <span style="color: var(--apple-gray-medium);">(${hospital.reviews.length} 条评价)</span>
+                        </div>
+                    </div>
+                    <div class="hospital-actions">
+                        <button class="btn btn-primary btn-small" onclick="selectNearbyHospital('${hospital.id}')">🧭 导航</button>
+                        <button class="btn btn-secondary btn-small" onclick="openGaodeMapNearby('${hospital.id}')">🗺️ 高德</button>
+                    </div>
+                </div>
+            `).join('');
         }
 
         // 生成模拟评论
@@ -3068,6 +3263,64 @@
             }
         }
 
+        // 选择附近医院 - 直接跳转高德地图
+        function selectNearbyHospital(hospitalId) {
+            const hospital = appData.nearbyHospitals.find(h => h.id === hospitalId);
+            if (hospital) {
+                showToast(`正在跳转到高德地图导航到 ${hospital.name}...`, 'info');
+                
+                // 构建高德地图导航URL，目的地为选中的医院
+                const gaodeUrl = `https://uri.amap.com/navigation?to=${hospital.lng},${hospital.lat},${encodeURIComponent(hospital.name)}&mode=car&coordinate=${appData.currentLocation.lng},${appData.currentLocation.lat}`;
+                
+                // 延迟跳转，让提示先显示
+                setTimeout(() => {
+                    window.open(gaodeUrl, '_blank');
+                }, 500);
+            }
+        }
+
+        // 打开附近医院的高德地图
+        function openGaodeMapNearby(hospitalId) {
+            const hospital = appData.nearbyHospitals.find(h => h.id === hospitalId);
+            if (!hospital) return;
+            
+            showToast(`正在打开 ${hospital.name} 的高德地图...`, 'info');
+            
+            // 构建高德地图URL，直接显示医院位置
+            const mapUrl = `https://uri.amap.com/marker?position=${hospital.lng},${hospital.lat}&name=${encodeURIComponent(hospital.name)}&coordinate=${appData.currentLocation.lng},${appData.currentLocation.lat}`;
+            window.open(mapUrl, '_blank');
+        }
+
+        // 打开推荐医院的高德地图
+        function openGaodeMap(hospitalId) {
+            const hospital = appData.hospitals.find(h => h.id === hospitalId);
+            if (!hospital) return;
+            
+            showToast(`正在打开 ${hospital.name} 的高德地图...`, 'info');
+            
+            // 构建高德地图URL，直接显示医院位置
+            const mapUrl = `https://uri.amap.com/marker?position=${hospital.lng},${hospital.lat}&name=${encodeURIComponent(hospital.name)}&coordinate=${appData.currentLocation.lng},${appData.currentLocation.lat}`;
+            window.open(mapUrl, '_blank');
+        }
+
+        // 删除推荐医院（管理员专用）
+        function deleteHospital(hospitalId) {
+            if (!appData.isAdmin) {
+                showToast('只有管理员才能删除医院', 'error');
+                return;
+            }
+            
+            if (confirm('确定要删除这家推荐医院吗？')) {
+                const index = appData.hospitals.findIndex(h => h.id === hospitalId);
+                if (index > -1) {
+                    const hospitalName = appData.hospitals[index].name;
+                    appData.hospitals.splice(index, 1);
+                    renderRecommendedHospitals();
+                    showToast(`已删除推荐医院：${hospitalName}`, 'success');
+                }
+            }
+        }
+
         // 打开医院评价模态框
         function openHospitalReviewModal(hospitalId) {
             document.getElementById('hospitalReviewModal').classList.add('active');
@@ -3183,7 +3436,8 @@
                 // 初始化论坛帖子
                 renderPosts();
                 
-                // 医院数据需要手动刷新，不自动加载
+                // 只初始化推荐医院，附近医院需要手动定位
+                renderRecommendedHospitals();
                 
                 // 初始化猫咪列表
                 initDefaultCats();
