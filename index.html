@@ -640,7 +640,7 @@
             }
         }
 
-        /* 右下角浮动按钮 */
+        /* 右下角浮动按钮 - 统一定义 */
         .fab {
             position: fixed;
             bottom: 80px; /* 避免遮挡底部导航 */
@@ -659,6 +659,11 @@
             display: flex;
             align-items: center;
             justify-content: center;
+        }
+
+        .fab:hover {
+            background: var(--apple-blue-hover);
+            transform: scale(1.1);
         }
 
         /* 桌面端隐藏移动端导航 */
@@ -695,6 +700,7 @@
             margin-bottom: var(--spacing-md);
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             -webkit-background-clip: text;
+            background-clip: text;
             -webkit-text-fill-color: transparent;
             text-align: center;
         }
@@ -948,31 +954,7 @@
             border: 1px solid rgba(255, 107, 157, 0.2);
         }
 
-        /* 右下角浮动按钮 */
-        .fab {
-            position: fixed;
-            bottom: 80px; /* 避免遮挡底部导航 */
-            right: 20px;
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            background: var(--apple-blue);
-            color: white;
-            border: none;
-            font-size: 20px;
-            cursor: pointer;
-            box-shadow: var(--shadow-heavy);
-            z-index: 997; /* 确保不会覆盖导航 */
-            transition: all 0.3s ease;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
 
-        .fab:hover {
-            background: var(--apple-blue-hover);
-            transform: scale(1.1);
-        }
 
         /* 地图样式 */
         .map-container {
@@ -1484,7 +1466,7 @@
                 <div style="text-align: center; padding: 40px; color: var(--apple-gray-medium);">
                     <div style="font-size: 48px; margin-bottom: var(--spacing-sm);">🏥</div>
                     <p>暂无用户推荐医院</p>
-                    <p style="font-size: 14px; margin-top: var(--spacing-sm);欢迎分享您知道的好医院</p>
+                    <p style="font-size: 14px; margin-top: var(--spacing-sm);">欢迎分享您知道的好医院</p>
                 </div>
             </div>
             
@@ -3332,6 +3314,95 @@
             }
         }
 
+        // 初始化默认商品数据
+        function initDefaultProducts() {
+            if (!appData.products || appData.products.length === 0) {
+                appData.products = [
+                    {
+                        id: 1,
+                        name: '优质猫粮',
+                        category: 'food',
+                        price: '89',
+                        platform: 'taobao',
+                        url: 'https://taobao.com/item1',
+                        icon: '🥫',
+                        description: '营养均衡的优质猫粮，适合各年龄段猫咪',
+                        addedBy: '管理员',
+                        addedTime: '2024-01-15 10:30:00',
+                        clickCount: 25
+                    },
+                    {
+                        id: 2,
+                        name: '逗猫棒套装',
+                        category: 'toys',
+                        price: '29',
+                        platform: 'pinduoduo',
+                        url: 'https://pinduoduo.com/item2',
+                        icon: '🧶',
+                        description: '多种款式的逗猫棒，让猫咪爱不释手',
+                        addedBy: '管理员',
+                        addedTime: '2024-01-14 15:20:00',
+                        clickCount: 18
+                    }
+                ];
+            }
+        }
+
+        // 初始化默认帖子数据
+        function initDefaultPosts() {
+            if (!appData.posts || appData.posts.length === 0) {
+                appData.posts = [
+                    {
+                        id: 1,
+                        title: '欢迎来到金猫论坛！',
+                        content: '欢迎大家在这里分享养猫经验，交流养猫心得。无论是猫咪的日常护理、健康问题，还是有趣的猫咪故事，都可以在这里和大家分享。\\n\\n让我们一起来创造一个温暖的猫咪社区吧！ 🐱💕',
+                        author: '管理员',
+                        avatar: '👤',
+                        time: '2小时前',
+                        images: [],
+                        likes: 128,
+                        comments: [
+                            {
+                                author: '用户1',
+                                content: '这个社区真棒！',
+                                time: '1小时前'
+                            }
+                        ],
+                        liked: false
+                    }
+                ];
+            }
+        }
+
+        // 初始化默认医院数据
+        function initDefaultHospitals() {
+            if (!appData.hospitals || appData.hospitals.length === 0) {
+                appData.hospitals = [
+                    {
+                        id: 1,
+                        name: '杭州爱心宠物医院',
+                        address: '杭州市西湖区文三路123号',
+                        phone: '0571-88888888',
+                        lat: 30.2741,
+                        lng: 120.1551,
+                        rating: 4.8,
+                        reviews: [
+                            {
+                                author: '猫主人',
+                                content: '医生很专业，服务态度很好',
+                                time: '1周前',
+                                rating: 5
+                            }
+                        ],
+                        distance: 0,
+                        distanceText: '0m',
+                        addedBy: '管理员',
+                        addedTime: '2024-01-15 10:30:00'
+                    }
+                ];
+            }
+        }
+
         // 渲染帖子列表
         function renderPosts() {
             const postList = document.getElementById('postList');
@@ -4666,7 +4737,8 @@
             showToast('版本：1.0.0 | 更新时间：2024年', 'info');
         }
 
-        function checkAdminStatus() {
+        function checkAdminStatus(event) {
+            if (event) event.preventDefault();
             const status = `
                 当前用户: ${appData.currentUser || '未登录'}
                 登录状态: ${appData.isLoggedIn ? '已登录' : '未登录'}
