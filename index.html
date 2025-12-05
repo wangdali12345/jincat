@@ -121,21 +121,25 @@
 
         /* 页面容器 */
         .page {
-            display: none;
+            display: none !important;
+            visibility: hidden !important;
+            opacity: 0 !important;
             padding: var(--spacing-lg) var(--spacing-md);
             min-height: calc(100vh - 120px);
             margin-top: 60px;
             background: var(--apple-white);
             position: relative;
             z-index: 1;
+            width: 100%;
         }
 
         .page.active {
-            display: block;
-            visibility: visible;
-            opacity: 1;
-            position: relative;
-            z-index: 5;
+            display: block !important;
+            visibility: visible !important;
+            opacity: 1 !important;
+            position: relative !important;
+            z-index: 5 !important;
+            width: 100%;
         }
 
 
@@ -507,11 +511,17 @@
                 bottom: 0 !important;
                 left: 0 !important;
                 right: 0 !important;
+                position: fixed !important;
+                z-index: 9999 !important;
+                background: white;
+                border-top: 1px solid #e0e0e0;
+                box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
             }
             
             /* 确保所有页面在移动端正确显示 */
             .page {
                 padding: var(--spacing-lg) var(--spacing-md) 80px !important;
+                margin-bottom: 60px !important;
             }
         }
 
@@ -1493,7 +1503,10 @@
             <div id="userRecommendedHospitals">
                 <div style="text-align: center; padding: 40px; color: var(--apple-gray-medium);">
                     <div style="font-size: 48px; margin-bottom: var(--spacing-sm);">🏥</div>
-                    <p>暂无用户推荐医院</p>
+                    <p>🏥 快来推荐您知道的宠物医院吧！</p>
+                    <p style="font-size: 14px; color: var(--apple-gray-medium); margin-top: 8px;">
+                        点击下方"添加推荐"按钮，分享给更多宠物主人
+                    </p>
                     <p style="font-size: 14px; margin-top: var(--spacing-sm);欢迎分享您知道的好医院</p>
                 </div>
             </div>
@@ -1829,7 +1842,10 @@
             <div class="grid grid-3" id="recommendedProducts">
                 <div style="text-align: center; padding: 40px; color: var(--apple-gray-medium);">
                     <div style="font-size: 48px; margin-bottom: var(--spacing-sm);">🛍️</div>
-                    <p>暂无商品，请联系管理员添加</p>
+                    <p>正在加载商品信息...</p>
+                    <p style="font-size: 14px; color: var(--apple-gray-medium); margin-top: 8px;">
+                        🛍️ 精选商品即将上架，敬请期待！
+                    </p>
                 </div>
             </div>
         </div>
@@ -1919,6 +1935,11 @@
                     <div class="menu-item" onclick="checkAdminStatus(event)" onmousedown="checkAdminStatus(event)" style="cursor: pointer; user-select: none;">
                         <span class="menu-icon">🔍</span>
                         <span class="menu-text">检查状态</span>
+                        <span class="menu-arrow">→</span>
+                    </div>
+                    <div class="menu-item" onclick="testAllPages(event)" onmousedown="testAllPages(event)" style="cursor: pointer; user-select: none; background: #f0f8ff;">
+                        <span class="menu-icon">🧪</span>
+                        <span class="menu-text">测试切换</span>
                         <span class="menu-arrow">→</span>
                     </div>
                 </div>
@@ -2114,6 +2135,7 @@
         // 简单的页面切换函数
         function switchPage(pageId) {
             console.log('🔄 切换到页面:', pageId);
+            console.log('📋 当前所有页面:', document.querySelectorAll('.page'));
             
             // 阻止事件冒泡和默认行为
             if (event) {
@@ -2130,13 +2152,21 @@
             // 隐藏所有页面
             document.querySelectorAll('.page').forEach(page => {
                 page.classList.remove('active');
+                page.style.display = 'none';
+                page.style.visibility = 'hidden';
+                page.style.opacity = '0';
+                console.log('📦 隐藏页面:', page.id);
             });
             
             // 显示目标页面
             const targetPage = document.getElementById(pageId);
             if (targetPage) {
                 targetPage.classList.add('active');
+                targetPage.style.display = 'block';
+                targetPage.style.visibility = 'visible';
+                targetPage.style.opacity = '1';
                 console.log('✅ 页面显示成功:', pageId);
+                console.log('📊 目标页面样式:', targetPage.style.cssText);
             } else {
                 console.error('❌ 页面不存在:', pageId);
                 return;
@@ -3733,7 +3763,10 @@
                 container.innerHTML = `
                     <div style="text-align: center; padding: 20px; color: var(--apple-gray-medium);">
                         <div style="font-size: 32px; margin-bottom: var(--spacing-sm);">🏥</div>
-                        <p>暂无推荐医院，请联系管理员添加</p>
+                        <p>🏥 发现优质宠物医院推荐</p>
+                        <p style="font-size: 14px; color: var(--apple-gray-medium); margin-top: 8px;">
+                            周边医院信息持续更新中...
+                        </p>
                     </div>
                 `;
                 return;
@@ -3776,7 +3809,10 @@
                 container.innerHTML = `
                     <div style="text-align: center; padding: 20px; color: var(--apple-gray-medium);">
                         <div style="font-size: 32px; margin-bottom: var(--spacing-sm);">🏥</div>
-                        <p>${currentCity}附近暂无推荐医院</p>
+                        <p>🔍 正在搜索${currentCity}附近的宠物医院...</p>
+                        <p style="font-size: 14px; color: var(--apple-gray-medium); margin-top: 8px;">
+                            为您寻找最优质的宠物医疗服务
+                        </p>
                         <p style="font-size: 12px; margin-top: 8px;">请联系管理员添加${currentCity}的推荐医院</p>
                     </div>
                 `;
@@ -4567,7 +4603,10 @@
                 container.innerHTML = `
                     <div style="text-align: center; padding: 40px; color: var(--apple-gray-medium);">
                         <div style="font-size: 48px; margin-bottom: var(--spacing-sm);">🛍️</div>
-                        <p>暂无商品，请联系管理员添加</p>
+                        <p>正在加载商品信息...</p>
+                    <p style="font-size: 14px; color: var(--apple-gray-medium); margin-top: 8px;">
+                        🛍️ 精选商品即将上架，敬请期待！
+                    </p>
                     </div>
                 `;
                 return;
@@ -4805,7 +4844,10 @@
                 container.innerHTML = `
                     <div style="text-align: center; padding: 40px; color: var(--apple-gray-medium);">
                         <div style="font-size: 48px; margin-bottom: var(--spacing-sm);">🏥</div>
-                        <p>暂无用户推荐医院</p>
+                        <p>🏥 快来推荐您知道的宠物医院吧！</p>
+                    <p style="font-size: 14px; color: var(--apple-gray-medium); margin-top: 8px;">
+                        点击下方"添加推荐"按钮，分享给更多宠物主人
+                    </p>
                         <p style="font-size: 14px; margin-top: var(--spacing-sm);">欢迎分享您知道的好医院</p>
                     </div>
                 `;
@@ -5144,6 +5186,36 @@
                 document.getElementById('userStatus').textContent = statusText;
                 
                 // 更新当前用户信息
+            }
+        }
+
+        // 测试所有页面切换功能
+        function testAllPages(event) {
+            if (event) {
+                event.preventDefault();
+                event.stopPropagation();
+            }
+            
+            console.log('🧪 开始测试所有页面切换...');
+            showToast('开始测试页面切换...', 'info');
+            
+            const pages = ['home', 'cats', 'hospital', 'logistics', 'forum', 'shop', 'profile'];
+            let index = 0;
+            
+            const testNextPage = () => {
+                if (index < pages.length) {
+                    switchPage(pages[index]);
+                    showToast(`切换到: ${pages[index]}`, 'info');
+                    index++;
+                    setTimeout(testNextPage, 2000);
+                } else {
+                    showToast('测试完成！', 'success');
+                    switchPage('home'); // 回到首页
+                }
+            };
+            
+            setTimeout(testNextPage, 1000);
+        }
                 appData.currentUser = appData.userProfile.userName;
                 appData.isLoggedIn = true;
             }
