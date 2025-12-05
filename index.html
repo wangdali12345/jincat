@@ -1252,13 +1252,6 @@
                 杭州自家小猫咪-李先生的宠物社区平台
             </p>
             
-            <!-- 测试按钮 -->
-            <div style="text-align: center; margin-bottom: var(--spacing-md);">
-                <button onclick="testPageSwitch()" style="background: #f0f0f0; border: 1px solid #ccc; padding: 8px 16px; border-radius: 4px; cursor: pointer; font-size: 12px;">
-                    🧪 测试页面切换
-                </button>
-            </div>
-            
             <!-- 功能网格 -->
             <div class="grid grid-3">
                 <div class="card" onclick="switchPage('cats')">
@@ -2250,23 +2243,6 @@
             console.log('📱 当前页面:', pageId);
             console.log('📱 页面元素:', document.getElementById(pageId));
             console.log('📱 页面状态:', document.getElementById(pageId)?.classList);
-        }
-
-        // 测试页面切换的辅助函数
-        function testPageSwitch() {
-            console.log('🧪 开始测试页面切换...');
-            const pages = ['home', 'cats', 'hospital', 'logistics', 'forum', 'shop', 'profile'];
-            
-            let index = 0;
-            const interval = setInterval(() => {
-                if (index < pages.length) {
-                    switchPage(pages[index]);
-                    index++;
-                } else {
-                    clearInterval(interval);
-                    console.log('🧪 测试完成');
-                }
-            }, 2000);
         }
 
         // Toast通知函数
