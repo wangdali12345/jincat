@@ -132,6 +132,10 @@
 
         .page.active {
             display: block !important;
+            visibility: visible !important;
+            opacity: 1 !important;
+            position: relative !important;
+            z-index: 5 !important;
         }
 
         /* 卡片样式 */
@@ -452,7 +456,7 @@
                 opacity: 1 !important;
                 justify-content: space-around;
                 padding: 4px 0;
-                z-index: 9999 !important;
+                z-index: 1000 !important;
                 box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
                 height: 50px;
             }
@@ -1228,6 +1232,13 @@
             <p style="text-align: center; font-size: 18px; margin-bottom: var(--spacing-lg);">
                 杭州自家小猫咪-李先生的宠物社区平台
             </p>
+            
+            <!-- 测试按钮 -->
+            <div style="text-align: center; margin-bottom: var(--spacing-md);">
+                <button onclick="testPageSwitch()" style="background: #f0f0f0; border: 1px solid #ccc; padding: 8px 16px; border-radius: 4px; cursor: pointer; font-size: 12px;">
+                    🧪 测试页面切换
+                </button>
+            </div>
             
             <!-- 功能网格 -->
             <div class="grid grid-3">
@@ -2106,6 +2117,12 @@
         function switchPage(pageId) {
             console.log('🔄 切换到页面:', pageId);
             
+            // 强制关闭所有模态框，防止遮挡
+            document.querySelectorAll('.modal-overlay.active').forEach(modal => {
+                modal.classList.remove('active');
+                console.log('🔒 关闭模态框');
+            });
+            
             // 隐藏所有页面
             document.querySelectorAll('.page').forEach(page => {
                 page.classList.remove('active');
@@ -2116,6 +2133,12 @@
             if (targetPage) {
                 targetPage.classList.add('active');
                 console.log('✅ 页面显示成功:', pageId);
+                
+                // 强制确保页面可见
+                targetPage.style.display = 'block';
+                targetPage.style.visibility = 'visible';
+                targetPage.style.opacity = '1';
+                targetPage.style.zIndex = '10';
             } else {
                 console.error('❌ 页面不存在:', pageId);
                 return;
@@ -2131,8 +2154,8 @@
                 console.log('✅ 导航状态更新:', pageId);
             });
             
-            // 初始化页面内容
-            setTimeout(() => {
+            // 初始化页面内容 - 去掉延迟，直接执行
+            try {
                 switch(pageId) {
                     case 'hospital':
                         if (typeof renderUserRecommendedHospitals === 'function') {
@@ -2167,13 +2190,17 @@
                         }
                         break;
                 }
-            }, 100);
+            } catch (error) {
+                console.error('页面初始化错误:', error);
+            }
             
-            // 检查管理员状态
-            if (appData && appData.isAdmin) {
-                setTimeout(() => {
+            // 检查管理员状态 - 简化逻辑
+            try {
+                if (appData && appData.isAdmin && typeof enableAdminFeatures === 'function') {
                     enableAdminFeatures();
-                }, 150);
+                }
+            } catch (error) {
+                console.error('管理员功能检查错误:', error);
             }
             
             // 确保移动端导航在手机端可见
@@ -2185,6 +2212,28 @@
                     mobileNav.style.opacity = '1';
                 }
             }
+            
+            // 调试信息
+            console.log('📱 当前页面:', pageId);
+            console.log('📱 页面元素:', document.getElementById(pageId));
+            console.log('📱 页面状态:', document.getElementById(pageId)?.classList);
+        }
+
+        // 测试页面切换的辅助函数
+        function testPageSwitch() {
+            console.log('🧪 开始测试页面切换...');
+            const pages = ['home', 'cats', 'hospital', 'logistics', 'forum', 'shop', 'profile'];
+            
+            let index = 0;
+            const interval = setInterval(() => {
+                if (index < pages.length) {
+                    switchPage(pages[index]);
+                    index++;
+                } else {
+                    clearInterval(interval);
+                    console.log('🧪 测试完成');
+                }
+            }, 2000);
         }
 
         // Toast通知函数
