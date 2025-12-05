@@ -31,6 +31,15 @@
             --apple-white: #fbfbfd;
             --apple-border: #d2d2d7;
             
+            /* 猫咪主题色彩 */
+            --cat-primary: #FF6B9D;
+            --cat-secondary: #C9E4DE;
+            --cat-accent: #FFA07A;
+            --cat-paw: #8B7355;
+            --cat-whisker: #FFB6C1;
+            --cat-bg-gradient: linear-gradient(135deg, #FFF0F5 0%, #F0F8FF 50%, #FFF5EE 100%);
+            --cat-card-shadow: 0 8px 24px rgba(255, 107, 157, 0.15);
+            
             /* 字体系统 */
             --font-family: "SF Pro Display", "SF Pro Text", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
             
@@ -55,7 +64,7 @@
 
         body {
             font-family: var(--font-family);
-            background: var(--apple-white);
+            background: linear-gradient(135deg, #FFF8E1 0%, #FFE0B2 100%);
             color: var(--apple-black);
             line-height: 1.47059;
             font-weight: 400;
@@ -89,8 +98,7 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            height: 50px;
-            padding: 0 var(--spacing-sm);
+            height: 60px;
         }
 
         .nav-menu {
@@ -121,28 +129,16 @@
 
         /* 页面容器 */
         .page {
-            display: none !important;
-            visibility: hidden !important;
-            opacity: 0 !important;
+            display: none;
             padding: var(--spacing-lg) var(--spacing-md);
-            min-height: calc(100vh - 120px);
+            min-height: 100vh;
             margin-top: 60px;
-            background: var(--apple-white);
-            position: relative;
-            z-index: 1;
-            width: 100%;
+            padding-bottom: 80px; /* 给底部按钮留空间 */
         }
 
         .page.active {
-            display: block !important;
-            visibility: visible !important;
-            opacity: 1 !important;
-            position: relative !important;
-            z-index: 5 !important;
-            width: 100%;
+            display: block;
         }
-
-
 
         /* 卡片样式 */
         .card {
@@ -286,6 +282,31 @@
             max-height: 90vh;
             overflow-y: auto;
             box-shadow: var(--shadow-heavy);
+            position: relative;
+        }
+
+        .modal-close-btn {
+            position: absolute;
+            top: var(--spacing-sm);
+            right: var(--spacing-sm);
+            background: #f5f5f5;
+            border: none;
+            border-radius: 50%;
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 18px;
+            color: #666;
+            transition: all 0.2s ease;
+            z-index: 10;
+        }
+
+        .modal-close-btn:hover {
+            background: #e5e5e5;
+            color: #333;
         }
 
         .modal-header {
@@ -407,15 +428,6 @@
 
         /* 响应式 */
         @media (max-width: 768px) {
-            .nav {
-                height: 45px !important;
-            }
-
-            .nav-content {
-                height: 45px !important;
-                padding: 0 var(--spacing-sm) !important;
-            }
-
             .nav-menu {
                 display: none;
             }
@@ -424,61 +436,54 @@
                 display: block;
                 background: none;
                 border: none;
-                font-size: 20px;
+                font-size: 24px;
                 cursor: pointer;
                 color: var(--apple-black);
-                padding: 4px;
             }
 
-            /* 确保移动端导航可见 */
+            /* 强制显示移动端导航 */
             .mobile-quick-nav {
                 display: flex !important;
                 visibility: visible !important;
-            }
-
-            /* 优化标题区域 */
-            .nav-content > div:first-child {
-                display: flex;
-                align-items: center;
-                gap: 8px;
-            }
-
-            .nav-content > div:first-child div {
-                font-weight: 700;
-                font-size: 18px;
-                color: var(--apple-black);
-            }
-
-            /* 移动端快捷导航 */
-            .mobile-quick-nav {
+                opacity: 1 !important;
                 position: fixed !important;
                 bottom: 0 !important;
                 left: 0 !important;
                 right: 0 !important;
-                background: white;
-                border-top: 1px solid var(--apple-border);
-                display: flex !important;
-                visibility: visible !important;
-                opacity: 1 !important;
-                justify-content: space-around;
-                padding: 4px 0;
-                z-index: 999 !important;
-                box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
-                height: 50px;
+                z-index: 9999 !important;
+                background: white !important;
+                border-top: 1px solid var(--apple-border) !important;
+                box-shadow: 0 -2px 10px rgba(0,0,0,0.1) !important;
             }
+
+        /* 移动端快捷导航 */
+        .mobile-quick-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: white;
+            border-top: 1px solid var(--apple-border);
+            display: flex !important;
+            justify-content: space-around;
+            padding: var(--spacing-xs) 0;
+            z-index: 9999 !important;
+            box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
+            visibility: visible !important;
+            opacity: 1 !important;
+        }
 
             .mobile-quick-nav-item {
                 display: flex;
                 flex-direction: column;
                 align-items: center;
-                gap: 2px;
-                padding: 4px;
+                gap: 4px;
+                padding: var(--spacing-xs);
                 text-decoration: none;
                 color: var(--apple-gray-medium);
-                font-size: 11px;
+                font-size: 12px;
                 cursor: pointer;
                 transition: color 0.3s ease;
-                flex: 1;
             }
 
             .mobile-quick-nav-item.active {
@@ -490,40 +495,8 @@
             }
 
             .mobile-quick-nav-item span:first-child {
-                font-size: 18px;
+                font-size: 20px;
             }
-
-
-
-        /* 桌面端隐藏移动端导航 */
-        @media (min-width: 769px) {
-            .mobile-quick-nav {
-                display: none !important;
-            }
-        }
-        
-        /* 移动端强制显示导航 */
-        @media (max-width: 768px) {
-            .mobile-quick-nav {
-                display: flex !important;
-                visibility: visible !important;
-                opacity: 1 !important;
-                bottom: 0 !important;
-                left: 0 !important;
-                right: 0 !important;
-                position: fixed !important;
-                z-index: 9999 !important;
-                background: white;
-                border-top: 1px solid #e0e0e0;
-                box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
-            }
-            
-            /* 确保所有页面在移动端正确显示 */
-            .page {
-                padding: var(--spacing-lg) var(--spacing-md) 80px !important;
-                margin-bottom: 60px !important;
-            }
-        }
 
             .grid-3 {
                 grid-template-columns: 1fr;
@@ -692,6 +665,13 @@
                 display: flex;
                 align-items: center;
                 justify-content: center;
+            }
+        }
+
+        /* 桌面端隐藏移动端导航 */
+        @media (min-width: 769px) {
+            .mobile-quick-nav {
+                display: none !important;
             }
         }
 
@@ -1216,45 +1196,52 @@
         <div class="container">
             <div class="nav-content">
                 <div style="display: flex; align-items: center; gap: var(--spacing-sm);">
-                    <div style="font-weight: 700; font-size: 20px; color: var(--apple-black);">杭州宠物社区</div>
+                    <div style="position: relative; font-size: 24px;">
+                        🐱
+                        <div style="position: absolute; top: -3px; right: -8px; font-size: 10px; opacity: 0.7;">🐾</div>
+                    </div>
+                    <div style="font-weight: 700; font-size: 20px; color: var(--cat-primary); text-shadow: 0 1px 2px rgba(255, 107, 157, 0.2);">金猫之家</div>
                 </div>
                 
                 <div class="nav-menu" id="navMenu">
-                    <a href="javascript:void(0)" class="nav-link active" data-page="home" onclick="switchPage('home')">首页</a>
-                    <a href="javascript:void(0)" class="nav-link" data-page="cats" onclick="switchPage('cats')">猫咪管理</a>
-                    <a href="javascript:void(0)" class="nav-link" data-page="hospital" onclick="switchPage('hospital')">宠物医院</a>
-                    <a href="javascript:void(0)" class="nav-link" data-page="logistics" onclick="switchPage('logistics')">物流查询</a>
-                    <a href="javascript:void(0)" class="nav-link" data-page="forum" onclick="switchPage('forum')">论坛交流</a>
-                    <a href="javascript:void(0)" class="nav-link" data-page="shop" onclick="switchPage('shop')">宠物商城</a>
-                    <a href="javascript:void(0)" class="nav-link" data-page="profile" onclick="switchPage('profile')">个人中心</a>
+                    <a href="#" class="nav-link active" data-page="home" onclick="event.preventDefault(); showPage('home', this)">首页</a>
+                    <a href="#" class="nav-link" data-page="cats" onclick="event.preventDefault(); showPage('cats', this)">猫咪管理</a>
+                    <a href="#" class="nav-link" data-page="hospital" onclick="event.preventDefault(); showPage('hospital', this)">宠物医院</a>
+                    <a href="#" class="nav-link" data-page="logistics" onclick="event.preventDefault(); showPage('logistics', this)">物流查询</a>
+                    <a href="#" class="nav-link" data-page="forum" onclick="event.preventDefault(); showPage('forum', this)">论坛交流</a>
+                    <a href="#" class="nav-link" data-page="shop" onclick="event.preventDefault(); showPage('shop', this)">宠物商城</a>
+                    <a href="#" class="nav-link" data-page="profile" onclick="event.preventDefault(); showPage('profile', this)">个人中心</a>
                 </div>
 
-
+                <div style="display: flex; align-items: center; gap: var(--spacing-sm); z-index: 1002; position: relative;">
+                    <button class="mobile-nav-toggle" onclick="toggleMobileMenu()" style="z-index: 1004; position: relative; pointer-events: auto;">☰</button>
+                </div>
             </div>
         </div>
     </nav>
 
-
+    <!-- 移动端导航遮罩 -->
+    <div class="mobile-nav-overlay" id="mobileNavOverlay" onclick="closeMobileMenu()"></div>
 
     <!-- 首页 -->
     <div id="home" class="page active">
         <div class="container">
-            <h1>杭州宠物社区</h1>
+            <h1>🐱 金猫之家</h1>
             <p style="text-align: center; font-size: 18px; margin-bottom: var(--spacing-lg);">
                 杭州自家小猫咪-李先生的宠物社区平台
             </p>
             
             <!-- 功能网格 -->
             <div class="grid grid-3">
-                <div class="card" onclick="switchPage('cats')">
+                <div class="card" onclick="showPage('cats', null)">
                     <div style="padding: var(--spacing-md); text-align: center;">
-                        <div style="font-size: 48px; margin-bottom: var(--spacing-sm);">🏠</div>
+                        <div style="font-size: 48px; margin-bottom: var(--spacing-sm);">🐱</div>
                         <h3>猫咪管理</h3>
                         <p>管理您的猫咪信息、健康记录和日常护理</p>
                     </div>
                 </div>
                 
-                <div class="card" onclick="switchPage('hospital')">
+                <div class="card" onclick="showPage('hospital', null)">
                     <div style="padding: var(--spacing-md); text-align: center;">
                         <div style="font-size: 48px; margin-bottom: var(--spacing-sm);">🏥</div>
                         <h3>宠物医院</h3>
@@ -1262,7 +1249,7 @@
                     </div>
                 </div>
                 
-                <div class="card" onclick="switchPage('logistics')">
+                <div class="card" onclick="showPage('logistics', null)">
                     <div style="padding: var(--spacing-md); text-align: center;">
                         <div style="font-size: 48px; margin-bottom: var(--spacing-sm);">📦</div>
                         <h3>物流查询</h3>
@@ -1270,7 +1257,7 @@
                     </div>
                 </div>
                 
-                <div class="card" onclick="switchPage('forum')">
+                <div class="card" onclick="showPage('forum', null)">
                     <div style="padding: var(--spacing-md); text-align: center;">
                         <div style="font-size: 48px; margin-bottom: var(--spacing-sm);">💬</div>
                         <h3>论坛交流</h3>
@@ -1278,7 +1265,7 @@
                     </div>
                 </div>
                 
-                <div class="card" onclick="switchPage('shop')">
+                <div class="card" onclick="showPage('shop', null)">
                     <div style="padding: var(--spacing-md); text-align: center;">
                         <div style="font-size: 48px; margin-bottom: var(--spacing-sm);">🛍️</div>
                         <h3>宠物商城</h3>
@@ -1293,7 +1280,7 @@
     <div id="cats" class="page">
         <div class="container">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--spacing-md);">
-                <h2>宠物管理</h2>
+                <h2>🐱 猫咪管理</h2>
                 <div id="catManagementButtons" style="display: none;">
                     <button class="btn btn-primary" onclick="addCat()">+ 添加猫咪</button>
                 </div>
@@ -1312,7 +1299,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h3>商品管理</h3>
-                <button class="btn btn-secondary" onclick="closeShopManager()">×</button>
+                <button class="modal-close-btn" onclick="closeShopManager()">×</button>
             </div>
             <div class="modal-body">
                 <div class="form-group">
@@ -1373,7 +1360,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h3>添加医院</h3>
-                <button class="btn btn-secondary" onclick="closeHospitalManager()">×</button>
+                <button class="modal-close-btn" onclick="closeHospitalManager()">×</button>
             </div>
             <div class="modal-body">
                 <div class="form-group">
@@ -1418,7 +1405,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h3>添加猫咪</h3>
-                <button class="btn btn-secondary" onclick="closeAddCatModal()">×</button>
+                <button class="modal-close-btn" onclick="closeAddCatModal()">×</button>
             </div>
             <div class="modal-body">
                 <div class="form-group">
@@ -1458,7 +1445,7 @@
                     </div>
                     <div id="catPhotoPreview" style="width: 100%; height: 200px; border: 2px dashed var(--apple-border); border-radius: var(--border-radius-sm); display: flex; align-items: center; justify-content: center; color: var(--apple-gray-medium); background-color: var(--apple-gray-light);">
                         <div style="text-align: center;">
-                            <div style="font-size: 48px; margin-bottom: var(--spacing-sm);">🏠</div>
+                            <div style="font-size: 48px; margin-bottom: var(--spacing-sm);">🐱</div>
                             <p>照片预览区域</p>
                         </div>
                     </div>
@@ -1503,10 +1490,7 @@
             <div id="userRecommendedHospitals">
                 <div style="text-align: center; padding: 40px; color: var(--apple-gray-medium);">
                     <div style="font-size: 48px; margin-bottom: var(--spacing-sm);">🏥</div>
-                    <p>🏥 快来推荐您知道的宠物医院吧！</p>
-                    <p style="font-size: 14px; color: var(--apple-gray-medium); margin-top: 8px;">
-                        点击下方"添加推荐"按钮，分享给更多宠物主人
-                    </p>
+                    <p>暂无用户推荐医院</p>
                     <p style="font-size: 14px; margin-top: var(--spacing-sm);欢迎分享您知道的好医院</p>
                 </div>
             </div>
@@ -1842,10 +1826,7 @@
             <div class="grid grid-3" id="recommendedProducts">
                 <div style="text-align: center; padding: 40px; color: var(--apple-gray-medium);">
                     <div style="font-size: 48px; margin-bottom: var(--spacing-sm);">🛍️</div>
-                    <p>正在加载商品信息...</p>
-                    <p style="font-size: 14px; color: var(--apple-gray-medium); margin-top: 8px;">
-                        🛍️ 精选商品即将上架，敬请期待！
-                    </p>
+                    <p>暂无商品，请联系管理员添加</p>
                 </div>
             </div>
         </div>
@@ -1864,7 +1845,7 @@
                     </div>
                     <div style="flex: 1;">
                         <h3 id="userName">游客用户</h3>
-                        <p id="userStatus" style="color: var(--apple-gray-medium); font-size: 14px;">欢迎来到杭州宠物社区</p>
+                        <p id="userStatus" style="color: var(--apple-gray-medium); font-size: 14px;">欢迎来到金猫之家</p>
                         <button class="btn btn-secondary" onclick="openUserProfile()" style="margin-top: 8px; font-size: 12px; padding: 4px 8px;">
                             ✏️ 编辑资料
                         </button>
@@ -1923,8 +1904,8 @@
                 <div style="padding: var(--spacing-md);">
                     <h3 style="margin-bottom: var(--spacing-md);">ℹ️ 关于</h3>
                     <div class="menu-item" onclick="showAbout(event)" onmousedown="showAbout(event)" style="cursor: pointer; user-select: none;">
-                        <span class="menu-icon">ℹ️</span>
-                        <span class="menu-text">关于我们</span>
+                        <span class="menu-icon">🐱</span>
+                        <span class="menu-text">关于金猫之家</span>
                         <span class="menu-arrow">→</span>
                     </div>
                     <div class="menu-item" onclick="showVersion(event)" onmousedown="showVersion(event)" style="cursor: pointer; user-select: none;">
@@ -1937,11 +1918,6 @@
                         <span class="menu-text">检查状态</span>
                         <span class="menu-arrow">→</span>
                     </div>
-                    <div class="menu-item" onclick="testAllPages(event)" onmousedown="testAllPages(event)" style="cursor: pointer; user-select: none; background: #f0f8ff;">
-                        <span class="menu-icon">🧪</span>
-                        <span class="menu-text">测试切换</span>
-                        <span class="menu-arrow">→</span>
-                    </div>
                 </div>
             </div>
         </div>
@@ -1952,38 +1928,34 @@
 
     <!-- 移动端快捷导航 -->
     <nav class="mobile-quick-nav">
-        <a href="javascript:void(0)" class="mobile-quick-nav-item active" data-page="home" onclick="switchPage('home')">
+        <a href="#" class="mobile-quick-nav-item active" data-page="home" onclick="event.preventDefault(); showPage('home', this)">
             <span>🏠</span>
             <span>首页</span>
         </a>
-        <a href="javascript:void(0)" class="mobile-quick-nav-item" data-page="cats" onclick="switchPage('cats')">
+        <a href="#" class="mobile-quick-nav-item" data-page="cats" onclick="event.preventDefault(); showPage('cats', this)">
             <span>🐱</span>
             <span>猫咪</span>
         </a>
-        <a href="javascript:void(0)" class="mobile-quick-nav-item" data-page="hospital" onclick="switchPage('hospital')">
+        <a href="#" class="mobile-quick-nav-item" data-page="hospital" onclick="event.preventDefault(); showPage('hospital', this)">
             <span>🏥</span>
             <span>医院</span>
         </a>
-        <a href="javascript:void(0)" class="mobile-quick-nav-item" data-page="logistics" onclick="switchPage('logistics')">
-            <span>📦</span>
-            <span>物流</span>
-        </a>
-        <a href="javascript:void(0)" class="mobile-quick-nav-item" data-page="forum" onclick="switchPage('forum')">
+        <a href="#" class="mobile-quick-nav-item" data-page="forum" onclick="event.preventDefault(); showPage('forum', this)">
             <span>💬</span>
             <span>论坛</span>
         </a>
-        <a href="javascript:void(0)" class="mobile-quick-nav-item" data-page="shop" onclick="switchPage('shop')">
+        <a href="#" class="mobile-quick-nav-item" data-page="shop" onclick="event.preventDefault(); showPage('shop', this)">
             <span>🛍️</span>
             <span>商城</span>
         </a>
-        <a href="javascript:void(0)" class="mobile-quick-nav-item" data-page="profile" onclick="switchPage('profile')">
+        <a href="#" class="mobile-quick-nav-item" data-page="profile" onclick="event.preventDefault(); showPage('profile', this)">
             <span>👤</span>
             <span>我的</span>
         </a>
     </nav>
 
     <!-- 右下角私信按钮 -->
-    <button class="fab" onclick="openMessageModal()" style="bottom: 70px;">✉️</button>
+    <button class="fab" onclick="openMessageModal()" style="bottom: 80px;">✉️</button>
 
     <!-- 私信模态框 -->
     <div id="messageModal" class="modal-overlay">
@@ -2079,7 +2051,7 @@
                         <div class="avatar-option" data-avatar="😽" onclick="selectAvatar('😽')">😽</div>
                         <div class="avatar-option" data-avatar="🙀" onclick="selectAvatar('🙀')">🙀</div>
                         <div class="avatar-option" data-avatar="😿" onclick="selectAvatar('😿')">😿</div>
-                        <div class="avatar-option" data-avatar="👤" onclick="selectAvatar('👤')">👤</div>
+                        <div class="avatar-option" data-avatar="🐱" onclick="selectAvatar('🐱')">🐱</div>
                         <div class="avatar-option" data-avatar="🐈" onclick="selectAvatar('🐈')">🐈</div>
                         <div class="avatar-option" data-avatar="🐈‍⬛" onclick="selectAvatar('🐈‍⬛')">🐈‍⬛</div>
                         <div class="avatar-option" data-avatar="🦁" onclick="selectAvatar('🦁')">🦁</div>
@@ -2117,7 +2089,10 @@
             products: [],
             reviews: {},
             messages: [],
-            currentLocation: null,
+            currentLocation: {
+                lat: 30.2741, // 杭州市中心坐标
+                lng: 120.1551
+            },
             currentUser: null,
             userProfile: null, // 普通用户资料
             isLoggedIn: false,
@@ -2126,131 +2101,116 @@
             hospitalMarkers: [] // 医院标记数组
         };
 
+        // 本地存储初始化
+        function initializeLocalStorage() {
+            const storedData = localStorage.getItem('petCommunityData');
+            if (storedData) {
+                const data = JSON.parse(storedData);
+                Object.assign(appData, data);
+                console.log('📦 从本地存储加载数据:', data);
+            } else {
+                console.log('🆕 使用默认数据初始化');
+                saveToLocalStorage();
+            }
+        }
+
+        // 保存到本地存储
+        function saveToLocalStorage() {
+            localStorage.setItem('petCommunityData', JSON.stringify(appData));
+            console.log('💾 数据已保存到本地存储');
+        }
+
         // 管理员账号信息
         const ADMIN_CREDENTIALS = {
             username: 'abc123',
             password: 'abc123'
         };
 
-        // 简单的页面切换函数
-        function switchPage(pageId) {
-            console.log('🔄 切换到页面:', pageId);
-            console.log('📋 当前所有页面:', document.querySelectorAll('.page'));
-            
-            // 阻止事件冒泡和默认行为
-            if (event) {
-                event.preventDefault();
-                event.stopPropagation();
-            }
-            
-            // 强制关闭所有模态框，防止遮挡
-            document.querySelectorAll('.modal-overlay.active').forEach(modal => {
-                modal.classList.remove('active');
-                console.log('🔒 关闭模态框');
-            });
-            
-            // 隐藏所有页面
-            document.querySelectorAll('.page').forEach(page => {
-                page.classList.remove('active');
-                page.style.display = 'none';
-                page.style.visibility = 'hidden';
-                page.style.opacity = '0';
-                console.log('📦 隐藏页面:', page.id);
-            });
-            
-            // 显示目标页面
-            const targetPage = document.getElementById(pageId);
-            if (targetPage) {
-                targetPage.classList.add('active');
-                targetPage.style.display = 'block';
-                targetPage.style.visibility = 'visible';
-                targetPage.style.opacity = '1';
-                console.log('✅ 页面显示成功:', pageId);
-                console.log('📊 目标页面样式:', targetPage.style.cssText);
-            } else {
-                console.error('❌ 页面不存在:', pageId);
-                return;
-            }
-            
-            // 更新导航状态
-            document.querySelectorAll('.nav-link').forEach(link => {
-                link.classList.remove('active');
-            });
-            document.querySelectorAll('.mobile-quick-nav-item').forEach(link => {
-                link.classList.remove('active');
-            });
-            
-            document.querySelectorAll(`.nav-link[data-page="${pageId}"]`).forEach(link => {
-                link.classList.add('active');
-            });
-            document.querySelectorAll(`.mobile-quick-nav-item[data-page="${pageId}"]`).forEach(link => {
-                link.classList.add('active');
-            });
-            console.log('✅ 导航状态更新:', pageId);
-            
-            // 滚动到顶部
-            setTimeout(() => {
+        // 页面切换函数 - 核心功能
+        function showPage(pageId, element) {
+            try {
+                console.log('🔄 切换到页面:', pageId);
+                
+                // 1. 隐藏所有页面 - 强制设置样式
+                document.querySelectorAll('.page').forEach(page => {
+                    page.classList.remove('active');
+                    page.style.display = 'none';
+                    page.style.visibility = 'hidden';
+                    page.style.opacity = '0';
+                });
+                
+                // 2. 显示目标页面 - 强制设置样式
+                const targetPage = document.getElementById(pageId);
+                if (targetPage) {
+                    targetPage.classList.add('active');
+                    targetPage.style.display = 'block';
+                    targetPage.style.visibility = 'visible';
+                    targetPage.style.opacity = '1';
+                    console.log('✅ 页面显示成功:', pageId);
+                } else {
+                    console.error('❌ 页面不存在:', pageId);
+                    showToast('页面不存在: ' + pageId, 'error');
+                    return;
+                }
+                
+                // 3. 更新导航状态
+                document.querySelectorAll('.nav-link').forEach(link => {
+                    link.classList.remove('active');
+                });
+                
+                document.querySelectorAll('.mobile-quick-nav-item').forEach(item => {
+                    item.classList.remove('active');
+                });
+                
+                if (element && element.classList) {
+                    element.classList.add('active');
+                } else {
+                    // 如果没有传入element，尝试通过data-page找到对应导航
+                    const navLink = document.querySelector(`[data-page="${pageId}"]`);
+                    if (navLink) {
+                        navLink.classList.add('active');
+                    }
+                    
+                    // 同时更新移动端导航
+                    const mobileNavLink = document.querySelector(`.mobile-quick-nav-item[data-page="${pageId}"]`);
+                    if (mobileNavLink) {
+                        mobileNavLink.classList.add('active');
+                    }
+                }
+                
+                // 4. 滚动到顶部
                 window.scrollTo(0, 0);
-            }, 10);
-            
-            // 初始化页面内容 - 去掉延迟，直接执行
-            try {
-                switch(pageId) {
-                    case 'hospital':
-                        if (typeof renderUserRecommendedHospitals === 'function') {
-                            renderUserRecommendedHospitals();
-                        }
-                        break;
-                    case 'shop':
-                        if (typeof renderProducts === 'function') {
-                            renderProducts();
-                        }
-                        break;
-                    case 'forum':
-                        if (typeof renderPosts === 'function') {
-                            renderPosts();
-                        }
-                        break;
-                    case 'cats':
-                        if (typeof renderCats === 'function') {
-                            renderCats();
-                        }
-                        break;
-                    case 'logistics':
-                        // 物流页面初始化
-                        if (typeof updateProfileMenu === 'function') {
-                            updateProfileMenu();
-                        }
-                        break;
-                    case 'profile':
-                        // 个人中心初始化
-                        if (typeof updateProfileMenu === 'function') {
-                            updateProfileMenu();
-                        }
-                        break;
+                
+                // 5. 检查并启用管理员功能（针对每个页面）
+                if (appData.isAdmin) {
+                    console.log('页面切换时检查管理员状态，启用相关功能...');
+                    setTimeout(() => {
+                        enableAdminFeatures();
+                    }, 100);
                 }
+                
+                // 6. 显示成功提示
+                console.log('✅ 页面切换完成:', pageId);
+                showToast('已切换到:' + getPageName(pageId), 'success');
+                
             } catch (error) {
-                console.error('页面初始化错误:', error);
+                console.error('❌ 页面切换错误:', error);
+                showToast('页面切换失败: ' + error.message, 'error');
             }
-            
-            // 检查管理员状态 - 简化逻辑
-            try {
-                if (appData && appData.isAdmin && typeof enableAdminFeatures === 'function') {
-                    enableAdminFeatures();
-                }
-            } catch (error) {
-                console.error('管理员功能检查错误:', error);
-            }
-            
+        }
 
-            
-            // 滚动到顶部
-            window.scrollTo(0, 0);
-            
-            // 调试信息
-            console.log('📱 当前页面:', pageId);
-            console.log('📱 页面元素:', document.getElementById(pageId));
-            console.log('📱 页面状态:', document.getElementById(pageId)?.classList);
+        // 获取页面中文名称
+        function getPageName(pageId) {
+            const pageNames = {
+                'home': '首页',
+                'cats': '猫咪管理',
+                'hospital': '宠物医院',
+                'logistics': '物流查询',
+                'forum': '论坛交流',
+                'shop': '宠物商城',
+                'profile': '个人中心'
+            };
+            return pageNames[pageId] || pageId;
         }
 
         // Toast通知函数
@@ -2631,11 +2591,53 @@
             }
         }
 
-        // 简化的管理员功能启用
         function enableAdminFeatures() {
+            // 管理员可以修改的元素添加编辑功能
+            console.log('管理员功能已启用');
+            console.log('当前状态:', appData);
+            
+            // 强制设置管理员状态
             appData.isAdmin = true;
             appData.isLoggedIn = true;
             appData.currentUser = '管理员';
+            
+            // 启用猫咪管理页面
+            const catManagementButtons = document.getElementById('catManagementButtons');
+            const catUserHint = document.getElementById('catUserHint');
+            if (catManagementButtons) {
+                catManagementButtons.style.display = 'block';
+                console.log('猫咪管理按钮已显示');
+            }
+            if (catUserHint) {
+                catUserHint.style.display = 'none';
+                console.log('普通用户提示已隐藏');
+            }
+            
+            // 启用商城管理功能
+            const shopManageBtn = document.getElementById('shopManageBtn');
+            if (shopManageBtn) {
+                shopManageBtn.style.display = 'block';
+                console.log('商城管理按钮已显示');
+            }
+            
+            // 启用医院管理功能
+            const hospitalManageBtn = document.getElementById('hospitalManageBtn');
+            if (hospitalManageBtn) {
+                hospitalManageBtn.style.display = 'block';
+                console.log('医院管理按钮已显示');
+            }
+            
+            // 启用论坛管理功能
+            enableForumAdminFeatures();
+            
+            // 重新渲染相关页面
+            renderCats();
+            renderPosts();
+            renderProducts();
+            updateProfileMenu();
+            
+            showToast('管理员功能已全部启用', 'success');
+            console.log('所有管理员功能启用完成');
         }
 
         // 论坛管理功能
@@ -2868,7 +2870,18 @@
             overlay.classList.toggle('active');
         }
 
+        function closeMobileMenu() {
+            const navMenu = document.getElementById('navMenu');
+            const overlay = document.getElementById('mobileNavOverlay');
+            
+            navMenu.classList.remove('active');
+            overlay.classList.remove('active');
+        }
 
+        function showPageAndCloseMenu(pageId, element) {
+            showPage(pageId, element);
+            closeMobileMenu();
+        }
 
         // 猫咪管理相关
         function addCat() {
@@ -2897,7 +2910,7 @@
             document.getElementById('catDescription').value = '';
             document.getElementById('catPhotoPreview').innerHTML = `
                 <div style="text-align: center;">
-                    <div style="font-size: 48px; margin-bottom: var(--spacing-sm);">📷</div>
+                    <div style="font-size: 48px; margin-bottom: var(--spacing-sm);">🐱</div>
                     <p>照片预览区域</p>
                 </div>
             `;
@@ -3004,19 +3017,13 @@
         }
 
         function renderCats() {
-            console.log('渲染猫咪列表...');
             const catList = document.getElementById('catList');
-            
-            if (!catList) {
-                console.error('找不到catList元素');
-                return;
-            }
             
             if (appData.cats.length === 0) {
                 // 显示提示信息
                 catList.innerHTML = `
                     <div style="text-align: center; padding: 40px; color: var(--apple-gray-medium);">
-                        <div style="font-size: 48px; margin-bottom: var(--spacing-sm);">🏠</div>
+                        <div style="font-size: 48px; margin-bottom: var(--spacing-sm);">🐱</div>
                         <p>暂无猫咪信息</p>
                         ${appData.isAdmin ? '<button class="btn btn-primary" onclick="addCat()">添加第一只猫咪</button>' : ''}
                     </div>
@@ -3334,13 +3341,7 @@
 
         // 渲染帖子列表
         function renderPosts() {
-            console.log('渲染论坛帖子...');
             const postList = document.getElementById('postList');
-            
-            if (!postList) {
-                console.error('找不到postList元素');
-                return;
-            }
             
             if (appData.posts.length === 0) {
                 // 显示示例帖子
@@ -3356,7 +3357,7 @@
                         <div class="post-content">
                             <h3 style="margin-bottom: var(--spacing-sm);">欢迎来到金猫论坛！</h3>
                             <p>欢迎大家在这里分享养猫经验，交流养猫心得。无论是猫咪的日常护理、健康问题，还是有趣的猫咪故事，都可以在这里和大家分享。</p>
-                            <p style="margin-top: var(--spacing-sm);">让我们一起来创造一个温暖的宠物社区吧！ 💕</p>
+                            <p style="margin-top: var(--spacing-sm);">让我们一起来创造一个温暖的猫咪社区吧！ 🐱💕</p>
                         </div>
                         <div class="post-actions">
                             <button class="post-action-btn" onclick="likePost(${Date.now()}, this)">
@@ -3763,10 +3764,7 @@
                 container.innerHTML = `
                     <div style="text-align: center; padding: 20px; color: var(--apple-gray-medium);">
                         <div style="font-size: 32px; margin-bottom: var(--spacing-sm);">🏥</div>
-                        <p>🏥 发现优质宠物医院推荐</p>
-                        <p style="font-size: 14px; color: var(--apple-gray-medium); margin-top: 8px;">
-                            周边医院信息持续更新中...
-                        </p>
+                        <p>暂无推荐医院，请联系管理员添加</p>
                     </div>
                 `;
                 return;
@@ -3809,10 +3807,7 @@
                 container.innerHTML = `
                     <div style="text-align: center; padding: 20px; color: var(--apple-gray-medium);">
                         <div style="font-size: 32px; margin-bottom: var(--spacing-sm);">🏥</div>
-                        <p>🔍 正在搜索${currentCity}附近的宠物医院...</p>
-                        <p style="font-size: 14px; color: var(--apple-gray-medium); margin-top: 8px;">
-                            为您寻找最优质的宠物医疗服务
-                        </p>
+                        <p>${currentCity}附近暂无推荐医院</p>
                         <p style="font-size: 12px; margin-top: 8px;">请联系管理员添加${currentCity}的推荐医院</p>
                     </div>
                 `;
@@ -4294,46 +4289,99 @@
             });
         });
 
+        // 强制初始化页面显示
+        function forceInitializePages() {
+            console.log('🔧 强制初始化页面显示...');
+            
+            // 强制隐藏所有页面
+            document.querySelectorAll('.page').forEach(page => {
+                page.classList.remove('active');
+                page.style.display = 'none';
+                page.style.visibility = 'hidden';
+                page.style.opacity = '0';
+            });
+            
+            // 强制显示首页
+            const homePage = document.getElementById('home');
+            if (homePage) {
+                homePage.classList.add('active');
+                homePage.style.display = 'block';
+                homePage.style.visibility = 'visible';
+                homePage.style.opacity = '1';
+                console.log('✅ 首页强制激活');
+            }
+            
+            // 强制显示移动端导航（如果是移动设备）
+            if (window.innerWidth <= 768) {
+                const mobileNav = document.querySelector('.mobile-quick-nav');
+                if (mobileNav) {
+                    mobileNav.style.display = 'flex';
+                    mobileNav.style.visibility = 'visible';
+                    mobileNav.style.opacity = '1';
+                    mobileNav.style.position = 'fixed';
+                    mobileNav.style.bottom = '0';
+                    mobileNav.style.left = '0';
+                    mobileNav.style.right = '0';
+                    mobileNav.style.zIndex = '9999';
+                    console.log('✅ 移动端导航强制显示');
+                }
+            }
+            
+            // 强制更新导航状态
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.classList.remove('active');
+            });
+            
+            document.querySelectorAll('.mobile-quick-nav-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            
+            // 激活首页导航
+            const homeNavLink = document.querySelector('[data-page="home"]');
+            if (homeNavLink) {
+                homeNavLink.classList.add('active');
+            }
+            
+            const homeMobileLink = document.querySelector('.mobile-quick-nav-item[data-page="home"]');
+            if (homeMobileLink) {
+                homeMobileLink.classList.add('active');
+            }
+        }
+
         // 初始化
         document.addEventListener('DOMContentLoaded', function() {
-            console.log('🚀 杭州宠物社区加载完成');
-            
-
+            console.log('🚀 金猫之家加载完成');
             
             try {
-                // 确保首页显示
-                const homePage = document.getElementById('home');
-                if (homePage) {
-                    homePage.classList.add('active');
-                    homePage.style.display = 'block';
-                    homePage.style.visibility = 'visible';
-                    homePage.style.opacity = '1';
-                    
-                    // 确保首页包装容器显示
-                    const homeWrapper = homePage.querySelector('.page-wrapper');
-                    if (homeWrapper) {
-                        homeWrapper.style.display = 'block';
-                        homeWrapper.style.visibility = 'visible';
-                        homeWrapper.style.opacity = '1';
-                    }
-                    
-                    console.log('✅ 首页已激活');
+                // 立即执行强制初始化
+                forceInitializePages();
+                
+                // 延迟再次执行确保初始化成功
+                setTimeout(() => {
+                    forceInitializePages();
+                }, 100);
+                
+                // 初始化数据存储
+                initializeLocalStorage();
+                
+                // 初始化默认数据
+                if (!appData.cats || appData.cats.length === 0) {
+                    initDefaultCats();
+                }
+                if (!appData.products || appData.products.length === 0) {
+                    initDefaultProducts();
+                }
+                if (!appData.posts || appData.posts.length === 0) {
+                    initDefaultPosts();
+                }
+                if (!appData.recommendedHospitals || appData.recommendedHospitals.length === 0) {
+                    initDefaultHospitals();
                 }
                 
-                // 初始化论坛帖子
+                // 渲染初始数据
                 renderPosts();
-                
-                // 只初始化推荐医院，附近医院需要手动定位
                 renderRecommendedHospitals();
-                
-                // 初始化猫咪列表
-                initDefaultCats();
                 renderCats();
-                
-                // 初始化商品列表
-                if (!appData.products) {
-                    appData.products = [];
-                }
                 renderProducts();
                 
                 // 初始化登录按钮和管理员状态
@@ -4383,9 +4431,42 @@
                     console.log('⚠️ 高德地图API未加载，将使用备用地图');
                 }
                 
+                // 强制检查移动端导航显示
+                setTimeout(() => {
+                    if (window.innerWidth <= 768) {
+                        const mobileNav = document.querySelector('.mobile-quick-nav');
+                        if (mobileNav) {
+                            console.log('🔧 强制显示移动端导航');
+                            mobileNav.style.cssText = `
+                                display: flex !important;
+                                visibility: visible !important;
+                                opacity: 1 !important;
+                                position: fixed !important;
+                                bottom: 0 !important;
+                                left: 0 !important;
+                                right: 0 !important;
+                                z-index: 9999 !important;
+                                background: white !important;
+                                border-top: 1px solid var(--apple-border) !important;
+                                box-shadow: 0 -2px 10px rgba(0,0,0,0.1) !important;
+                            `;
+                            console.log('✅ 移动端导航样式强制应用');
+                        } else {
+                            console.error('❌ 找不到移动端导航元素');
+                        }
+                    }
+                }, 200);
+                
+                // 再次强制初始化页面
+                setTimeout(() => {
+                    forceInitializePages();
+                    console.log('🔧 最终页面初始化完成');
+                }, 300);
+
                 // 显示欢迎消息
                 setTimeout(() => {
-                    showToast('🎉 欢迎来到杭州宠物社区！', 'success');
+                    showToast('🎉 欢迎来到金猫之家！', 'success');
+                    console.log('💡 提示：在控制台输入 testPageSwitching() 可以测试页面切换功能');
                 }, 500);
                 
             } catch (error) {
@@ -4394,10 +4475,58 @@
             }
         });
 
-        // 错误处理
-        window.addEventListener('error', function(e) {
-            console.error('全局错误:', e.error);
-        });
+            // 错误处理
+            window.addEventListener('error', function(e) {
+                console.error('全局错误:', e.error);
+            });
+
+            // 添加测试函数
+            window.testPageSwitching = function() {
+                console.log('🧪 开始测试页面切换...');
+                const pages = ['home', 'cats', 'hospital', 'logistics', 'forum', 'shop', 'profile'];
+                let currentIndex = 0;
+                
+                function switchToNextPage() {
+                    if (currentIndex < pages.length) {
+                        const pageId = pages[currentIndex];
+                        console.log(`🧪 测试切换到: ${pageId}`);
+                        showPage(pageId, null);
+                        
+                        currentIndex++;
+                        setTimeout(switchToNextPage, 1500);
+                    } else {
+                        console.log('🧪 页面切换测试完成');
+                        showToast('页面切换测试完成！', 'success');
+                    }
+                }
+                
+                switchToNextPage();
+            };
+
+            // 添加窗口大小变化监听
+            window.addEventListener('resize', function() {
+                console.log('🖥️ 窗口大小变化:', window.innerWidth, 'x', window.innerHeight);
+                
+                // 重新应用移动端导航样式
+                if (window.innerWidth <= 768) {
+                    const mobileNav = document.querySelector('.mobile-quick-nav');
+                    if (mobileNav) {
+                        mobileNav.style.cssText = `
+                            display: flex !important;
+                            visibility: visible !important;
+                            opacity: 1 !important;
+                            position: fixed !important;
+                            bottom: 0 !important;
+                            left: 0 !important;
+                            right: 0 !important;
+                            z-index: 9999 !important;
+                            background: white !important;
+                            border-top: 1px solid var(--apple-border) !important;
+                            box-shadow: 0 -2px 10px rgba(0,0,0,0.1) !important;
+                        `;
+                    }
+                }
+            });
 
         // 移动端导航切换
         document.querySelector('.mobile-nav-toggle')?.addEventListener('click', function() {
@@ -4408,40 +4537,33 @@
         // 个人中心相关功能
         function showAddressManager(event) {
             if (event) event.preventDefault();
-            console.log('打开地址管理');
             showToast('地址管理功能开发中...', 'info');
             // 这里可以添加地址管理模态框
         }
 
         function showOrderManager(event) {
             if (event) event.preventDefault();
-            console.log('打开订单管理');
             showToast('订单管理功能开发中...', 'info');
             // 这里可以添加订单管理模态框
         }
 
         function showSettings(event) {
             if (event) event.preventDefault();
-            console.log('打开设置');
             showToast('设置功能开发中...', 'info');
             // 这里可以添加设置模态框
         }
 
         function showAbout(event) {
             if (event) event.preventDefault();
-            console.log('显示关于信息');
-            showToast('杭州宠物社区 v1.0 - 宠物交流与服务平台', 'info');
+            showToast('金猫之家 v1.0 - 杭州自家小猫咪-李先生的宠物社区平台', 'info');
         }
 
         function showVersion(event) {
             if (event) event.preventDefault();
-            console.log('显示版本信息');
             showToast('版本：1.0.0 | 更新时间：2024年', 'info');
         }
 
-        function checkAdminStatus(event) {
-            if (event) event.preventDefault();
-            console.log('检查管理员状态');
+        function checkAdminStatus() {
             const status = `
                 当前用户: ${appData.currentUser || '未登录'}
                 登录状态: ${appData.isLoggedIn ? '已登录' : '未登录'}
@@ -4603,10 +4725,7 @@
                 container.innerHTML = `
                     <div style="text-align: center; padding: 40px; color: var(--apple-gray-medium);">
                         <div style="font-size: 48px; margin-bottom: var(--spacing-sm);">🛍️</div>
-                        <p>正在加载商品信息...</p>
-                    <p style="font-size: 14px; color: var(--apple-gray-medium); margin-top: 8px;">
-                        🛍️ 精选商品即将上架，敬请期待！
-                    </p>
+                        <p>暂无商品，请联系管理员添加</p>
                     </div>
                 `;
                 return;
@@ -4775,21 +4894,13 @@
 
         // 医院推荐功能
         function openHospitalRecommendation() {
-            console.log('打开医院推荐模态框');
-            const modal = document.getElementById('hospitalRecommendationModal');
-            if (modal) {
-                modal.classList.add('active');
-                // 清空表单
-                document.getElementById('recommendHospitalName').value = '';
-                document.getElementById('recommendHospitalAddress').value = '';
-                document.getElementById('recommendHospitalPhone').value = '';
-                document.getElementById('recommendHospitalReason').value = '';
-                document.getElementById('recommendHospitalUser').value = appData.userProfile?.name || '';
-                console.log('模态框已打开');
-            } else {
-                console.error('找不到推荐模态框');
-                showToast('推荐功能暂时不可用', 'error');
-            }
+            document.getElementById('hospitalRecommendationModal').classList.add('active');
+            // 清空表单
+            document.getElementById('recommendHospitalName').value = '';
+            document.getElementById('recommendHospitalAddress').value = '';
+            document.getElementById('recommendHospitalPhone').value = '';
+            document.getElementById('recommendHospitalReason').value = '';
+            document.getElementById('recommendHospitalUser').value = appData.userProfile?.name || '';
         }
 
         function closeHospitalRecommendationModal() {
@@ -4844,10 +4955,7 @@
                 container.innerHTML = `
                     <div style="text-align: center; padding: 40px; color: var(--apple-gray-medium);">
                         <div style="font-size: 48px; margin-bottom: var(--spacing-sm);">🏥</div>
-                        <p>🏥 快来推荐您知道的宠物医院吧！</p>
-                    <p style="font-size: 14px; color: var(--apple-gray-medium); margin-top: 8px;">
-                        点击下方"添加推荐"按钮，分享给更多宠物主人
-                    </p>
+                        <p>暂无用户推荐医院</p>
                         <p style="font-size: 14px; margin-top: var(--spacing-sm);">欢迎分享您知道的好医院</p>
                     </div>
                 `;
@@ -5182,40 +5290,10 @@
                 avatarElement.style.background = 'linear-gradient(135deg, var(--apple-blue), var(--apple-purple))';
                 
                 // 更新状态文本
-                const statusText = appData.userProfile.bio || '欢迎来到杭州宠物社区';
+                const statusText = appData.userProfile.bio || '欢迎来到金猫之家';
                 document.getElementById('userStatus').textContent = statusText;
                 
                 // 更新当前用户信息
-            }
-        }
-
-        // 测试所有页面切换功能
-        function testAllPages(event) {
-            if (event) {
-                event.preventDefault();
-                event.stopPropagation();
-            }
-            
-            console.log('🧪 开始测试所有页面切换...');
-            showToast('开始测试页面切换...', 'info');
-            
-            const pages = ['home', 'cats', 'hospital', 'logistics', 'forum', 'shop', 'profile'];
-            let index = 0;
-            
-            const testNextPage = () => {
-                if (index < pages.length) {
-                    switchPage(pages[index]);
-                    showToast(`切换到: ${pages[index]}`, 'info');
-                    index++;
-                    setTimeout(testNextPage, 2000);
-                } else {
-                    showToast('测试完成！', 'success');
-                    switchPage('home'); // 回到首页
-                }
-            };
-            
-            setTimeout(testNextPage, 1000);
-        }
                 appData.currentUser = appData.userProfile.userName;
                 appData.isLoggedIn = true;
             }
