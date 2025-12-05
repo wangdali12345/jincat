@@ -1194,13 +1194,13 @@
                 </div>
                 
                 <div class="nav-menu" id="navMenu">
-                    <a href="#" class="nav-link active" data-page="home" onclick="showPageAndCloseMenu('home', this)">首页</a>
-                    <a href="#" class="nav-link" data-page="cats" onclick="showPageAndCloseMenu('cats', this)">猫咪管理</a>
-                    <a href="#" class="nav-link" data-page="hospital" onclick="showPageAndCloseMenu('hospital', this)">宠物医院</a>
-                    <a href="#" class="nav-link" data-page="logistics" onclick="showPageAndCloseMenu('logistics', this)">物流查询</a>
-                    <a href="#" class="nav-link" data-page="forum" onclick="showPageAndCloseMenu('forum', this)">论坛交流</a>
-                    <a href="#" class="nav-link" data-page="shop" onclick="showPageAndCloseMenu('shop', this)">宠物商城</a>
-                    <a href="#" class="nav-link" data-page="profile" onclick="showPageAndCloseMenu('profile', this)">个人中心</a>
+                    <a href="#" class="nav-link active" data-page="home" onclick="switchPage('home')">首页</a>
+                    <a href="#" class="nav-link" data-page="cats" onclick="switchPage('cats')">猫咪管理</a>
+                    <a href="#" class="nav-link" data-page="hospital" onclick="switchPage('hospital')">宠物医院</a>
+                    <a href="#" class="nav-link" data-page="logistics" onclick="switchPage('logistics')">物流查询</a>
+                    <a href="#" class="nav-link" data-page="forum" onclick="switchPage('forum')">论坛交流</a>
+                    <a href="#" class="nav-link" data-page="shop" onclick="switchPage('shop')">宠物商城</a>
+                    <a href="#" class="nav-link" data-page="profile" onclick="switchPage('profile')">个人中心</a>
                 </div>
 
                 <div style="display: flex; align-items: center; gap: var(--spacing-sm); z-index: 1002; position: relative;">
@@ -1223,7 +1223,7 @@
             
             <!-- 功能网格 -->
             <div class="grid grid-3">
-                <div class="card" onclick="showPage('cats')">
+                <div class="card" onclick="switchPage('cats')">
                     <div style="padding: var(--spacing-md); text-align: center;">
                         <div style="font-size: 48px; margin-bottom: var(--spacing-sm);">🏠</div>
                         <h3>猫咪管理</h3>
@@ -1231,7 +1231,7 @@
                     </div>
                 </div>
                 
-                <div class="card" onclick="showPage('hospital')">
+                <div class="card" onclick="switchPage('hospital')">
                     <div style="padding: var(--spacing-md); text-align: center;">
                         <div style="font-size: 48px; margin-bottom: var(--spacing-sm);">🏥</div>
                         <h3>宠物医院</h3>
@@ -1239,7 +1239,7 @@
                     </div>
                 </div>
                 
-                <div class="card" onclick="showPage('logistics')">
+                <div class="card" onclick="switchPage('logistics')">
                     <div style="padding: var(--spacing-md); text-align: center;">
                         <div style="font-size: 48px; margin-bottom: var(--spacing-sm);">📦</div>
                         <h3>物流查询</h3>
@@ -1247,7 +1247,7 @@
                     </div>
                 </div>
                 
-                <div class="card" onclick="showPage('forum')">
+                <div class="card" onclick="switchPage('forum')">
                     <div style="padding: var(--spacing-md); text-align: center;">
                         <div style="font-size: 48px; margin-bottom: var(--spacing-sm);">💬</div>
                         <h3>论坛交流</h3>
@@ -1255,7 +1255,7 @@
                     </div>
                 </div>
                 
-                <div class="card" onclick="showPage('shop')">
+                <div class="card" onclick="switchPage('shop')">
                     <div style="padding: var(--spacing-md); text-align: center;">
                         <div style="font-size: 48px; margin-bottom: var(--spacing-sm);">🛍️</div>
                         <h3>宠物商城</h3>
@@ -1918,27 +1918,27 @@
 
     <!-- 移动端快捷导航 -->
     <nav class="mobile-quick-nav">
-        <a href="#" class="mobile-quick-nav-item active" data-page="home" onclick="showPage('home', this)">
+        <a href="#" class="mobile-quick-nav-item active" data-page="home" onclick="switchPage('home')">
             <span>🏠</span>
             <span>首页</span>
         </a>
-        <a href="#" class="mobile-quick-nav-item" data-page="cats" onclick="showPage('cats', this)">
-            <span>🏠</span>
-            <span>首页</span>
+        <a href="#" class="mobile-quick-nav-item" data-page="cats" onclick="switchPage('cats')">
+            <span>🐱</span>
+            <span>猫咪</span>
         </a>
-        <a href="#" class="mobile-quick-nav-item" data-page="hospital" onclick="showPage('hospital', this)">
+        <a href="#" class="mobile-quick-nav-item" data-page="hospital" onclick="switchPage('hospital')">
             <span>🏥</span>
             <span>医院</span>
         </a>
-        <a href="#" class="mobile-quick-nav-item" data-page="forum" onclick="showPage('forum', this)">
+        <a href="#" class="mobile-quick-nav-item" data-page="forum" onclick="switchPage('forum')">
             <span>💬</span>
             <span>论坛</span>
         </a>
-        <a href="#" class="mobile-quick-nav-item" data-page="shop" onclick="showPage('shop', this)">
+        <a href="#" class="mobile-quick-nav-item" data-page="shop" onclick="switchPage('shop')">
             <span>🛍️</span>
             <span>商城</span>
         </a>
-        <a href="#" class="mobile-quick-nav-item" data-page="profile" onclick="showPage('profile', this)">
+        <a href="#" class="mobile-quick-nav-item" data-page="profile" onclick="switchPage('profile')">
             <span>👤</span>
             <span>我的</span>
         </a>
@@ -2094,80 +2094,27 @@
             password: 'abc123'
         };
 
-        // 页面切换函数 - 核心功能
-        function showPage(pageId, element) {
-            try {
-                console.log('🔄 切换到页面:', pageId);
-                
-                // 1. 隐藏所有页面
-                document.querySelectorAll('.page').forEach(page => {
-                    page.classList.remove('active');
-                });
-                
-                // 2. 显示目标页面
-                const targetPage = document.getElementById(pageId);
-                if (targetPage) {
-                    targetPage.classList.add('active');
-                    console.log('✅ 页面显示成功:', pageId);
-                } else {
-                    console.error('❌ 页面不存在:', pageId);
-                    showToast('页面不存在: ' + pageId, 'error');
-                    return;
-                }
-                
-                // 3. 更新导航状态
-                document.querySelectorAll('.nav-link').forEach(link => {
-                    link.classList.remove('active');
-                });
-                
-                if (element && element.classList) {
-                    element.classList.add('active');
-                } else {
-                    // 如果没有传入element，尝试通过data-page找到对应导航
-                    const navLink = document.querySelector(`[data-page="${pageId}"]`);
-                    if (navLink) {
-                        navLink.classList.add('active');
-                    }
-                }
-                
-                // 4. 滚动到顶部
-                window.scrollTo(0, 0);
-                
-                // 5. 针对特定页面的初始化
-                setTimeout(() => {
-                    console.log('初始化页面:', pageId);
-                    switch(pageId) {
-                        case 'hospital':
-                            console.log('加载医院推荐页面');
-                            renderUserRecommendedHospitals();
-                            break;
-                        case 'shop':
-                            renderProducts();
-                            break;
-                        case 'forum':
-                            renderPosts();
-                            break;
-                        case 'cats':
-                            renderCats();
-                            break;
-                    }
-                }, 100);
-
-                // 6. 检查并启用管理员功能（针对每个页面）
-                if (appData.isAdmin) {
-                    console.log('页面切换时检查管理员状态，启用相关功能...');
-                    setTimeout(() => {
-                        enableAdminFeatures();
-                    }, 100);
-                }
-                
-                // 7. 显示成功提示
-                console.log('✅ 页面切换完成:', pageId);
-                
-            } catch (error) {
-                console.error('❌ 页面切换错误:', error);
-                showToast('页面切换失败: ' + error.message, 'error');
+        // 简单的页面切换函数
+        function switchPage(pageId) {
+            // 隐藏所有页面
+            document.querySelectorAll('.page').forEach(page => {
+                page.classList.remove('active');
+            });
+            
+            // 显示目标页面
+            const targetPage = document.getElementById(pageId);
+            if (targetPage) {
+                targetPage.classList.add('active');
             }
+            
+            // 更新导航状态
+            document.querySelectorAll('.nav-link, .mobile-quick-nav-item').forEach(link => {
+                link.classList.remove('active');
+            });
+            
+            document.querySelectorAll(`[data-page="${pageId}"]`).forEach(link => {
+                link.classList.add('active');
+            });
         }
 
         // Toast通知函数
@@ -2548,53 +2495,11 @@
             }
         }
 
+        // 简化的管理员功能启用
         function enableAdminFeatures() {
-            // 管理员可以修改的元素添加编辑功能
-            console.log('管理员功能已启用');
-            console.log('当前状态:', appData);
-            
-            // 强制设置管理员状态
             appData.isAdmin = true;
             appData.isLoggedIn = true;
             appData.currentUser = '管理员';
-            
-            // 启用猫咪管理页面
-            const catManagementButtons = document.getElementById('catManagementButtons');
-            const catUserHint = document.getElementById('catUserHint');
-            if (catManagementButtons) {
-                catManagementButtons.style.display = 'block';
-                console.log('猫咪管理按钮已显示');
-            }
-            if (catUserHint) {
-                catUserHint.style.display = 'none';
-                console.log('普通用户提示已隐藏');
-            }
-            
-            // 启用商城管理功能
-            const shopManageBtn = document.getElementById('shopManageBtn');
-            if (shopManageBtn) {
-                shopManageBtn.style.display = 'block';
-                console.log('商城管理按钮已显示');
-            }
-            
-            // 启用医院管理功能
-            const hospitalManageBtn = document.getElementById('hospitalManageBtn');
-            if (hospitalManageBtn) {
-                hospitalManageBtn.style.display = 'block';
-                console.log('医院管理按钮已显示');
-            }
-            
-            // 启用论坛管理功能
-            enableForumAdminFeatures();
-            
-            // 重新渲染相关页面
-            renderCats();
-            renderPosts();
-            renderProducts();
-            updateProfileMenu();
-            
-            showToast('管理员功能已全部启用', 'success');
-            console.log('所有管理员功能启用完成');
         }
 
         // 论坛管理功能
@@ -2827,18 +2732,7 @@
             overlay.classList.toggle('active');
         }
 
-        function closeMobileMenu() {
-            const navMenu = document.getElementById('navMenu');
-            const overlay = document.getElementById('mobileNavOverlay');
-            
-            navMenu.classList.remove('active');
-            overlay.classList.remove('active');
-        }
 
-        function showPageAndCloseMenu(pageId, element) {
-            showPage(pageId, element);
-            closeMobileMenu();
-        }
 
         // 猫咪管理相关
         function addCat() {
