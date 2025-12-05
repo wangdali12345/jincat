@@ -427,6 +427,12 @@
                 padding: 4px;
             }
 
+            /* 确保移动端导航可见 */
+            .mobile-quick-nav {
+                display: flex !important;
+                visibility: visible !important;
+            }
+
             /* 优化标题区域 */
             .nav-content > div:first-child {
                 display: flex;
@@ -490,11 +496,15 @@
             /* 调整页面内容间距，避免被导航栏遮挡 */
             .page {
                 padding-top: var(--spacing-lg);
-                padding-bottom: 60px;
+                padding-bottom: 70px;
             }
 
-            .mobile-quick-nav-item span:first-child {
-                font-size: 20px;
+            /* 桌面端隐藏移动端导航 */
+            @media (min-width: 769px) {
+                .mobile-quick-nav {
+                    display: none !important;
+                }
+            }
             }
 
             .grid-3 {
@@ -664,13 +674,6 @@
                 display: flex;
                 align-items: center;
                 justify-content: center;
-            }
-        }
-
-        /* 桌面端隐藏移动端导航 */
-        @media (min-width: 769px) {
-            .mobile-quick-nav {
-                display: none;
             }
         }
 
@@ -1954,7 +1957,7 @@
     </nav>
 
     <!-- 右下角私信按钮 -->
-    <button class="fab" onclick="openMessageModal()" style="bottom: 80px;">✉️</button>
+    <button class="fab" onclick="openMessageModal()" style="bottom: 70px;">✉️</button>
 
     <!-- 私信模态框 -->
     <div id="messageModal" class="modal-overlay">
