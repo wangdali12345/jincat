@@ -124,14 +124,11 @@
             display: none !important;
             visibility: hidden !important;
             opacity: 0 !important;
-            padding: var(--spacing-lg) var(--spacing-md);
-            min-height: calc(100vh - 120px);
+            padding: 0;
+            min-height: calc(100vh - 60px);
             margin-top: 60px;
             background: var(--apple-white);
-            position: absolute !important;
-            top: 0;
-            left: 0;
-            right: 0;
+            position: relative;
             z-index: 1;
         }
 
@@ -141,17 +138,13 @@
             opacity: 1 !important;
             position: relative !important;
             z-index: 5 !important;
-            top: auto;
-            left: auto;
-            right: auto;
         }
 
         /* 页面包装容器 */
         .page-wrapper {
             position: relative;
             width: 100%;
-            min-height: calc(100vh - 60px);
-            margin-top: 60px;
+            min-height: 100%;
             background: var(--apple-white);
             z-index: 2;
         }
@@ -474,7 +467,7 @@
                 opacity: 1 !important;
                 justify-content: space-around;
                 padding: 4px 0;
-                z-index: 1000 !important;
+                z-index: 999 !important;
                 box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
                 height: 50px;
             }
@@ -2160,8 +2153,15 @@
                 targetPage.style.opacity = '1';
                 targetPage.style.zIndex = '10';
                 targetPage.style.position = 'relative';
-                targetPage.style.marginTop = '60px';
                 console.log('✅ 页面显示成功:', pageId);
+                
+                // 确保页面内容容器正确显示
+                const wrapper = targetPage.querySelector('.page-wrapper');
+                if (wrapper) {
+                    wrapper.style.display = 'block';
+                    wrapper.style.visibility = 'visible';
+                    wrapper.style.opacity = '1';
+                }
             } else {
                 console.error('❌ 页面不存在:', pageId);
                 return;
@@ -2230,9 +2230,14 @@
             if (window.innerWidth <= 768) {
                 const mobileNav = document.querySelector('.mobile-quick-nav');
                 if (mobileNav) {
-                    mobileNav.style.display = 'flex';
-                    mobileNav.style.visibility = 'visible';
-                    mobileNav.style.opacity = '1';
+                    mobileNav.style.display = 'flex !important';
+                    mobileNav.style.visibility = 'visible !important';
+                    mobileNav.style.opacity = '1 !important';
+                    mobileNav.style.position = 'fixed !important';
+                    mobileNav.style.bottom = '0 !important';
+                    mobileNav.style.left = '0 !important';
+                    mobileNav.style.right = '0 !important';
+                    mobileNav.style.zIndex = '999 !important';
                 }
             }
             
@@ -4288,9 +4293,14 @@
             if (window.innerWidth <= 768) {
                 const mobileNav = document.querySelector('.mobile-quick-nav');
                 if (mobileNav) {
-                    mobileNav.style.display = 'flex';
-                    mobileNav.style.visibility = 'visible';
-                    mobileNav.style.opacity = '1';
+                    mobileNav.style.display = 'flex !important';
+                    mobileNav.style.visibility = 'visible !important';
+                    mobileNav.style.opacity = '1 !important';
+                    mobileNav.style.position = 'fixed !important';
+                    mobileNav.style.bottom = '0 !important';
+                    mobileNav.style.left = '0 !important';
+                    mobileNav.style.right = '0 !important';
+                    mobileNav.style.zIndex = '999 !important';
                 }
             }
             
@@ -4299,6 +4309,18 @@
                 const homePage = document.getElementById('home');
                 if (homePage) {
                     homePage.classList.add('active');
+                    homePage.style.display = 'block';
+                    homePage.style.visibility = 'visible';
+                    homePage.style.opacity = '1';
+                    
+                    // 确保首页包装容器显示
+                    const homeWrapper = homePage.querySelector('.page-wrapper');
+                    if (homeWrapper) {
+                        homeWrapper.style.display = 'block';
+                        homeWrapper.style.visibility = 'visible';
+                        homeWrapper.style.opacity = '1';
+                    }
+                    
                     console.log('✅ 首页已激活');
                 }
                 
