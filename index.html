@@ -121,11 +121,9 @@
 
         /* 页面容器 */
         .page {
-            display: none !important;
-            visibility: hidden !important;
-            opacity: 0 !important;
-            padding: 0;
-            min-height: calc(100vh - 60px);
+            display: none;
+            padding: var(--spacing-lg) var(--spacing-md);
+            min-height: calc(100vh - 120px);
             margin-top: 60px;
             background: var(--apple-white);
             position: relative;
@@ -133,21 +131,14 @@
         }
 
         .page.active {
-            display: block !important;
-            visibility: visible !important;
-            opacity: 1 !important;
-            position: relative !important;
-            z-index: 5 !important;
+            display: block;
+            visibility: visible;
+            opacity: 1;
+            position: relative;
+            z-index: 5;
         }
 
-        /* 页面包装容器 */
-        .page-wrapper {
-            position: relative;
-            width: 100%;
-            min-height: 100%;
-            background: var(--apple-white);
-            z-index: 2;
-        }
+
 
         /* 卡片样式 */
         .card {
@@ -523,7 +514,6 @@
                 padding: var(--spacing-lg) var(--spacing-md) 80px !important;
             }
         }
-            }
 
             .grid-3 {
                 grid-template-columns: 1fr;
@@ -1238,8 +1228,7 @@
 
     <!-- 首页 -->
     <div id="home" class="page active">
-        <div class="page-wrapper">
-            <div class="container">
+        <div class="container">
             <h1>杭州宠物社区</h1>
             <p style="text-align: center; font-size: 18px; margin-bottom: var(--spacing-lg);">
                 杭州自家小猫咪-李先生的宠物社区平台
@@ -1292,8 +1281,7 @@
 
     <!-- 猫咪管理页面 -->
     <div id="cats" class="page">
-        <div class="page-wrapper">
-            <div class="container">
+        <div class="container">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--spacing-md);">
                 <h2>宠物管理</h2>
                 <div id="catManagementButtons" style="display: none;">
@@ -1479,8 +1467,7 @@
 
     <!-- 宠物医院页面 -->
     <div id="hospital" class="page">
-        <div class="page-wrapper">
-            <div class="container">
+        <div class="container">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--spacing-md);">
                 <h2>🏥 宠物医院推荐</h2>
                 <div style="display: flex; gap: var(--spacing-sm);">
@@ -1587,8 +1574,7 @@
 
     <!-- 物流查询页面 -->
     <div id="logistics" class="page">
-        <div class="page-wrapper">
-            <div class="container">
+        <div class="container">
             <h2>📦 物流查询</h2>
             
             <!-- 快捷入口 -->
@@ -1655,8 +1641,7 @@
 
     <!-- 论坛交流页面 -->
     <div id="forum" class="page">
-        <div class="page-wrapper">
-            <div class="container">
+        <div class="container">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--spacing-md);">
                 <h2>💬 论坛交流</h2>
                 <div style="display: flex; gap: var(--spacing-sm);">
@@ -1705,8 +1690,7 @@
 
     <!-- 宠物商城页面 -->
     <div id="shop" class="page">
-        <div class="page-wrapper">
-            <div class="container">
+        <div class="container">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--spacing-md);">
                 <h2 style="position: relative; display: inline-block;">
                 <span style="position: relative; z-index: 2;">🛍️ 宠物商城</span>
@@ -1853,8 +1837,7 @@
 
     <!-- 个人中心页面 -->
     <div id="profile" class="page">
-        <div class="page-wrapper">
-            <div class="container">
+        <div class="container">
             <h2>👤 个人中心</h2>
             
             <!-- 用户信息卡片 -->
@@ -2134,34 +2117,16 @@
                 console.log('🔒 关闭模态框');
             });
             
-            // 完全隐藏所有页面
+            // 隐藏所有页面
             document.querySelectorAll('.page').forEach(page => {
                 page.classList.remove('active');
-                page.style.display = 'none';
-                page.style.visibility = 'hidden';
-                page.style.opacity = '0';
-                page.style.zIndex = '1';
             });
             
             // 显示目标页面
             const targetPage = document.getElementById(pageId);
             if (targetPage) {
                 targetPage.classList.add('active');
-                // 强制重置所有样式并显示
-                targetPage.style.display = 'block';
-                targetPage.style.visibility = 'visible';
-                targetPage.style.opacity = '1';
-                targetPage.style.zIndex = '10';
-                targetPage.style.position = 'relative';
                 console.log('✅ 页面显示成功:', pageId);
-                
-                // 确保页面内容容器正确显示
-                const wrapper = targetPage.querySelector('.page-wrapper');
-                if (wrapper) {
-                    wrapper.style.display = 'block';
-                    wrapper.style.visibility = 'visible';
-                    wrapper.style.opacity = '1';
-                }
             } else {
                 console.error('❌ 页面不存在:', pageId);
                 return;
@@ -2226,20 +2191,7 @@
                 console.error('管理员功能检查错误:', error);
             }
             
-            // 确保移动端导航在手机端可见
-            if (window.innerWidth <= 768) {
-                const mobileNav = document.querySelector('.mobile-quick-nav');
-                if (mobileNav) {
-                    mobileNav.style.display = 'flex !important';
-                    mobileNav.style.visibility = 'visible !important';
-                    mobileNav.style.opacity = '1 !important';
-                    mobileNav.style.position = 'fixed !important';
-                    mobileNav.style.bottom = '0 !important';
-                    mobileNav.style.left = '0 !important';
-                    mobileNav.style.right = '0 !important';
-                    mobileNav.style.zIndex = '999 !important';
-                }
-            }
+
             
             // 滚动到顶部
             window.scrollTo(0, 0);
@@ -4289,20 +4241,7 @@
         document.addEventListener('DOMContentLoaded', function() {
             console.log('🚀 杭州宠物社区加载完成');
             
-            // 确保移动端导航在手机端可见
-            if (window.innerWidth <= 768) {
-                const mobileNav = document.querySelector('.mobile-quick-nav');
-                if (mobileNav) {
-                    mobileNav.style.display = 'flex !important';
-                    mobileNav.style.visibility = 'visible !important';
-                    mobileNav.style.opacity = '1 !important';
-                    mobileNav.style.position = 'fixed !important';
-                    mobileNav.style.bottom = '0 !important';
-                    mobileNav.style.left = '0 !important';
-                    mobileNav.style.right = '0 !important';
-                    mobileNav.style.zIndex = '999 !important';
-                }
-            }
+
             
             try {
                 // 确保首页显示
