@@ -426,6 +426,46 @@
             margin-right: 4px;
         }
 
+        /* 移动端快捷导航 */
+        .mobile-quick-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: white;
+            border-top: 1px solid var(--apple-border);
+            display: none;
+            justify-content: space-around;
+            padding: var(--spacing-xs) 0;
+            z-index: 9999;
+            box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
+        }
+
+        .mobile-quick-nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            padding: var(--spacing-xs);
+            text-decoration: none;
+            color: var(--apple-gray-medium);
+            font-size: 12px;
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+
+        .mobile-quick-nav-item.active {
+            color: var(--apple-blue);
+        }
+
+        .mobile-quick-nav-item:hover {
+            color: var(--apple-blue);
+        }
+
+        .mobile-quick-nav-item span:first-child {
+            font-size: 20px;
+        }
+
         /* 响应式 */
         @media (max-width: 768px) {
             .nav-menu {
@@ -441,61 +481,9 @@
                 color: var(--apple-black);
             }
 
-            /* 强制显示移动端导航 */
+            /* 移动端显示导航 */
             .mobile-quick-nav {
                 display: flex !important;
-                visibility: visible !important;
-                opacity: 1 !important;
-                position: fixed !important;
-                bottom: 0 !important;
-                left: 0 !important;
-                right: 0 !important;
-                z-index: 9999 !important;
-                background: white !important;
-                border-top: 1px solid var(--apple-border) !important;
-                box-shadow: 0 -2px 10px rgba(0,0,0,0.1) !important;
-            }
-
-        /* 移动端快捷导航 */
-        .mobile-quick-nav {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            background: white;
-            border-top: 1px solid var(--apple-border);
-            display: flex !important;
-            justify-content: space-around;
-            padding: var(--spacing-xs) 0;
-            z-index: 9999 !important;
-            box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
-            visibility: visible !important;
-            opacity: 1 !important;
-        }
-
-            .mobile-quick-nav-item {
-                display: flex;
-                flex-direction: column;
-                align-items: center;
-                gap: 4px;
-                padding: var(--spacing-xs);
-                text-decoration: none;
-                color: var(--apple-gray-medium);
-                font-size: 12px;
-                cursor: pointer;
-                transition: color 0.3s ease;
-            }
-
-            .mobile-quick-nav-item.active {
-                color: var(--apple-blue);
-            }
-
-            .mobile-quick-nav-item:hover {
-                color: var(--apple-blue);
-            }
-
-            .mobile-quick-nav-item span:first-child {
-                font-size: 20px;
             }
 
             .grid-3 {
@@ -651,21 +639,26 @@
                 font-size: 18px;
             }
         }
-                width: 50px;
-                height: 50px;
-                border-radius: 50%;
-                background: var(--apple-blue);
-                color: white;
-                border: none;
-                font-size: 20px;
-                cursor: pointer;
-                box-shadow: var(--shadow-heavy);
-                z-index: 996; /* 降低z-index，避免覆盖导航 */
-                transition: all 0.3s ease;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-            }
+
+        /* 右下角浮动按钮 */
+        .fab {
+            position: fixed;
+            bottom: 80px; /* 避免遮挡底部导航 */
+            right: 20px;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: var(--apple-blue);
+            color: white;
+            border: none;
+            font-size: 20px;
+            cursor: pointer;
+            box-shadow: var(--shadow-heavy);
+            z-index: 997; /* 确保不会覆盖导航 */
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
         /* 桌面端隐藏移动端导航 */
@@ -4348,6 +4341,37 @@
             }
         }
 
+        // 专门修复移动端导航的函数
+        function fixMobileNavigation() {
+            console.log('📱 修复移动端导航...');
+            
+            const mobileNav = document.querySelector('.mobile-quick-nav');
+            if (mobileNav) {
+                // 应用完整的样式
+                mobileNav.style.cssText = `
+                    display: flex !important;
+                    visibility: visible !important;
+                    opacity: 1 !important;
+                    position: fixed !important;
+                    bottom: 0 !important;
+                    left: 0 !important;
+                    right: 0 !important;
+                    z-index: 9999 !important;
+                    background: white !important;
+                    border-top: 1px solid var(--apple-border) !important;
+                    box-shadow: 0 -2px 10px rgba(0,0,0,0.1) !important;
+                    justify-content: space-around !important;
+                    padding: 8px 0 !important;
+                    margin: 0 !important;
+                    width: 100% !important;
+                    height: auto !important;
+                `;
+                console.log('✅ 移动端导航样式完全应用');
+            } else {
+                console.error('❌ 找不到移动端导航元素');
+            }
+        }
+
         // 初始化
         document.addEventListener('DOMContentLoaded', function() {
             console.log('🚀 金猫之家加载完成');
@@ -4360,6 +4384,17 @@
                 setTimeout(() => {
                     forceInitializePages();
                 }, 100);
+                
+                // 如果是移动设备，额外修复导航
+                if (window.innerWidth <= 768) {
+                    setTimeout(() => {
+                        fixMobileNavigation();
+                    }, 200);
+                    
+                    setTimeout(() => {
+                        fixMobileNavigation();
+                    }, 1000);
+                }
                 
                 // 初始化数据存储
                 initializeLocalStorage();
@@ -4437,25 +4472,41 @@
                         const mobileNav = document.querySelector('.mobile-quick-nav');
                         if (mobileNav) {
                             console.log('🔧 强制显示移动端导航');
-                            mobileNav.style.cssText = `
-                                display: flex !important;
-                                visibility: visible !important;
-                                opacity: 1 !important;
-                                position: fixed !important;
-                                bottom: 0 !important;
-                                left: 0 !important;
-                                right: 0 !important;
-                                z-index: 9999 !important;
-                                background: white !important;
-                                border-top: 1px solid var(--apple-border) !important;
-                                box-shadow: 0 -2px 10px rgba(0,0,0,0.1) !important;
-                            `;
+                            mobileNav.style.display = 'flex';
+                            mobileNav.style.visibility = 'visible';
+                            mobileNav.style.opacity = '1';
+                            mobileNav.style.position = 'fixed';
+                            mobileNav.style.bottom = '0';
+                            mobileNav.style.left = '0';
+                            mobileNav.style.right = '0';
+                            mobileNav.style.zIndex = '9999';
                             console.log('✅ 移动端导航样式强制应用');
                         } else {
                             console.error('❌ 找不到移动端导航元素');
                         }
                     }
                 }, 200);
+
+                // 再次强制应用移动端导航样式
+                setTimeout(() => {
+                    const mobileNav = document.querySelector('.mobile-quick-nav');
+                    if (mobileNav && window.innerWidth <= 768) {
+                        mobileNav.style.cssText = `
+                            display: flex !important;
+                            visibility: visible !important;
+                            opacity: 1 !important;
+                            position: fixed !important;
+                            bottom: 0 !important;
+                            left: 0 !important;
+                            right: 0 !important;
+                            z-index: 9999 !important;
+                            background: white !important;
+                            border-top: 1px solid var(--apple-border) !important;
+                            box-shadow: 0 -2px 10px rgba(0,0,0,0.1) !important;
+                        `;
+                        console.log('🔧 移动端导航最终强制应用');
+                    }
+                }, 500);
                 
                 // 再次强制初始化页面
                 setTimeout(() => {
@@ -4466,7 +4517,10 @@
                 // 显示欢迎消息
                 setTimeout(() => {
                     showToast('🎉 欢迎来到金猫之家！', 'success');
-                    console.log('💡 提示：在控制台输入 testPageSwitching() 可以测试页面切换功能');
+                    console.log('💡 调试命令：');
+                    console.log('- testPageSwitching() : 测试页面切换');
+                    console.log('- forceShowAllPages() : 强制显示所有页面');
+                    console.log('- checkPageContent("页面ID") : 检查指定页面内容');
                 }, 500);
                 
             } catch (error) {
@@ -4503,6 +4557,38 @@
                 switchToNextPage();
             };
 
+            // 强制显示所有页面内容（用于调试）
+            window.forceShowAllPages = function() {
+                console.log('🔧 强制显示所有页面内容...');
+                document.querySelectorAll('.page').forEach(page => {
+                    page.style.display = 'block';
+                    page.style.visibility = 'visible';
+                    page.style.opacity = '1';
+                    page.style.position = 'static';
+                    page.style.height = 'auto';
+                    console.log('✅ 强制显示页面:', page.id);
+                });
+            };
+
+            // 检查页面内容
+            window.checkPageContent = function(pageId) {
+                const page = document.getElementById(pageId);
+                if (page) {
+                    console.log(`📄 检查页面 ${pageId}:`);
+                    console.log('- display:', page.style.display);
+                    console.log('- visibility:', page.style.visibility);
+                    console.log('- opacity:', page.style.opacity);
+                    console.log('- 内容长度:', page.innerHTML.length);
+                    console.log('- 子元素数量:', page.children.length);
+                    
+                    // 显示页面内容的前100个字符
+                    const contentPreview = page.innerHTML.substring(0, 100);
+                    console.log('- 内容预览:', contentPreview);
+                } else {
+                    console.error(`❌ 页面 ${pageId} 不存在`);
+                }
+            };
+
             // 添加窗口大小变化监听
             window.addEventListener('resize', function() {
                 console.log('🖥️ 窗口大小变化:', window.innerWidth, 'x', window.innerHeight);
@@ -4511,6 +4597,21 @@
                 if (window.innerWidth <= 768) {
                     const mobileNav = document.querySelector('.mobile-quick-nav');
                     if (mobileNav) {
+                        mobileNav.style.display = 'flex';
+                        console.log('📱 移动端导航已显示');
+                    }
+                } else {
+                    const mobileNav = document.querySelector('.mobile-quick-nav');
+                    if (mobileNav) {
+                        mobileNav.style.display = 'none';
+                        console.log('🖥️ 桌面端隐藏移动端导航');
+                    }
+                }
+
+                // 强制重新应用样式
+                setTimeout(() => {
+                    const mobileNav = document.querySelector('.mobile-quick-nav');
+                    if (mobileNav && window.innerWidth <= 768) {
                         mobileNav.style.cssText = `
                             display: flex !important;
                             visibility: visible !important;
@@ -4523,9 +4624,11 @@
                             background: white !important;
                             border-top: 1px solid var(--apple-border) !important;
                             box-shadow: 0 -2px 10px rgba(0,0,0,0.1) !important;
+                            justify-content: space-around !important;
+                            padding: 8px 0 !important;
                         `;
                     }
-                }
+                }, 100);
             });
 
         // 移动端导航切换
