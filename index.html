@@ -98,7 +98,8 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            height: 60px;
+            height: 50px;
+            padding: 0 var(--spacing-sm);
         }
 
         .nav-menu {
@@ -403,6 +404,15 @@
 
         /* 响应式 */
         @media (max-width: 768px) {
+            .nav {
+                height: 45px !important;
+            }
+
+            .nav-content {
+                height: 45px !important;
+                padding: 0 var(--spacing-sm) !important;
+            }
+
             .nav-menu {
                 display: none;
             }
@@ -411,9 +421,28 @@
                 display: block;
                 background: none;
                 border: none;
-                font-size: 24px;
+                font-size: 20px;
                 cursor: pointer;
                 color: var(--apple-black);
+                padding: 4px;
+            }
+
+            /* 优化标题区域 */
+            .nav-content > div:first-child {
+                display: flex;
+                align-items: center;
+                gap: 8px;
+            }
+
+            .nav-content > div:first-child div:first-child {
+                font-size: 20px !important;
+            }
+
+            .nav-content > div:first-child div:nth-child(2) {
+                font-weight: 700;
+                font-size: 18px;
+                color: var(--cat-primary);
+                text-shadow: 0 1px 2px rgba(255, 107, 157, 0.2);
             }
 
             /* 移动端快捷导航 */
@@ -426,22 +455,24 @@
                 border-top: 1px solid var(--apple-border);
                 display: flex;
                 justify-content: space-around;
-                padding: var(--spacing-xs) 0;
+                padding: 4px 0;
                 z-index: 998;
                 box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
+                height: 50px;
             }
 
             .mobile-quick-nav-item {
                 display: flex;
                 flex-direction: column;
                 align-items: center;
-                gap: 4px;
-                padding: var(--spacing-xs);
+                gap: 2px;
+                padding: 4px;
                 text-decoration: none;
                 color: var(--apple-gray-medium);
-                font-size: 12px;
+                font-size: 11px;
                 cursor: pointer;
                 transition: color 0.3s ease;
+                flex: 1;
             }
 
             .mobile-quick-nav-item.active {
@@ -450,6 +481,16 @@
 
             .mobile-quick-nav-item:hover {
                 color: var(--apple-blue);
+            }
+
+            .mobile-quick-nav-item span:first-child {
+                font-size: 18px;
+            }
+
+            /* 调整页面内容间距，避免被导航栏遮挡 */
+            .page {
+                padding-top: var(--spacing-lg);
+                padding-bottom: 60px;
             }
 
             .mobile-quick-nav-item span:first-child {
@@ -1424,48 +1465,38 @@
     <div id="hospital" class="page">
         <div class="container">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--spacing-md);">
-                <h2>🏥 宠物医院</h2>
+                <h2>🏥 宠物医院推荐</h2>
                 <div style="display: flex; gap: var(--spacing-sm);">
-                    <button class="btn btn-primary" onclick="getCurrentLocation()">📍 定位</button>
                     <button class="btn btn-secondary" onclick="refreshHospitals()">🔄 刷新</button>
-                    <button id="hospitalManageBtn" class="btn btn-primary" onclick="openHospitalManager()" style="display: none;">➕ 添加医院</button>
+                    <button id="hospitalManageBtn" class="btn btn-primary" onclick="openHospitalManager()" style="display: none;">➕ 添加推荐</button>
                 </div>
             </div>
             
-            <!-- 地图容器 -->
-            <div class="map-container" id="mapContainer">
-                <div style="display: flex; align-items: center; justify-content: center; height: 100%; color: var(--apple-gray-medium);">
-                    <div style="text-align: center;">
-                        <div style="font-size: 48px; margin-bottom: var(--spacing-sm);">🗺️</div>
-                        <p>地图加载中...</p>
+            <!-- 高德导航栏 -->
+            <div class="card" style="margin-bottom: var(--spacing-lg);">
+                <div style="padding: var(--spacing-md);">
+                    <h3 style="margin-bottom: var(--spacing-sm);">🧭 高德地图导航</h3>
+                    <div style="display: flex; gap: var(--spacing-sm); margin-bottom: var(--spacing-sm);">
+                        <input type="text" class="input" id="gaodeDestination" placeholder="输入医院详细地址..." style="flex: 1;">
+                        <button class="btn btn-primary" onclick="openGaodeNavigation()">🗺️ 开始导航</button>
                     </div>
-                </div>
-            </div>
-
-            <!-- 搜索栏 -->
-            <div style="margin-bottom: var(--spacing-md);">
-                <div style="display: flex; gap: var(--spacing-sm);">
-                    <input type="text" class="input" placeholder="搜索医院名称或地址..." id="hospitalSearch" style="flex: 1;" onkeypress="if(event.key === 'Enter') searchNearbyHospitals()">
-                    <button class="btn btn-primary" onclick="searchNearbyHospitals()">🔍 搜索</button>
+                    <p style="color: var(--apple-gray-medium); font-size: 14px;">输入医院地址后直接跳转到高德地图进行导航</p>
                 </div>
             </div>
             
-            <!-- 推荐医院 - 管理员上传 -->
-            <h3 style="margin-bottom: var(--spacing-md);">⭐ 推荐医院</h3>
-            <div id="recommendedHospitalList">
-                <div style="text-align: center; padding: 20px; color: var(--apple-gray-medium);">
-                    <div style="font-size: 32px; margin-bottom: var(--spacing-sm);">🏥</div>
-                    <p>暂无推荐医院，请联系管理员添加</p>
-                </div>
-            </div>
-            
-            <!-- 附近医院 - 基于地理位置 -->
-            <h3 style="margin: var(--spacing-lg) 0 var(--spacing-md);">📍 附近医院</h3>
-            <div id="nearbyHospitalList">
+            <!-- 用户推荐医院 -->
+            <h3 style="margin-bottom: var(--spacing-md);">💝 用户推荐医院</h3>
+            <div id="userRecommendedHospitals">
                 <div style="text-align: center; padding: 40px; color: var(--apple-gray-medium);">
-                    <div style="font-size: 48px; margin-bottom: var(--spacing-sm);">🗺️</div>
-                    <p>请点击"定位"按钮搜索附近宠物医院</p>
+                    <div style="font-size: 48px; margin-bottom: var(--spacing-sm);">🏥</div>
+                    <p>暂无用户推荐医院</p>
+                    <p style="font-size: 14px; margin-top: var(--spacing-sm);欢迎分享您知道的好医院</p>
                 </div>
+            </div>
+            
+            <!-- 添加推荐按钮 -->
+            <div style="text-align: center; margin: var(--spacing-lg) 0;">
+                <button class="btn btn-primary" onclick="openHospitalRecommendation()">📝 推荐医院</button>
             </div>
         </div>
     </div>
@@ -1497,6 +1528,42 @@
             <div class="modal-footer">
                 <button class="btn btn-secondary" onclick="closeHospitalReviewModal()">取消</button>
                 <button class="btn btn-primary" onclick="submitReview()">提交评价</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 医院推荐模态框 -->
+    <div id="hospitalRecommendationModal" class="modal-overlay">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>🏥 推荐医院</h3>
+                <button class="btn btn-secondary" onclick="closeHospitalRecommendationModal()">×</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>医院名称 *</label>
+                    <input type="text" class="input" id="recommendHospitalName" placeholder="请输入医院名称">
+                </div>
+                <div class="form-group">
+                    <label>详细地址 *</label>
+                    <input type="text" class="input" id="recommendHospitalAddress" placeholder="请输入详细地址">
+                </div>
+                <div class="form-group">
+                    <label>联系电话</label>
+                    <input type="text" class="input" id="recommendHospitalPhone" placeholder="请输入联系电话">
+                </div>
+                <div class="form-group">
+                    <label>推荐理由</label>
+                    <textarea class="input" id="recommendHospitalReason" rows="3" placeholder="为什么推荐这家医院？"></textarea>
+                </div>
+                <div class="form-group">
+                    <label>推荐人</label>
+                    <input type="text" class="input" id="recommendHospitalUser" placeholder="您的昵称（可选）">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeHospitalRecommendationModal()">取消</button>
+                <button class="btn btn-primary" onclick="submitHospitalRecommendation()">提交推荐</button>
             </div>
         </div>
     </div>
@@ -2015,6 +2082,7 @@
         const appData = {
             cats: [],
             hospitals: [], // 管理员上传的推荐医院
+            userRecommendedHospitals: [], // 用户推荐医院
             nearbyHospitals: [], // 基于地理位置的附近医院
             posts: [],
             products: [],
@@ -2074,7 +2142,25 @@
                 // 4. 滚动到顶部
                 window.scrollTo(0, 0);
                 
-                // 5. 检查并启用管理员功能（针对每个页面）
+                // 5. 针对特定页面的初始化
+                setTimeout(() => {
+                    switch(pageId) {
+                        case 'hospital':
+                            renderUserRecommendedHospitals();
+                            break;
+                        case 'shop':
+                            renderProducts();
+                            break;
+                        case 'forum':
+                            renderPosts();
+                            break;
+                        case 'cats':
+                            renderCats();
+                            break;
+                    }
+                }, 100);
+
+                // 6. 检查并启用管理员功能（针对每个页面）
                 if (appData.isAdmin) {
                     console.log('页面切换时检查管理员状态，启用相关功能...');
                     setTimeout(() => {
@@ -2082,7 +2168,7 @@
                     }, 100);
                 }
                 
-                // 6. 显示成功提示
+                // 7. 显示成功提示
                 console.log('✅ 页面切换完成:', pageId);
                 
             } catch (error) {
@@ -4293,7 +4379,8 @@
             showToast('版本：1.0.0 | 更新时间：2024年', 'info');
         }
 
-        function checkAdminStatus() {
+        function checkAdminStatus(event) {
+            if (event) event.preventDefault();
             const status = `
                 当前用户: ${appData.currentUser || '未登录'}
                 登录状态: ${appData.isLoggedIn ? '已登录' : '未登录'}
@@ -4369,7 +4456,10 @@
                 icon: icon,
                 description: description || '优质宠物用品',
                 addedBy: appData.currentUser,
-                addedTime: new Date().toLocaleString()
+                addedTime: new Date().toLocaleString(),
+                clickCount: 0,
+                lastClicked: null,
+                viewCount: 0
             };
 
             // 初始化产品数组
@@ -4410,14 +4500,22 @@
                         'jd': '京东'
                     }[product.platform] || '购买';
 
+                    const clickCount = product.clickCount || 0;
+
                     return `
                         <div class="card">
                             <div style="padding: var(--spacing-md); text-align: center;">
                                 <div style="font-size: 36px; margin-bottom: var(--spacing-sm);">${product.icon}</div>
                                 <h4 style="font-size: 16px; margin-bottom: 8px;">${product.name}</h4>
                                 <p style="color: var(--apple-orange); font-weight: 600; font-size: 18px;">¥${product.price}</p>
+                                <div style="display: flex; justify-content: space-between; align-items: center; margin: 8px 0;">
+                                    <span style="color: var(--apple-gray-medium); font-size: 11px;">🔥 ${clickCount} 次点击</span>
+                                    ${appData.isAdmin ? `
+                                        <button class="btn btn-secondary btn-small" onclick="editProductStats(${product.id})" style="font-size: 10px; padding: 2px 6px;">📊</button>
+                                    ` : ''}
+                                </div>
                                 ${product.description ? `<p style="color: var(--apple-gray-medium); font-size: 12px; margin: 8px 0;">${product.description}</p>` : ''}
-                                <button class="btn btn-primary" onclick="openProductUrl('${product.url}', '${product.platform}')" style="font-size: 12px; padding: 8px 16px;">🛒 ${platformText}</button>
+                                <button class="btn btn-primary" onclick="openProductUrl('${product.url}', '${product.platform}', ${product.id})" style="font-size: 12px; padding: 8px 16px;">🛒 ${platformText}</button>
                                 ${appData.isAdmin ? `
                                     <div style="margin-top: 8px;">
                                         <button class="btn btn-secondary btn-small" onclick="deleteProduct(${product.id})" style="font-size: 11px; padding: 4px 8px;">删除</button>
@@ -4450,10 +4548,17 @@
                 return;
             }
             
-            // 显示所有管理员添加的商品，按添加时间倒序
-            const sortedProducts = allProducts.sort((a, b) => b.id - a.id);
+            // 按点击频率排序，点击次数相同则按添加时间倒序
+            const sortedProducts = allProducts.sort((a, b) => {
+                const aClicks = a.clickCount || 0;
+                const bClicks = b.clickCount || 0;
+                if (aClicks !== bClicks) {
+                    return bClicks - aClicks; // 点击次数多的排前面
+                }
+                return b.id - a.id; // 点击次数相同，按添加时间倒序
+            });
             
-            container.innerHTML = sortedProducts.slice(0, 6).map(product => {
+            container.innerHTML = sortedProducts.slice(0, 9).map((product, index) => {
                 const platformText = {
                     'taobao': '淘宝',
                     'pinduoduo': '拼多多',
@@ -4468,17 +4573,30 @@
                     'health': '💊 保健'
                 }[product.category] || '📦 其他';
 
+                // 排行徽章
+                const rankBadge = index < 3 ? ['🥇', '🥈', '🥉'][index] : `#${index + 1}`;
+                const clickCount = product.clickCount || 0;
+
                 return `
                     <div class="card" style="position: relative;">
                         <div style="padding: var(--spacing-md); text-align: center;">
+                            <div style="position: absolute; top: 8px; left: 8px; background: ${index < 3 ? 'var(--apple-orange)' : 'var(--apple-gray-medium)'}; color: white; font-size: 12px; padding: 2px 6px; border-radius: 10px; font-weight: bold;">
+                                ${rankBadge}
+                            </div>
                             <div style="position: absolute; top: 8px; right: 8px; background: var(--cat-primary); color: white; font-size: 10px; padding: 2px 6px; border-radius: 10px;">
                                 ${categoryBadge}
                             </div>
                             <div style="font-size: 36px; margin-bottom: var(--spacing-sm);">${product.icon}</div>
                             <h4 style="font-size: 16px; margin-bottom: 8px;">${product.name}</h4>
                             <p style="color: var(--apple-orange); font-weight: 600; font-size: 18px;">¥${product.price}</p>
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin: 8px 0;">
+                                <span style="color: var(--apple-gray-medium); font-size: 11px;">🔥 点击 ${clickCount} 次</span>
+                                ${appData.isAdmin ? `
+                                    <button class="btn btn-secondary btn-small" onclick="editProductStats(${product.id})" style="font-size: 10px; padding: 2px 6px;">📊</button>
+                                ` : ''}
+                            </div>
                             ${product.description ? `<p style="color: var(--apple-gray-medium); font-size: 12px; margin: 8px 0;">${product.description}</p>` : ''}
-                            <button class="btn btn-primary" onclick="openProductUrl('${product.url}', '${product.platform}')" style="font-size: 12px; padding: 8px 16px;">🛒 ${platformText}</button>
+                            <button class="btn btn-primary" onclick="openProductUrl('${product.url}', '${product.platform}', ${product.id})" style="font-size: 12px; padding: 8px 16px;">🛒 ${platformText}</button>
                             ${appData.isAdmin ? `
                                 <div style="margin-top: 8px;">
                                     <button class="btn btn-secondary btn-small" onclick="deleteProduct(${product.id})" style="font-size: 11px; padding: 4px 8px;">删除</button>
@@ -4503,7 +4621,22 @@
         }
 
         // 打开商品链接
-        function openProductUrl(url, platform) {
+        function openProductUrl(url, platform, productId) {
+            // 统计商品点击
+            if (productId) {
+                const product = appData.products.find(p => p.id === productId);
+                if (product) {
+                    product.clickCount = (product.clickCount || 0) + 1;
+                    product.lastClicked = new Date().toLocaleString();
+                    console.log(`商品 ${product.name} 点击次数: ${product.clickCount}`);
+                    
+                    // 如果是管理员，显示点击统计
+                    if (appData.isAdmin) {
+                        showToast(`商品点击: ${product.clickCount} 次`, 'info');
+                    }
+                }
+            }
+            
             const isMobile = isMobileDevice();
             
             if (isMobile) {
@@ -4553,6 +4686,226 @@
                     renderProducts();
                     showToast('商品删除成功', 'success');
                 }
+            }
+        }
+
+        // 编辑商品统计数据
+        function editProductStats(productId) {
+            const product = appData.products.find(p => p.id === productId);
+            if (!product) return;
+
+            const newClickCount = prompt(`修改 "${product.name}" 的点击次数:\n当前点击次数: ${product.clickCount || 0}`, product.clickCount || 0);
+            
+            if (newClickCount !== null) {
+                const count = parseInt(newClickCount);
+                if (!isNaN(count) && count >= 0) {
+                    product.clickCount = count;
+                    product.lastClicked = new Date().toLocaleString();
+                    renderProducts();
+                    showToast('统计数据更新成功', 'success');
+                } else {
+                    showToast('请输入有效的数字', 'error');
+                }
+            }
+        }
+
+        // 医院推荐功能
+        function openHospitalRecommendation() {
+            document.getElementById('hospitalRecommendationModal').classList.add('active');
+            // 清空表单
+            document.getElementById('recommendHospitalName').value = '';
+            document.getElementById('recommendHospitalAddress').value = '';
+            document.getElementById('recommendHospitalPhone').value = '';
+            document.getElementById('recommendHospitalReason').value = '';
+            document.getElementById('recommendHospitalUser').value = appData.userProfile?.name || '';
+        }
+
+        function closeHospitalRecommendationModal() {
+            document.getElementById('hospitalRecommendationModal').classList.remove('active');
+        }
+
+        function submitHospitalRecommendation() {
+            const name = document.getElementById('recommendHospitalName').value.trim();
+            const address = document.getElementById('recommendHospitalAddress').value.trim();
+            const phone = document.getElementById('recommendHospitalPhone').value.trim();
+            const reason = document.getElementById('recommendHospitalReason').value.trim();
+            const userName = document.getElementById('recommendHospitalUser').value.trim() || '匿名用户';
+
+            if (!name || !address) {
+                showToast('请填写医院名称和详细地址', 'error');
+                return;
+            }
+
+            const recommendation = {
+                id: Date.now(),
+                name: name,
+                address: address,
+                phone: phone || '暂无',
+                reason: reason || '用户推荐',
+                userName: userName,
+                userProfile: appData.userProfile,
+                recommendedTime: new Date().toLocaleString(),
+                status: 'pending', // pending, approved, rejected
+                likeCount: 0,
+                dislikeCount: 0
+            };
+
+            // 初始化用户推荐医院数组
+            if (!appData.userRecommendedHospitals) {
+                appData.userRecommendedHospitals = [];
+            }
+
+            appData.userRecommendedHospitals.push(recommendation);
+            renderUserRecommendedHospitals();
+            closeHospitalRecommendationModal();
+            showToast('医院推荐提交成功！感谢您的分享！', 'success');
+        }
+
+        // 渲染用户推荐医院
+        function renderUserRecommendedHospitals() {
+            const container = document.getElementById('userRecommendedHospitals');
+            if (!container) return;
+
+            const recommendations = appData.userRecommendedHospitals || [];
+
+            if (recommendations.length === 0) {
+                container.innerHTML = `
+                    <div style="text-align: center; padding: 40px; color: var(--apple-gray-medium);">
+                        <div style="font-size: 48px; margin-bottom: var(--spacing-sm);">🏥</div>
+                        <p>暂无用户推荐医院</p>
+                        <p style="font-size: 14px; margin-top: var(--spacing-sm);">欢迎分享您知道的好医院</p>
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = recommendations.map(recommendation => {
+                const statusBadge = {
+                    'pending': '⏳ 待审核',
+                    'approved': '✅ 已通过',
+                    'rejected': '❌ 已拒绝'
+                }[recommendation.status] || '⏳ 待审核';
+
+                const statusColor = {
+                    'pending': 'var(--apple-orange)',
+                    'approved': 'var(--apple-green)',
+                    'rejected': 'var(--apple-red)'
+                }[recommendation.status] || 'var(--apple-orange)';
+
+                return `
+                    <div class="card">
+                        <div style="padding: var(--spacing-md);">
+                            <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: var(--spacing-sm);">
+                                <div style="flex: 1;">
+                                    <h4 style="margin-bottom: 4px;">🏥 ${recommendation.name}</h4>
+                                    <p style="color: var(--apple-gray-medium); font-size: 14px; margin-bottom: 4px;">📍 ${recommendation.address}</p>
+                                    <p style="color: var(--apple-gray-medium); font-size: 14px; margin-bottom: 4px;">📞 ${recommendation.phone}</p>
+                                </div>
+                                <span style="background: ${statusColor}; color: white; font-size: 10px; padding: 2px 6px; border-radius: 10px;">
+                                    ${statusBadge}
+                                </span>
+                            </div>
+                            
+                            <p style="color: var(--apple-gray-dark); font-size: 14px; margin-bottom: var(--spacing-sm);">💬 ${recommendation.reason}</p>
+                            
+                            <div style="display: flex; justify-content: space-between; align-items: center; padding-top: var(--spacing-sm); border-top: 1px solid var(--apple-border);">
+                                <div style="font-size: 12px; color: var(--apple-gray-medium);">
+                                    👤 ${recommendation.userName} · ${recommendation.recommendedTime}
+                                </div>
+                                <div style="display: flex; gap: var(--spacing-sm);">
+                                    ${recommendation.status === 'approved' ? `
+                                        <button class="btn btn-primary btn-small" onclick="navigateToHospital('${recommendation.address}', '${recommendation.name}')">🧭 导航</button>
+                                    ` : ''}
+                                    ${appData.isAdmin ? `
+                                        <button class="btn btn-secondary btn-small" onclick="approveRecommendation(${recommendation.id})">✅</button>
+                                        <button class="btn btn-secondary btn-small" onclick="rejectRecommendation(${recommendation.id})">❌</button>
+                                        <button class="btn btn-secondary btn-small" onclick="deleteRecommendation(${recommendation.id})">🗑️</button>
+                                    ` : `
+                                        <div style="display: flex; gap: 4px;">
+                                            <button class="btn btn-small" onclick="likeRecommendation(${recommendation.id})">👍 ${recommendation.likeCount}</button>
+                                            <button class="btn btn-small" onclick="dislikeRecommendation(${recommendation.id})">👎 ${recommendation.dislikeCount}</button>
+                                        </div>
+                                    `}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // 高德导航功能
+        function openGaodeNavigation() {
+            const destination = document.getElementById('gaodeDestination').value.trim();
+            
+            if (!destination) {
+                showToast('请输入医院地址', 'warning');
+                return;
+            }
+            
+            showToast('正在打开高德地图导航...', 'info');
+            
+            // 构建高德地图导航URL
+            const gaodeUrl = `https://uri.amap.com/navigation?to=${encodeURIComponent(destination)},医院&mode=car`;
+            
+            setTimeout(() => {
+                window.open(gaodeUrl, '_blank');
+            }, 500);
+        }
+
+        // 导航到医院
+        function navigateToHospital(address, hospitalName) {
+            showToast(`正在打开高德地图导航到 ${hospitalName}...`, 'info');
+            
+            // 构建高德地图导航URL
+            const gaodeUrl = `https://uri.amap.com/navigation?to=${encodeURIComponent(address)},${encodeURIComponent(hospitalName)}&mode=car`;
+            
+            setTimeout(() => {
+                window.open(gaodeUrl, '_blank');
+            }, 500);
+        }
+
+        // 管理员功能
+        function approveRecommendation(recommendationId) {
+            const recommendation = appData.userRecommendedHospitals.find(r => r.id === recommendationId);
+            if (recommendation) {
+                recommendation.status = 'approved';
+                renderUserRecommendedHospitals();
+                showToast('推荐已通过审核', 'success');
+            }
+        }
+
+        function rejectRecommendation(recommendationId) {
+            const recommendation = appData.userRecommendedHospitals.find(r => r.id === recommendationId);
+            if (recommendation) {
+                recommendation.status = 'rejected';
+                renderUserRecommendedHospitals();
+                showToast('推荐已拒绝', 'info');
+            }
+        }
+
+        function deleteRecommendation(recommendationId) {
+            if (confirm('确定要删除这个推荐吗？')) {
+                appData.userRecommendedHospitals = appData.userRecommendedHospitals.filter(r => r.id !== recommendationId);
+                renderUserRecommendedHospitals();
+                showToast('推荐已删除', 'success');
+            }
+        }
+
+        // 用户点赞功能
+        function likeRecommendation(recommendationId) {
+            const recommendation = appData.userRecommendedHospitals.find(r => r.id === recommendationId);
+            if (recommendation) {
+                recommendation.likeCount = (recommendation.likeCount || 0) + 1;
+                renderUserRecommendedHospitals();
+            }
+        }
+
+        function dislikeRecommendation(recommendationId) {
+            const recommendation = appData.userRecommendedHospitals.find(r => r.id === recommendationId);
+            if (recommendation) {
+                recommendation.dislikeCount = (recommendation.dislikeCount || 0) + 1;
+                renderUserRecommendedHospitals();
             }
         }
 
