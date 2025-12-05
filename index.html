@@ -445,7 +445,8 @@
                 right: 0;
                 background: white;
                 border-top: 1px solid var(--apple-border);
-                display: flex;
+                display: flex !important;
+                visibility: visible !important;
                 justify-content: space-around;
                 padding: 4px 0;
                 z-index: 998;
@@ -485,12 +486,21 @@
                 padding-bottom: 70px;
             }
 
-            /* 桌面端隐藏移动端导航 */
-            @media (min-width: 769px) {
-                .mobile-quick-nav {
-                    display: none !important;
-                }
+        /* 桌面端隐藏移动端导航 */
+        @media (min-width: 769px) {
+            .mobile-quick-nav {
+                display: none !important;
             }
+        }
+        
+        /* 移动端强制显示导航 */
+        @media (max-width: 768px) {
+            .mobile-quick-nav {
+                display: flex !important;
+                visibility: visible !important;
+                opacity: 1 !important;
+            }
+        }
             }
 
             .grid-3 {
@@ -2129,8 +2139,10 @@
                 
                 // 5. 针对特定页面的初始化
                 setTimeout(() => {
+                    console.log('初始化页面:', pageId);
                     switch(pageId) {
                         case 'hospital':
+                            console.log('加载医院推荐页面');
                             renderUserRecommendedHospitals();
                             break;
                         case 'shop':
@@ -4696,13 +4708,21 @@
 
         // 医院推荐功能
         function openHospitalRecommendation() {
-            document.getElementById('hospitalRecommendationModal').classList.add('active');
-            // 清空表单
-            document.getElementById('recommendHospitalName').value = '';
-            document.getElementById('recommendHospitalAddress').value = '';
-            document.getElementById('recommendHospitalPhone').value = '';
-            document.getElementById('recommendHospitalReason').value = '';
-            document.getElementById('recommendHospitalUser').value = appData.userProfile?.name || '';
+            console.log('打开医院推荐模态框');
+            const modal = document.getElementById('hospitalRecommendationModal');
+            if (modal) {
+                modal.classList.add('active');
+                // 清空表单
+                document.getElementById('recommendHospitalName').value = '';
+                document.getElementById('recommendHospitalAddress').value = '';
+                document.getElementById('recommendHospitalPhone').value = '';
+                document.getElementById('recommendHospitalReason').value = '';
+                document.getElementById('recommendHospitalUser').value = appData.userProfile?.name || '';
+                console.log('模态框已打开');
+            } else {
+                console.error('找不到推荐模态框');
+                showToast('推荐功能暂时不可用', 'error');
+            }
         }
 
         function closeHospitalRecommendationModal() {
