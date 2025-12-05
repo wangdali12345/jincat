@@ -125,6 +125,9 @@
             padding: var(--spacing-lg) var(--spacing-md);
             min-height: calc(100vh - 120px);
             margin-top: 60px;
+            background: var(--apple-white);
+            position: relative;
+            z-index: 1;
         }
 
         .page.active {
@@ -495,6 +498,14 @@
                 display: flex !important;
                 visibility: visible !important;
                 opacity: 1 !important;
+                bottom: 0 !important;
+                left: 0 !important;
+                right: 0 !important;
+            }
+            
+            /* 确保所有页面在移动端正确显示 */
+            .page {
+                padding: var(--spacing-lg) var(--spacing-md) 80px !important;
             }
         }
             }
@@ -1203,15 +1214,12 @@
                     <a href="#" class="nav-link" data-page="profile" onclick="switchPage('profile')">个人中心</a>
                 </div>
 
-                <div style="display: flex; align-items: center; gap: var(--spacing-sm); z-index: 1002; position: relative;">
-                    <button class="mobile-nav-toggle" onclick="toggleMobileMenu()" style="z-index: 1004; position: relative; pointer-events: auto;">☰</button>
-                </div>
+
             </div>
         </div>
     </nav>
 
-    <!-- 移动端导航遮罩 -->
-    <div class="mobile-nav-overlay" id="mobileNavOverlay" onclick="closeMobileMenu()"></div>
+
 
     <!-- 首页 -->
     <div id="home" class="page active">
@@ -2096,6 +2104,8 @@
 
         // 简单的页面切换函数
         function switchPage(pageId) {
+            console.log('🔄 切换到页面:', pageId);
+            
             // 隐藏所有页面
             document.querySelectorAll('.page').forEach(page => {
                 page.classList.remove('active');
@@ -2105,6 +2115,10 @@
             const targetPage = document.getElementById(pageId);
             if (targetPage) {
                 targetPage.classList.add('active');
+                console.log('✅ 页面显示成功:', pageId);
+            } else {
+                console.error('❌ 页面不存在:', pageId);
+                return;
             }
             
             // 更新导航状态
@@ -2114,7 +2128,63 @@
             
             document.querySelectorAll(`[data-page="${pageId}"]`).forEach(link => {
                 link.classList.add('active');
+                console.log('✅ 导航状态更新:', pageId);
             });
+            
+            // 初始化页面内容
+            setTimeout(() => {
+                switch(pageId) {
+                    case 'hospital':
+                        if (typeof renderUserRecommendedHospitals === 'function') {
+                            renderUserRecommendedHospitals();
+                        }
+                        break;
+                    case 'shop':
+                        if (typeof renderProducts === 'function') {
+                            renderProducts();
+                        }
+                        break;
+                    case 'forum':
+                        if (typeof renderPosts === 'function') {
+                            renderPosts();
+                        }
+                        break;
+                    case 'cats':
+                        if (typeof renderCats === 'function') {
+                            renderCats();
+                        }
+                        break;
+                    case 'logistics':
+                        // 物流页面初始化
+                        if (typeof updateProfileMenu === 'function') {
+                            updateProfileMenu();
+                        }
+                        break;
+                    case 'profile':
+                        // 个人中心初始化
+                        if (typeof updateProfileMenu === 'function') {
+                            updateProfileMenu();
+                        }
+                        break;
+                }
+            }, 100);
+            
+            // 检查管理员状态
+            if (appData && appData.isAdmin) {
+                setTimeout(() => {
+                    enableAdminFeatures();
+                }, 150);
+            }
+            
+            // 确保移动端导航在手机端可见
+            if (window.innerWidth <= 768) {
+                const mobileNav = document.querySelector('.mobile-quick-nav');
+                if (mobileNav) {
+                    mobileNav.style.display = 'flex';
+                    mobileNav.style.visibility = 'visible';
+                    mobileNav.style.opacity = '1';
+                }
+            }
         }
 
         // Toast通知函数
@@ -4155,6 +4225,16 @@
         // 初始化
         document.addEventListener('DOMContentLoaded', function() {
             console.log('🚀 杭州宠物社区加载完成');
+            
+            // 确保移动端导航在手机端可见
+            if (window.innerWidth <= 768) {
+                const mobileNav = document.querySelector('.mobile-quick-nav');
+                if (mobileNav) {
+                    mobileNav.style.display = 'flex';
+                    mobileNav.style.visibility = 'visible';
+                    mobileNav.style.opacity = '1';
+                }
+            }
             
             try {
                 // 确保首页显示
