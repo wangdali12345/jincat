@@ -123,13 +123,12 @@
         .page {
             display: none;
             padding: var(--spacing-lg) var(--spacing-md);
-            min-height: 100vh;
+            min-height: calc(100vh - 120px);
             margin-top: 60px;
-            padding-bottom: 80px; /* 给底部按钮留空间 */
         }
 
         .page.active {
-            display: block;
+            display: block !important;
         }
 
         /* 卡片样式 */
@@ -439,17 +438,18 @@
 
             /* 移动端快捷导航 */
             .mobile-quick-nav {
-                position: fixed;
-                bottom: 0;
-                left: 0;
-                right: 0;
+                position: fixed !important;
+                bottom: 0 !important;
+                left: 0 !important;
+                right: 0 !important;
                 background: white;
                 border-top: 1px solid var(--apple-border);
                 display: flex !important;
                 visibility: visible !important;
+                opacity: 1 !important;
                 justify-content: space-around;
                 padding: 4px 0;
-                z-index: 998;
+                z-index: 9999 !important;
                 box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
                 height: 50px;
             }
@@ -480,11 +480,7 @@
                 font-size: 18px;
             }
 
-            /* 调整页面内容间距，避免被导航栏遮挡 */
-            .page {
-                padding-top: var(--spacing-lg);
-                padding-bottom: 70px;
-            }
+
 
         /* 桌面端隐藏移动端导航 */
         @media (min-width: 769px) {
@@ -2978,7 +2974,13 @@
         }
 
         function renderCats() {
+            console.log('渲染猫咪列表...');
             const catList = document.getElementById('catList');
+            
+            if (!catList) {
+                console.error('找不到catList元素');
+                return;
+            }
             
             if (appData.cats.length === 0) {
                 // 显示提示信息
@@ -3302,7 +3304,13 @@
 
         // 渲染帖子列表
         function renderPosts() {
+            console.log('渲染论坛帖子...');
             const postList = document.getElementById('postList');
+            
+            if (!postList) {
+                console.error('找不到postList元素');
+                return;
+            }
             
             if (appData.posts.length === 0) {
                 // 显示示例帖子
@@ -4350,34 +4358,40 @@
         // 个人中心相关功能
         function showAddressManager(event) {
             if (event) event.preventDefault();
+            console.log('打开地址管理');
             showToast('地址管理功能开发中...', 'info');
             // 这里可以添加地址管理模态框
         }
 
         function showOrderManager(event) {
             if (event) event.preventDefault();
+            console.log('打开订单管理');
             showToast('订单管理功能开发中...', 'info');
             // 这里可以添加订单管理模态框
         }
 
         function showSettings(event) {
             if (event) event.preventDefault();
+            console.log('打开设置');
             showToast('设置功能开发中...', 'info');
             // 这里可以添加设置模态框
         }
 
         function showAbout(event) {
             if (event) event.preventDefault();
+            console.log('显示关于信息');
             showToast('杭州宠物社区 v1.0 - 宠物交流与服务平台', 'info');
         }
 
         function showVersion(event) {
             if (event) event.preventDefault();
+            console.log('显示版本信息');
             showToast('版本：1.0.0 | 更新时间：2024年', 'info');
         }
 
         function checkAdminStatus(event) {
             if (event) event.preventDefault();
+            console.log('检查管理员状态');
             const status = `
                 当前用户: ${appData.currentUser || '未登录'}
                 登录状态: ${appData.isLoggedIn ? '已登录' : '未登录'}
