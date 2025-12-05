@@ -235,12 +235,70 @@
             background: white;
             transition: all 0.3s ease;
             min-height: 44px;
+            user-select: text;
+            -webkit-user-select: text;
+            -moz-user-select: text;
+            -ms-user-select: text;
+            position: relative;
         }
 
         .input:focus {
             outline: none;
             border-color: var(--apple-blue);
             box-shadow: 0 0 0 3px rgba(0, 113, 227, 0.1);
+        }
+
+        /* 复制粘贴按钮 */
+        .input-paste-btn {
+            position: absolute;
+            right: 8px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: var(--apple-gray-light);
+            border: none;
+            border-radius: var(--border-radius-sm);
+            padding: 6px 10px;
+            font-size: 12px;
+            color: var(--apple-gray-dark);
+            cursor: pointer;
+            transition: all 0.2s ease;
+            z-index: 10;
+        }
+
+        .input-paste-btn:hover {
+            background: var(--apple-blue);
+            color: white;
+        }
+
+        .input-copy-btn {
+            position: absolute;
+            right: 50px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: var(--apple-gray-light);
+            border: none;
+            border-radius: var(--border-radius-sm);
+            padding: 6px 10px;
+            font-size: 12px;
+            color: var(--apple-gray-dark);
+            cursor: pointer;
+            transition: all 0.2s ease;
+            z-index: 10;
+        }
+
+        .input-copy-btn:hover {
+            background: var(--apple-green);
+            color: white;
+        }
+
+        .input-wrapper {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+        .input-wrapper .input {
+            padding-right: 110px;
         }
 
         /* 表单组 */
@@ -1019,6 +1077,117 @@
             font-size: 14px;
         }
 
+        /* 医院排行榜样式 */
+        .ranking-list {
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .ranking-item {
+            display: flex;
+            align-items: center;
+            padding: var(--spacing-sm);
+            border-radius: var(--border-radius-sm);
+            margin-bottom: var(--spacing-xs);
+            background: var(--apple-gray-light);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .ranking-item:hover {
+            background: var(--cat-bg-gradient);
+            transform: translateX(4px);
+        }
+
+        .ranking-number {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 14px;
+            margin-right: var(--spacing-sm);
+            flex-shrink: 0;
+        }
+
+        .ranking-number.gold {
+            background: linear-gradient(135deg, #FFD700, #FFA500);
+            color: white;
+        }
+
+        .ranking-number.silver {
+            background: linear-gradient(135deg, #C0C0C0, #808080);
+            color: white;
+        }
+
+        .ranking-number.bronze {
+            background: linear-gradient(135deg, #CD7F32, #8B4513);
+            color: white;
+        }
+
+        .ranking-number.normal {
+            background: var(--apple-gray-medium);
+            color: white;
+        }
+
+        .ranking-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .ranking-name {
+            font-weight: 600;
+            color: var(--apple-black);
+            margin-bottom: 2px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .ranking-details {
+            font-size: 12px;
+            color: var(--apple-gray-medium);
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-xs);
+        }
+
+        .ranking-likes {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            font-size: 12px;
+            color: var(--apple-red);
+        }
+
+        .ranking-actions {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .rank-up-btn, .rank-down-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+            padding: 2px 6px;
+            border-radius: var(--border-radius-sm);
+            transition: all 0.2s ease;
+        }
+
+        .rank-up-btn:hover {
+            background: var(--apple-green);
+            color: white;
+        }
+
+        .rank-down-btn:hover {
+            background: var(--apple-red);
+            color: white;
+        }
+
         /* 折叠评论样式 */
         .comments-section {
             max-height: 200px;
@@ -1460,6 +1629,26 @@
                 </div>
             </div>
             
+            <!-- 医院排行榜 -->
+            <div class="card" style="margin-bottom: var(--spacing-lg);">
+                <div style="padding: var(--spacing-md);">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--spacing-md);">
+                        <h3 style="margin: 0; display: flex; align-items: center; gap: var(--spacing-sm);">
+                            🏆 医院排行榜
+                            <span style="font-size: 14px; color: var(--apple-gray-medium); font-weight: normal;">(按用户点赞和使用量排序)</span>
+                        </h3>
+                        <button id="editRankingBtn" class="btn btn-secondary" onclick="openHospitalRankingManager()" style="display: none; font-size: 14px; padding: 8px 16px;">
+                            ✏️ 编辑排行
+                        </button>
+                    </div>
+                    <div id="hospitalRanking">
+                        <div id="hospitalRankingList" class="ranking-list">
+                            <!-- 排行榜内容将在这里动态生成 -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <!-- 用户推荐医院 -->
             <h3 style="margin-bottom: var(--spacing-md);">💝 用户推荐医院</h3>
             <div id="userRecommendedHospitals">
@@ -1540,6 +1729,36 @@
             <div class="modal-footer">
                 <button class="btn btn-secondary" onclick="closeHospitalRecommendationModal()">取消</button>
                 <button class="btn btn-primary" onclick="submitHospitalRecommendation()">提交推荐</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 医院排行榜管理模态框 -->
+    <div id="hospitalRankingManagerModal" class="modal-overlay">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>🏆 医院排行榜管理</h3>
+                <button class="modal-close-btn" onclick="closeHospitalRankingManager()">×</button>
+            </div>
+            <div class="modal-body">
+                <div style="margin-bottom: var(--spacing-md); padding: var(--spacing-sm); background: var(--apple-gray-light); border-radius: var(--border-radius-sm);">
+                    <p style="margin: 0; color: var(--apple-gray-dark); font-size: 14px;">
+                        💡 提示：您可以拖拽调整医院排名，或使用上下箭头精确调整
+                    </p>
+                </div>
+                
+                <div id="sortableRankingList" style="max-height: 400px; overflow-y: auto;">
+                    <!-- 可排序的医院列表将在这里生成 -->
+                </div>
+                
+                <div style="margin-top: var(--spacing-md);">
+                    <button class="btn btn-secondary" onclick="addNewHospitalToRanking()">➕ 添加新医院</button>
+                    <button class="btn btn-secondary" onclick="resetRankingToDefault()">🔄 重置为默认</button>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeHospitalRankingManager()">取消</button>
+                <button class="btn btn-primary" onclick="saveRankingChanges()">保存更改</button>
             </div>
         </div>
     </div>
@@ -2083,10 +2302,352 @@
                 const data = JSON.parse(storedData);
                 Object.assign(appData, data);
                 console.log('📦 从本地存储加载数据:', data);
+                
+                // 确保用户推荐医院数组存在
+                if (!appData.userRecommendedHospitals) {
+                    appData.userRecommendedHospitals = [];
+                }
+                
+                // 确保医院排行榜数组存在
+                if (!appData.hospitalRanking) {
+                    appData.hospitalRanking = [];
+                }
             } else {
                 console.log('🆕 使用默认数据初始化');
+                // 初始化必要的数据结构
+                appData.userRecommendedHospitals = [];
+                appData.hospitalRanking = [];
+                
+                // 初始化默认排行榜数据
+                initDefaultHospitalRanking();
+                
                 saveToLocalStorage();
             }
+        }
+
+        // 初始化默认医院排行榜
+        function initDefaultHospitalRanking() {
+            appData.hospitalRanking = [
+                {
+                    id: 1,
+                    name: '杭州爱心宠物医院',
+                    address: '杭州市西湖区文三路123号',
+                    phone: '0571-88888888',
+                    likes: 156,
+                    rating: 4.8,
+                    description: '专业宠物医疗服务，设备先进'
+                },
+                {
+                    id: 2,
+                    name: '杭州宠物中心医院',
+                    address: '杭州市拱墅区湖墅南路456号',
+                    phone: '0571-99999999',
+                    likes: 128,
+                    rating: 4.6,
+                    description: '24小时急诊服务，经验丰富'
+                },
+                {
+                    id: 3,
+                    name: '杭州萌宠宠物医院',
+                    address: '杭州市上城区钱江路789号',
+                    phone: '0571-77777777',
+                    likes: 95,
+                    rating: 4.5,
+                    description: '环境温馨，服务贴心'
+                }
+            ];
+        }
+
+        // 渲染医院排行榜
+        function renderHospitalRanking() {
+            const container = document.getElementById('hospitalRankingList');
+            if (!container) return;
+
+            let ranking = [...(appData.hospitalRanking || [])];
+            
+            // 按点赞量排序
+            ranking.sort((a, b) => b.likes - a.likes);
+
+            if (ranking.length === 0) {
+                container.innerHTML = `
+                    <div style="text-align: center; padding: 20px; color: var(--apple-gray-medium);">
+                        <p>暂无排行榜数据</p>
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = ranking.map((hospital, index) => {
+                const rankClass = index === 0 ? 'gold' : index === 1 ? 'silver' : index === 2 ? 'bronze' : 'normal';
+                const rankEmoji = index === 0 ? '🥇' : index === 1 ? '🥈' : index === 2 ? '🥉' : `${index + 1}`;
+
+                return `
+                    <div class="ranking-item" onclick="showHospitalDetails(${hospital.id})">
+                        <div class="ranking-number ${rankClass}">
+                            ${rankEmoji}
+                        </div>
+                        <div class="ranking-info">
+                            <div class="ranking-name">${hospital.name}</div>
+                            <div class="ranking-details">
+                                <span>📍 ${hospital.address}</span>
+                                <span>⭐ ${hospital.rating}</span>
+                            </div>
+                        </div>
+                        <div class="ranking-likes">
+                            <span>❤️</span>
+                            <span>${hospital.likes}</span>
+                        </div>
+                        ${appData.isAdmin ? `
+                            <div class="ranking-actions">
+                                <button class="rank-up-btn" onclick="event.stopPropagation(); moveHospitalRank(${hospital.id}, -1)" title="上升排名">⬆️</button>
+                                <button class="rank-down-btn" onclick="event.stopPropagation(); moveHospitalRank(${hospital.id}, 1)" title="下降排名">⬇️</button>
+                            </div>
+                        ` : ''}
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // 移动医院排名
+        function moveHospitalRank(hospitalId, direction) {
+            if (!appData.hospitalRanking || appData.hospitalRanking.length === 0) return;
+
+            const index = appData.hospitalRanking.findIndex(h => h.id === hospitalId);
+            if (index === -1) return;
+
+            const newIndex = index + direction;
+            if (newIndex < 0 || newIndex >= appData.hospitalRanking.length) return;
+
+            // 交换位置
+            [appData.hospitalRanking[index], appData.hospitalRanking[newIndex]] = 
+            [appData.hospitalRanking[newIndex], appData.hospitalRanking[index]];
+
+            saveToLocalStorage();
+            renderHospitalRanking();
+            showToast('排名已更新', 'success');
+        }
+
+        // 显示医院详情
+        function showHospitalDetails(hospitalId) {
+            const hospital = appData.hospitalRanking.find(h => h.id === hospitalId);
+            if (!hospital) return;
+
+            showToast(`${hospital.name} - ${hospital.address} - 电话: ${hospital.phone}`, 'info');
+        }
+
+        // 打开医院排行榜管理器
+        function openHospitalRankingManager() {
+            const modal = document.getElementById('hospitalRankingManagerModal');
+            modal.classList.add('active');
+            
+            // 渲染可编辑的排行榜
+            renderEditableRanking();
+            
+            // 阻止背景滚动
+            document.body.style.overflow = 'hidden';
+        }
+
+        // 关闭医院排行榜管理器
+        function closeHospitalRankingManager() {
+            const modal = document.getElementById('hospitalRankingManagerModal');
+            modal.classList.remove('active');
+            
+            // 恢复背景滚动
+            document.body.style.overflow = '';
+        }
+
+        // 渲染可编辑的排行榜
+        function renderEditableRanking() {
+            const container = document.getElementById('sortableRankingList');
+            if (!container) return;
+            
+            let ranking = [...(appData.hospitalRanking || [])];
+            
+            if (ranking.length === 0) {
+                container.innerHTML = `
+                    <div style="text-align: center; padding: 20px; color: var(--apple-gray-medium);">
+                        <p>暂无排行榜数据</p>
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = ranking.map((hospital, index) => `
+                <div class="ranking-item" data-hospital-id="${hospital.id}" draggable="true">
+                    <div class="ranking-number" style="background: var(--apple-gray-medium); color: white; cursor: move;">
+                        ${index + 1}
+                    </div>
+                    <div class="ranking-info">
+                        <div class="ranking-name">${hospital.name}</div>
+                        <div class="ranking-details">
+                            <span>📍 ${hospital.address}</span>
+                            <span>⭐ ${hospital.rating}</span>
+                        </div>
+                    </div>
+                    <div class="ranking-likes">
+                        <span>❤️</span>
+                        <input type="number" value="${hospital.likes}" min="0" style="width: 60px; padding: 4px; border: 1px solid var(--apple-border); border-radius: 4px;" onchange="updateHospitalLikes(${hospital.id}, this.value)">
+                    </div>
+                    <div class="ranking-actions">
+                        <button class="rank-up-btn" onclick="moveHospitalInEditor(${hospital.id}, -1)" title="上升排名">⬆️</button>
+                        <button class="rank-down-btn" onclick="moveHospitalInEditor(${hospital.id}, 1)" title="下降排名">⬇️</button>
+                        <button class="btn btn-secondary" onclick="editHospitalInRanking(${hospital.id})" title="编辑信息" style="padding: 4px 8px; font-size: 12px;">✏️</button>
+                        <button class="btn btn-secondary" onclick="removeHospitalFromRanking(${hospital.id})" title="删除" style="padding: 4px 8px; font-size: 12px; background: var(--apple-red); color: white;">🗑️</button>
+                    </div>
+                </div>
+            `).join('');
+
+            // 初始化拖拽功能
+            initializeDragAndDrop();
+        }
+
+        // 初始化拖拽功能
+        function initializeDragAndDrop() {
+            const items = document.querySelectorAll('#sortableRankingList .ranking-item');
+            let draggedItem = null;
+
+            items.forEach(item => {
+                item.addEventListener('dragstart', function(e) {
+                    draggedItem = this;
+                    this.style.opacity = '0.5';
+                });
+
+                item.addEventListener('dragend', function(e) {
+                    this.style.opacity = '';
+                });
+
+                item.addEventListener('dragover', function(e) {
+                    e.preventDefault();
+                    if (this !== draggedItem) {
+                        const rect = this.getBoundingClientRect();
+                        const midpoint = rect.top + rect.height / 2;
+                        if (e.clientY < midpoint) {
+                            this.parentNode.insertBefore(draggedItem, this);
+                        } else {
+                            this.parentNode.insertBefore(draggedItem, this.nextSibling);
+                        }
+                    }
+                });
+            });
+        }
+
+        // 在编辑器中移动医院排名
+        function moveHospitalInEditor(hospitalId, direction) {
+            const container = document.getElementById('sortableRankingList');
+            const items = container.querySelectorAll('.ranking-item');
+            const currentIndex = Array.from(items).findIndex(item => 
+                parseInt(item.dataset.hospitalId) === hospitalId
+            );
+            
+            if (currentIndex === -1) return;
+            
+            const newIndex = currentIndex + direction;
+            if (newIndex < 0 || newIndex >= items.length) return;
+            
+            if (direction === -1) {
+                container.insertBefore(items[newIndex], items[currentIndex]);
+            } else {
+                container.insertBefore(items[currentIndex], items[newIndex].nextSibling);
+            }
+        }
+
+        // 更新医院点赞数
+        function updateHospitalLikes(hospitalId, newLikes) {
+            const hospital = appData.hospitalRanking.find(h => h.id === hospitalId);
+            if (hospital) {
+                hospital.likes = parseInt(newLikes) || 0;
+                showToast('点赞数已更新', 'success');
+            }
+        }
+
+        // 从排行榜中移除医院
+        function removeHospitalFromRanking(hospitalId) {
+            if (confirm('确定要从排行榜中移除这家医院吗？')) {
+                appData.hospitalRanking = appData.hospitalRanking.filter(h => h.id !== hospitalId);
+                renderEditableRanking();
+                showToast('医院已从排行榜中移除', 'success');
+            }
+        }
+
+        // 添加新医院到排行榜
+        function addNewHospitalToRanking() {
+            const name = prompt('请输入医院名称：');
+            if (!name) return;
+            
+            const address = prompt('请输入医院地址：');
+            if (!address) return;
+            
+            const phone = prompt('请输入联系电话：') || '';
+            const rating = parseFloat(prompt('请输入评分（1-5）：')) || 4.0;
+            
+            const newHospital = {
+                id: Date.now(),
+                name: name,
+                address: address,
+                phone: phone,
+                likes: 0,
+                rating: Math.min(5, Math.max(1, rating)),
+                description: ''
+            };
+            
+            appData.hospitalRanking.push(newHospital);
+            renderEditableRanking();
+            showToast('新医院已添加到排行榜', 'success');
+        }
+
+        // 编辑排行榜中的医院信息
+        function editHospitalInRanking(hospitalId) {
+            const hospital = appData.hospitalRanking.find(h => h.id === hospitalId);
+            if (!hospital) return;
+            
+            const newName = prompt('医院名称：', hospital.name);
+            if (!newName) return;
+            
+            const newAddress = prompt('医院地址：', hospital.address);
+            if (!newAddress) return;
+            
+            const newPhone = prompt('联系电话：', hospital.phone);
+            const newRating = parseFloat(prompt('评分（1-5）：', hospital.rating));
+            const newDescription = prompt('医院简介：', hospital.description || '');
+            
+            hospital.name = newName;
+            hospital.address = newAddress;
+            hospital.phone = newPhone;
+            hospital.rating = isNaN(newRating) ? hospital.rating : Math.min(5, Math.max(1, newRating));
+            hospital.description = newDescription || '';
+            
+            renderEditableRanking();
+            showToast('医院信息已更新', 'success');
+        }
+
+        // 重置排行榜为默认
+        function resetRankingToDefault() {
+            if (confirm('确定要重置为默认排行榜吗？当前更改将丢失。')) {
+                initDefaultHospitalRanking();
+                renderEditableRanking();
+                showToast('排行榜已重置为默认', 'success');
+            }
+        }
+
+        // 保存排行榜更改
+        function saveRankingChanges() {
+            const container = document.getElementById('sortableRankingList');
+            const items = container.querySelectorAll('.ranking-item');
+            
+            const newRanking = [];
+            items.forEach((item, index) => {
+                const hospitalId = parseInt(item.dataset.hospitalId);
+                const hospital = appData.hospitalRanking.find(h => h.id === hospitalId);
+                if (hospital) {
+                    newRanking.push(hospital);
+                }
+            });
+            
+            appData.hospitalRanking = newRanking;
+            saveToLocalStorage();
+            renderHospitalRanking();
+            closeHospitalRankingManager();
+            showToast('排行榜已保存', 'success');
         }
 
         // 保存到本地存储
@@ -2600,6 +3161,13 @@
             if (hospitalManageBtn) {
                 hospitalManageBtn.style.display = 'block';
                 console.log('医院管理按钮已显示');
+            }
+            
+            // 启用医院排行榜编辑功能
+            const editRankingBtn = document.getElementById('editRankingBtn');
+            if (editRankingBtn) {
+                editRankingBtn.style.display = 'block';
+                console.log('医院排行榜编辑按钮已显示');
             }
             
             // 启用论坛管理功能
@@ -4448,6 +5016,20 @@
             console.log('🚀 金猫之家加载完成');
             
             try {
+                // 初始化复制粘贴功能
+                setTimeout(() => {
+                    initializeCopyPaste();
+                }, 500);
+                
+                // 初始化医院排行榜
+                setTimeout(() => {
+                    if (!appData.hospitalRanking || appData.hospitalRanking.length === 0) {
+                        initDefaultHospitalRanking();
+                        saveToLocalStorage();
+                    }
+                    renderHospitalRanking();
+                }, 600);
+                
                 // 立即执行强制初始化
                 forceInitializePages();
                 
@@ -5372,6 +5954,145 @@
                 document.body.removeChild(textArea);
                 showToast('图片链接已复制到剪贴板', 'success');
             });
+        }
+
+        // 增强的复制粘贴功能
+        async function copyToClipboardAdvanced(text) {
+            try {
+                if (navigator.clipboard && window.isSecureContext) {
+                    await navigator.clipboard.writeText(text);
+                    showToast('已复制到剪贴板', 'success');
+                } else {
+                    const textArea = document.createElement('textarea');
+                    textArea.value = text;
+                    document.body.appendChild(textArea);
+                    textArea.select();
+                    document.execCommand('copy');
+                    document.body.removeChild(textArea);
+                    showToast('已复制到剪贴板', 'success');
+                }
+            } catch (err) {
+                console.error('复制失败:', err);
+                showToast('复制失败，请手动复制', 'error');
+            }
+        }
+
+        // 从剪贴板粘贴
+        async function pasteFromClipboard(inputElement) {
+            try {
+                if (navigator.clipboard && window.isSecureContext) {
+                    const text = await navigator.clipboard.readText();
+                    if (text) {
+                        inputElement.value = text;
+                        showToast('已粘贴内容', 'success');
+                    }
+                } else {
+                    showToast('您的浏览器不支持自动粘贴，请使用Ctrl+V', 'info');
+                }
+            } catch (err) {
+                showToast('粘贴失败，请使用Ctrl+V', 'info');
+            }
+        }
+
+        // 为输入框添加复制粘贴按钮
+        function addCopyPasteButtons(inputElement) {
+            const wrapper = document.createElement('div');
+            wrapper.className = 'input-wrapper';
+            
+            inputElement.parentNode.insertBefore(wrapper, inputElement);
+            wrapper.appendChild(inputElement);
+            
+            // 复制按钮
+            const copyBtn = document.createElement('button');
+            copyBtn.className = 'input-copy-btn';
+            copyBtn.innerHTML = '📋';
+            copyBtn.title = '复制内容';
+            copyBtn.onclick = (e) => {
+                e.stopPropagation();
+                if (inputElement.value) {
+                    copyToClipboardAdvanced(inputElement.value);
+                } else {
+                    showToast('没有内容可复制', 'info');
+                }
+            };
+            
+            // 粘贴按钮
+            const pasteBtn = document.createElement('button');
+            pasteBtn.className = 'input-paste-btn';
+            pasteBtn.innerHTML = '📄';
+            pasteBtn.title = '粘贴内容';
+            pasteBtn.onclick = (e) => {
+                e.stopPropagation();
+                pasteFromClipboard(inputElement);
+            };
+            
+            wrapper.appendChild(copyBtn);
+            wrapper.appendChild(pasteBtn);
+            
+            // 添加键盘快捷键支持
+            inputElement.addEventListener('keydown', (e) => {
+                if (e.ctrlKey || e.metaKey) {
+                    if (e.key === 'v') {
+                        e.preventDefault();
+                        pasteFromClipboard(inputElement);
+                    } else if (e.key === 'c' && inputElement.value) {
+                        e.preventDefault();
+                        copyToClipboardAdvanced(inputElement.value);
+                    }
+                }
+            });
+        }
+
+        // 初始化所有输入框的复制粘贴功能
+        function initializeCopyPaste() {
+            const inputs = document.querySelectorAll('.input[type="text"], .input[type="number"], textarea, .input:not([type])');
+            inputs.forEach(input => {
+                // 跳过已有包装器的输入框
+                if (input.closest('.input-wrapper')) return;
+                
+                // 跳过特殊用途的输入框
+                if (input.id && (
+                    input.id.includes('tracking') || 
+                    input.id.includes('search') ||
+                    input.closest('.modal') && !input.id.includes('Name') && !input.id.includes('Address') && !input.id.includes('Description')
+                )) return;
+                
+                addCopyPasteButtons(input);
+            });
+        }
+
+        // 增强版复制到剪贴板
+        function copyToClipboardAdvanced(text) {
+            if (navigator.clipboard && window.isSecureContext) {
+                navigator.clipboard.writeText(text).then(() => {
+                    showToast('已复制到剪贴板', 'success');
+                }).catch(() => {
+                    fallbackCopy(text);
+                });
+            } else {
+                fallbackCopy(text);
+            }
+        }
+
+        // 备用复制方法
+        function fallbackCopy(text) {
+            const textarea = document.createElement('textarea');
+            textarea.value = text;
+            textarea.style.position = 'fixed';
+            textarea.style.left = '-999999px';
+            textarea.style.top = '-999999px';
+            document.body.appendChild(textarea);
+            textarea.focus();
+            textarea.select();
+            
+            try {
+                document.execCommand('copy');
+                showToast('已复制到剪贴板', 'success');
+            } catch (err) {
+                showToast('复制失败，请手动选择复制', 'error');
+            }
+            
+            document.body.removeChild(textarea);
         }
 
         // 键盘事件：ESC关闭图片查看器
