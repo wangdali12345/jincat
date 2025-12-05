@@ -31,15 +31,6 @@
             --apple-white: #fbfbfd;
             --apple-border: #d2d2d7;
             
-            /* 猫咪主题色彩 */
-            --cat-primary: #FF6B9D;
-            --cat-secondary: #C9E4DE;
-            --cat-accent: #FFA07A;
-            --cat-paw: #8B7355;
-            --cat-whisker: #FFB6C1;
-            --cat-bg-gradient: linear-gradient(135deg, #FFF0F5 0%, #F0F8FF 50%, #FFF5EE 100%);
-            --cat-card-shadow: 0 8px 24px rgba(255, 107, 157, 0.15);
-            
             /* 字体系统 */
             --font-family: "SF Pro Display", "SF Pro Text", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
             
@@ -64,7 +55,7 @@
 
         body {
             font-family: var(--font-family);
-            background: linear-gradient(135deg, #FFF8E1 0%, #FFE0B2 100%);
+            background: var(--apple-white);
             color: var(--apple-black);
             line-height: 1.47059;
             font-weight: 400;
@@ -440,15 +431,10 @@
                 gap: 8px;
             }
 
-            .nav-content > div:first-child div:first-child {
-                font-size: 20px !important;
-            }
-
-            .nav-content > div:first-child div:nth-child(2) {
+            .nav-content > div:first-child div {
                 font-weight: 700;
                 font-size: 18px;
-                color: var(--cat-primary);
-                text-shadow: 0 1px 2px rgba(255, 107, 157, 0.2);
+                color: var(--apple-black);
             }
 
             /* 移动端快捷导航 */
@@ -1198,11 +1184,7 @@
         <div class="container">
             <div class="nav-content">
                 <div style="display: flex; align-items: center; gap: var(--spacing-sm);">
-                    <div style="position: relative; font-size: 24px;">
-                        🐱
-                        <div style="position: absolute; top: -3px; right: -8px; font-size: 10px; opacity: 0.7;">🐾</div>
-                    </div>
-                    <div style="font-weight: 700; font-size: 20px; color: var(--cat-primary); text-shadow: 0 1px 2px rgba(255, 107, 157, 0.2);">金猫之家</div>
+                    <div style="font-weight: 700; font-size: 20px; color: var(--apple-black);">杭州宠物社区</div>
                 </div>
                 
                 <div class="nav-menu" id="navMenu">
@@ -1228,7 +1210,7 @@
     <!-- 首页 -->
     <div id="home" class="page active">
         <div class="container">
-            <h1>🐱 金猫之家</h1>
+            <h1>杭州宠物社区</h1>
             <p style="text-align: center; font-size: 18px; margin-bottom: var(--spacing-lg);">
                 杭州自家小猫咪-李先生的宠物社区平台
             </p>
@@ -1237,7 +1219,7 @@
             <div class="grid grid-3">
                 <div class="card" onclick="showPage('cats')">
                     <div style="padding: var(--spacing-md); text-align: center;">
-                        <div style="font-size: 48px; margin-bottom: var(--spacing-sm);">🐱</div>
+                        <div style="font-size: 48px; margin-bottom: var(--spacing-sm);">🏠</div>
                         <h3>猫咪管理</h3>
                         <p>管理您的猫咪信息、健康记录和日常护理</p>
                     </div>
@@ -1282,7 +1264,7 @@
     <div id="cats" class="page">
         <div class="container">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--spacing-md);">
-                <h2>🐱 猫咪管理</h2>
+                <h2>宠物管理</h2>
                 <div id="catManagementButtons" style="display: none;">
                     <button class="btn btn-primary" onclick="addCat()">+ 添加猫咪</button>
                 </div>
@@ -1447,7 +1429,7 @@
                     </div>
                     <div id="catPhotoPreview" style="width: 100%; height: 200px; border: 2px dashed var(--apple-border); border-radius: var(--border-radius-sm); display: flex; align-items: center; justify-content: center; color: var(--apple-gray-medium); background-color: var(--apple-gray-light);">
                         <div style="text-align: center;">
-                            <div style="font-size: 48px; margin-bottom: var(--spacing-sm);">🐱</div>
+                            <div style="font-size: 48px; margin-bottom: var(--spacing-sm);">🏠</div>
                             <p>照片预览区域</p>
                         </div>
                     </div>
@@ -1847,7 +1829,7 @@
                     </div>
                     <div style="flex: 1;">
                         <h3 id="userName">游客用户</h3>
-                        <p id="userStatus" style="color: var(--apple-gray-medium); font-size: 14px;">欢迎来到金猫之家</p>
+                        <p id="userStatus" style="color: var(--apple-gray-medium); font-size: 14px;">欢迎来到杭州宠物社区</p>
                         <button class="btn btn-secondary" onclick="openUserProfile()" style="margin-top: 8px; font-size: 12px; padding: 4px 8px;">
                             ✏️ 编辑资料
                         </button>
@@ -1906,8 +1888,8 @@
                 <div style="padding: var(--spacing-md);">
                     <h3 style="margin-bottom: var(--spacing-md);">ℹ️ 关于</h3>
                     <div class="menu-item" onclick="showAbout(event)" onmousedown="showAbout(event)" style="cursor: pointer; user-select: none;">
-                        <span class="menu-icon">🐱</span>
-                        <span class="menu-text">关于金猫之家</span>
+                        <span class="menu-icon">ℹ️</span>
+                        <span class="menu-text">关于我们</span>
                         <span class="menu-arrow">→</span>
                     </div>
                     <div class="menu-item" onclick="showVersion(event)" onmousedown="showVersion(event)" style="cursor: pointer; user-select: none;">
@@ -1935,8 +1917,8 @@
             <span>首页</span>
         </a>
         <a href="#" class="mobile-quick-nav-item" data-page="cats" onclick="showPage('cats', this)">
-            <span>🐱</span>
-            <span>猫咪</span>
+            <span>🏠</span>
+            <span>首页</span>
         </a>
         <a href="#" class="mobile-quick-nav-item" data-page="hospital" onclick="showPage('hospital', this)">
             <span>🏥</span>
@@ -2053,7 +2035,7 @@
                         <div class="avatar-option" data-avatar="😽" onclick="selectAvatar('😽')">😽</div>
                         <div class="avatar-option" data-avatar="🙀" onclick="selectAvatar('🙀')">🙀</div>
                         <div class="avatar-option" data-avatar="😿" onclick="selectAvatar('😿')">😿</div>
-                        <div class="avatar-option" data-avatar="🐱" onclick="selectAvatar('🐱')">🐱</div>
+                        <div class="avatar-option" data-avatar="👤" onclick="selectAvatar('👤')">👤</div>
                         <div class="avatar-option" data-avatar="🐈" onclick="selectAvatar('🐈')">🐈</div>
                         <div class="avatar-option" data-avatar="🐈‍⬛" onclick="selectAvatar('🐈‍⬛')">🐈‍⬛</div>
                         <div class="avatar-option" data-avatar="🦁" onclick="selectAvatar('🦁')">🦁</div>
@@ -2877,7 +2859,7 @@
             document.getElementById('catDescription').value = '';
             document.getElementById('catPhotoPreview').innerHTML = `
                 <div style="text-align: center;">
-                    <div style="font-size: 48px; margin-bottom: var(--spacing-sm);">🐱</div>
+                    <div style="font-size: 48px; margin-bottom: var(--spacing-sm);">📷</div>
                     <p>照片预览区域</p>
                 </div>
             `;
@@ -2990,7 +2972,7 @@
                 // 显示提示信息
                 catList.innerHTML = `
                     <div style="text-align: center; padding: 40px; color: var(--apple-gray-medium);">
-                        <div style="font-size: 48px; margin-bottom: var(--spacing-sm);">🐱</div>
+                        <div style="font-size: 48px; margin-bottom: var(--spacing-sm);">🏠</div>
                         <p>暂无猫咪信息</p>
                         ${appData.isAdmin ? '<button class="btn btn-primary" onclick="addCat()">添加第一只猫咪</button>' : ''}
                     </div>
@@ -3324,7 +3306,7 @@
                         <div class="post-content">
                             <h3 style="margin-bottom: var(--spacing-sm);">欢迎来到金猫论坛！</h3>
                             <p>欢迎大家在这里分享养猫经验，交流养猫心得。无论是猫咪的日常护理、健康问题，还是有趣的猫咪故事，都可以在这里和大家分享。</p>
-                            <p style="margin-top: var(--spacing-sm);">让我们一起来创造一个温暖的猫咪社区吧！ 🐱💕</p>
+                            <p style="margin-top: var(--spacing-sm);">让我们一起来创造一个温暖的宠物社区吧！ 💕</p>
                         </div>
                         <div class="post-actions">
                             <button class="post-action-btn" onclick="likePost(${Date.now()}, this)">
@@ -4258,7 +4240,7 @@
 
         // 初始化
         document.addEventListener('DOMContentLoaded', function() {
-            console.log('🚀 金猫之家加载完成');
+            console.log('🚀 杭州宠物社区加载完成');
             
             try {
                 // 确保首页显示
@@ -4333,7 +4315,7 @@
                 
                 // 显示欢迎消息
                 setTimeout(() => {
-                    showToast('🎉 欢迎来到金猫之家！', 'success');
+                    showToast('🎉 欢迎来到杭州宠物社区！', 'success');
                 }, 500);
                 
             } catch (error) {
@@ -4374,7 +4356,7 @@
 
         function showAbout(event) {
             if (event) event.preventDefault();
-            showToast('金猫之家 v1.0 - 杭州自家小猫咪-李先生的宠物社区平台', 'info');
+            showToast('杭州宠物社区 v1.0 - 宠物交流与服务平台', 'info');
         }
 
         function showVersion(event) {
@@ -5110,7 +5092,7 @@
                 avatarElement.style.background = 'linear-gradient(135deg, var(--apple-blue), var(--apple-purple))';
                 
                 // 更新状态文本
-                const statusText = appData.userProfile.bio || '欢迎来到金猫之家';
+                const statusText = appData.userProfile.bio || '欢迎来到杭州宠物社区';
                 document.getElementById('userStatus').textContent = statusText;
                 
                 // 更新当前用户信息
