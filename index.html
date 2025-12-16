@@ -440,17 +440,20 @@
         /* Toast通知 */
         .toast {
             position: fixed;
-            top: 20px;
+            top: 80px; /* 避开顶部导航栏 */
             right: 20px;
             padding: 16px 24px;
             border-radius: var(--border-radius-sm);
             color: white;
             font-weight: 600;
-            z-index: 2000;
+            z-index: 99999; /* 设置为最高层级 */
             opacity: 0;
             transform: translateY(-20px);
             transition: all 0.3s ease;
-            box-shadow: var(--shadow-medium);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            font-size: 16px;
+            max-width: 300px;
+            word-wrap: break-word;
         }
 
         .toast.show {
@@ -2057,6 +2060,11 @@
                         <span class="menu-arrow">→</span>
                     </div>
                     <div id="adminMenuItems" style="display: none;">
+                        <div class="menu-item" onclick="showBackupManager()">
+                            <span class="menu-icon">💾</span>
+                            <span class="menu-text">备份管理</span>
+                            <span class="menu-arrow">→</span>
+                        </div>
                         <div class="menu-item" onclick="showAdminPanel()">
                             <span class="menu-icon">⚙️</span>
                             <span class="menu-text">管理员面板</span>
@@ -2150,6 +2158,54 @@
 
     <!-- 右下角私信按钮 -->
     <button class="fab" onclick="openMessageModal()" style="bottom: 80px;">✉️</button>
+
+    <!-- 备份管理模态框 -->
+    <div id="backupManagerModal" class="modal-overlay">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>💾 备份管理</h3>
+                <button class="modal-close-btn" onclick="closeBackupManager()">×</button>
+            </div>
+            <div class="modal-body">
+                <div style="margin-bottom: var(--spacing-md); padding: var(--spacing-sm); background: var(--apple-gray-light); border-radius: var(--border-radius-sm);">
+                    <p style="margin: 0; color: var(--apple-gray-dark); font-size: 14px;">
+                        💡 备份功能将管理员添加的内容单独存放，避免与用户内容混合。每次修改都会创建新的备份记录。
+                    </p>
+                </div>
+                
+                <div class="form-group">
+                    <label>当前备份数据统计</label>
+                    <div id="backupStats" style="display: grid; grid-template-columns: 1fr 1fr; gap: var(--spacing-sm); margin-top: var(--spacing-sm);">
+                        <!-- 统计数据将在这里生成 -->
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label>备份操作</label>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: var(--spacing-sm);">
+                        <button class="btn btn-primary" onclick="createBackup()">📦 创建备份</button>
+                        <button class="btn btn-secondary" onclick="restoreBackup()">♻️ 恢复备份</button>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label>备份历史</label>
+                    <div id="backupHistory" style="max-height: 200px; overflow-y: auto; border: 1px solid var(--apple-border); border-radius: var(--border-radius-sm); padding: var(--spacing-sm);">
+                        <!-- 备份历史将在这里显示 -->
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label>数据导出</label>
+                    <button class="btn btn-secondary" onclick="exportAllData()">📤 导出所有数据</button>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeBackupManager()">关闭</button>
+                <button class="btn btn-primary" onclick="saveBackupChanges()">保存更改</button>
+            </div>
+        </div>
+    </div>
 
     <!-- 私信模态框 -->
     <div id="messageModal" class="modal-overlay">
@@ -2292,7 +2348,16 @@
             isLoggedIn: false,
             isAdmin: false,
             map: null, // 地图实例
-            hospitalMarkers: [] // 医院标记数组
+            hospitalMarkers: [], // 医院标记数组
+            
+            // 备份数据结构
+            adminBackup: {
+                cats: [],      // 管理员添加的猫咪
+                hospitals: [], // 管理员添加的医院
+                products: [], // 管理员添加的商品
+                posts: [],     // 管理员添加的帖子
+                backupHistory: [] // 备份历史记录
+            }
         };
 
         // 本地存储初始化
@@ -2361,21 +2426,28 @@
         // 渲染医院排行榜
         function renderHospitalRanking() {
             const container = document.getElementById('hospitalRankingList');
+            const rankingContainer = document.getElementById('hospitalRanking');
             if (!container) return;
 
-            let ranking = [...(appData.hospitalRanking || [])];
+            // 只显示用户推荐的医院
+            let ranking = [...(appData.hospitals || [])].filter(hospital => {
+                return hospital.addedBy && hospital.addedBy !== '管理员';
+            });
+
+            // 如果没有用户推荐的医院，隐藏整个排行榜
+            if (ranking.length === 0) {
+                if (rankingContainer) {
+                    rankingContainer.style.display = 'none';
+                }
+                return;
+            } else {
+                if (rankingContainer) {
+                    rankingContainer.style.display = 'block';
+                }
+            }
             
             // 按点赞量排序
             ranking.sort((a, b) => b.likes - a.likes);
-
-            if (ranking.length === 0) {
-                container.innerHTML = `
-                    <div style="text-align: center; padding: 20px; color: var(--apple-gray-medium);">
-                        <p>暂无排行榜数据</p>
-                    </div>
-                `;
-                return;
-            }
 
             container.innerHTML = ranking.map((hospital, index) => {
                 const rankClass = index === 0 ? 'gold' : index === 1 ? 'silver' : index === 2 ? 'bronze' : 'normal';
@@ -2650,6 +2722,244 @@
             showToast('排行榜已保存', 'success');
         }
 
+        // ========== 备份管理功能 ==========
+        
+        // 打开备份管理器
+        function showBackupManager() {
+            const modal = document.getElementById('backupManagerModal');
+            modal.classList.add('active');
+            
+            // 更新备份统计
+            updateBackupStats();
+            
+            // 显示备份历史
+            renderBackupHistory();
+            
+            // 阻止背景滚动
+            document.body.style.overflow = 'hidden';
+        }
+
+        // 关闭备份管理器
+        function closeBackupManager() {
+            const modal = document.getElementById('backupManagerModal');
+            modal.classList.remove('active');
+            
+            // 恢复背景滚动
+            document.body.style.overflow = '';
+        }
+
+        // 更新备份统计信息
+        function updateBackupStats() {
+            const statsContainer = document.getElementById('backupStats');
+            if (!statsContainer) return;
+            
+            const backup = appData.adminBackup;
+            const stats = `
+                <div style="padding: var(--spacing-xs); background: white; border-radius: var(--border-radius-sm); text-align: center;">
+                    <div style="font-size: 24px; margin-bottom: 4px;">🐱</div>
+                    <div style="font-weight: 600;">猫咪</div>
+                    <div style="color: var(--apple-blue);">${backup.cats.length} 只</div>
+                </div>
+                <div style="padding: var(--spacing-xs); background: white; border-radius: var(--border-radius-sm); text-align: center;">
+                    <div style="font-size: 24px; margin-bottom: 4px;">🏥</div>
+                    <div style="font-weight: 600;">医院</div>
+                    <div style="color: var(--apple-blue);">${backup.hospitals.length} 家</div>
+                </div>
+                <div style="padding: var(--spacing-xs); background: white; border-radius: var(--border-radius-sm); text-align: center;">
+                    <div style="font-size: 24px; margin-bottom: 4px;">🛍️</div>
+                    <div style="font-weight: 600;">商品</div>
+                    <div style="color: var(--apple-blue);">${backup.products.length} 件</div>
+                </div>
+                <div style="padding: var(--spacing-xs); background: white; border-radius: var(--border-radius-sm); text-align: center;">
+                    <div style="font-size: 24px; margin-bottom: 4px;">📝</div>
+                    <div style="font-weight: 600;">帖子</div>
+                    <div style="color: var(--apple-blue);">${backup.posts.length} 篇</div>
+                </div>
+            `;
+            
+            statsContainer.innerHTML = stats;
+        }
+
+        // 创建备份
+        function createBackup() {
+            const timestamp = new Date().toLocaleString('zh-CN');
+            
+            // 筛选出管理员添加的内容
+            const adminCats = appData.cats.filter(cat => cat.addedBy === '管理员');
+            const adminHospitals = appData.hospitals.filter(hospital => hospital.addedBy === '管理员');
+            const adminProducts = appData.products.filter(product => product.addedBy === '管理员');
+            const adminPosts = appData.posts.filter(post => post.author === '管理员');
+            
+            // 创建备份记录
+            const backupRecord = {
+                timestamp: timestamp,
+                cats: JSON.parse(JSON.stringify(adminCats)),
+                hospitals: JSON.parse(JSON.stringify(adminHospitals)),
+                products: JSON.parse(JSON.stringify(adminProducts)),
+                posts: JSON.parse(JSON.stringify(adminPosts)),
+                id: Date.now()
+            };
+            
+            // 添加到备份历史
+            appData.adminBackup.backupHistory.unshift(backupRecord);
+            
+            // 只保留最近10次备份
+            if (appData.adminBackup.backupHistory.length > 10) {
+                appData.adminBackup.backupHistory = appData.adminBackup.backupHistory.slice(0, 10);
+            }
+            
+            // 更新当前备份
+            appData.adminBackup.cats = adminCats;
+            appData.adminBackup.hospitals = adminHospitals;
+            appData.adminBackup.products = adminProducts;
+            appData.adminBackup.posts = adminPosts;
+            
+            saveToLocalStorage();
+            updateBackupStats();
+            renderBackupHistory();
+            
+            showToast(`备份创建成功！时间：${timestamp}`, 'success');
+        }
+
+        // 恢复备份
+        function restoreBackup() {
+            if (!appData.adminBackup.backupHistory || appData.adminBackup.backupHistory.length === 0) {
+                showToast('没有可恢复的备份', 'warning');
+                return;
+            }
+            
+            const latestBackup = appData.adminBackup.backupHistory[0];
+            
+            if (confirm(`确定要恢复 ${latestBackup.timestamp} 的备份吗？这将覆盖当前的管理员内容。`)) {
+                // 恢复数据
+                appData.adminBackup.cats = latestBackup.cats;
+                appData.adminBackup.hospitals = latestBackup.hospitals;
+                appData.adminBackup.products = latestBackup.products;
+                appData.adminBackup.posts = latestBackup.posts;
+                
+                // 同时恢复到主数据（只恢复管理员内容）
+                appData.cats = [...appData.cats.filter(cat => cat.addedBy !== '管理员'), ...latestBackup.cats];
+                appData.hospitals = [...appData.hospitals.filter(hospital => hospital.addedBy !== '管理员'), ...latestBackup.hospitals];
+                appData.products = [...appData.products.filter(product => product.addedBy !== '管理员'), ...latestBackup.products];
+                appData.posts = [...appData.posts.filter(post => post.author !== '管理员'), ...latestBackup.posts];
+                
+                saveToLocalStorage();
+                updateBackupStats();
+                
+                // 重新渲染相关页面
+                renderCats();
+                renderProducts();
+                renderPosts();
+                
+                showToast('备份恢复成功！', 'success');
+            }
+        }
+
+        // 渲染备份历史
+        function renderBackupHistory() {
+            const historyContainer = document.getElementById('backupHistory');
+            if (!historyContainer) return;
+            
+            const history = appData.adminBackup.backupHistory || [];
+            
+            if (history.length === 0) {
+                historyContainer.innerHTML = `
+                    <div style="text-align: center; color: var(--apple-gray-medium); padding: 20px;">
+                        <p>暂无备份历史</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            historyContainer.innerHTML = history.map((backup, index) => `
+                <div style="display: flex; justify-content: space-between; align-items: center; padding: var(--spacing-xs); border-bottom: 1px solid var(--apple-border); margin-bottom: var(--spacing-xs);">
+                    <div>
+                        <div style="font-weight: 600; font-size: 14px;">${backup.timestamp}</div>
+                        <div style="font-size: 12px; color: var(--apple-gray-medium);">
+                            🐱${backup.cats.length} 🏥${backup.hospitals.length} 🛍️${backup.products.length} 📝${backup.posts.length}
+                        </div>
+                    </div>
+                    <div style="display: flex; gap: 4px;">
+                        <button class="btn btn-secondary btn-small" onclick="restoreSpecificBackup(${backup.id})" title="恢复此备份">
+                            ♻️
+                        </button>
+                        <button class="btn btn-secondary btn-small" onclick="deleteBackup(${backup.id})" title="删除备份" style="background: var(--apple-red); color: white;">
+                            🗑️
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // 恢复指定备份
+        function restoreSpecificBackup(backupId) {
+            const backup = appData.adminBackup.backupHistory.find(b => b.id === backupId);
+            if (!backup) return;
+            
+            if (confirm(`确定要恢复 ${backup.timestamp} 的备份吗？`)) {
+                appData.adminBackup.cats = backup.cats;
+                appData.adminBackup.hospitals = backup.hospitals;
+                appData.adminBackup.products = backup.products;
+                appData.adminBackup.posts = backup.posts;
+                
+                // 更新主数据
+                appData.cats = [...appData.cats.filter(cat => cat.addedBy !== '管理员'), ...backup.cats];
+                appData.hospitals = [...appData.hospitals.filter(hospital => hospital.addedBy !== '管理员'), ...backup.hospitals];
+                appData.products = [...appData.products.filter(product => product.addedBy !== '管理员'), ...backup.products];
+                appData.posts = [...appData.posts.filter(post => post.author !== '管理员'), ...backup.posts];
+                
+                saveToLocalStorage();
+                updateBackupStats();
+                renderBackupHistory();
+                
+                // 重新渲染
+                renderCats();
+                renderProducts();
+                renderPosts();
+                
+                showToast('指定备份恢复成功！', 'success');
+            }
+        }
+
+        // 删除备份
+        function deleteBackup(backupId) {
+            if (confirm('确定要删除这个备份吗？')) {
+                appData.adminBackup.backupHistory = appData.adminBackup.backupHistory.filter(b => b.id !== backupId);
+                
+                saveToLocalStorage();
+                renderBackupHistory();
+                
+                showToast('备份已删除', 'success');
+            }
+        }
+
+        // 导出所有数据
+        function exportAllData() {
+            const exportData = {
+                appData: appData,
+                adminBackup: appData.adminBackup,
+                exportTime: new Date().toLocaleString('zh-CN'),
+                version: '1.0'
+            };
+            
+            const dataStr = JSON.stringify(exportData, null, 2);
+            const dataBlob = new Blob([dataStr], { type: 'application/json' });
+            
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(dataBlob);
+            link.download = `金猫之家_数据备份_${new Date().getTime()}.json`;
+            link.click();
+            
+            showToast('数据导出成功！', 'success');
+        }
+
+        // 保存备份更改
+        function saveBackupChanges() {
+            saveToLocalStorage();
+            closeBackupManager();
+            showToast('备份设置已保存', 'success');
+        }
+
         // 保存到本地存储
         function saveToLocalStorage() {
             localStorage.setItem('petCommunityData', JSON.stringify(appData));
@@ -2667,6 +2977,12 @@
             try {
                 console.log('🔄 切换到页面:', pageId);
                 
+                // 阻止事件冒泡
+                if (event) {
+                    event.stopPropagation();
+                    event.preventDefault();
+                }
+                
                 // 1. 隐藏所有页面 - 强制设置样式
                 document.querySelectorAll('.page').forEach(page => {
                     page.classList.remove('active');
@@ -2682,6 +2998,7 @@
                     targetPage.style.display = 'block';
                     targetPage.style.visibility = 'visible';
                     targetPage.style.opacity = '1';
+                    targetPage.style.zIndex = '1';
                     console.log('✅ 页面显示成功:', pageId);
                 } else {
                     console.error('❌ 页面不存在:', pageId);
@@ -2725,9 +3042,13 @@
                     }, 100);
                 }
                 
-                // 6. 显示成功提示
-                console.log('✅ 页面切换完成:', pageId);
-                showToast('已切换到:' + getPageName(pageId), 'success');
+                // 6. 延迟显示成功提示，避免干扰导航
+                setTimeout(() => {
+                    if (pageId !== 'home') { // 首页不显示提示
+                        console.log('✅ 页面切换完成:', pageId);
+                        showToast('已切换到:' + getPageName(pageId), 'success');
+                    }
+                }, 300);
                 
             } catch (error) {
                 console.error('❌ 页面切换错误:', error);
@@ -5417,12 +5738,17 @@
         function renderProducts() {
             const categories = ['food', 'toys', 'supplies', 'grooming', 'health'];
             
+            // 只显示管理员添加的精选商品
+            const adminProducts = appData.products ? appData.products.filter(p => 
+                p.addedBy === '管理员' || p.isFeatured === true
+            ) : [];
+            
             // 渲染各分类商品
             categories.forEach(category => {
                 const container = document.querySelector(`[data-category="${category}"] .product-grid`);
                 if (!container) return;
                 
-                const categoryProducts = appData.products ? appData.products.filter(p => p.category === category) : [];
+                const categoryProducts = adminProducts.filter(p => p.category === category);
                 
                 if (categoryProducts.length === 0) {
                     container.innerHTML = `
@@ -5785,8 +6111,8 @@
             
             showToast('正在打开高德地图导航...', 'info');
             
-            // 构建高德地图导航URL
-            const gaodeUrl = `https://uri.amap.com/navigation?to=${encodeURIComponent(destination)},医院&mode=car`;
+            // 构建高德地图导航URL，自动设置目的地
+            const gaodeUrl = `https://uri.amap.com/navigation?to=${encodeURIComponent(destination)},医院&mode=car&coordinate=116.397428,39.90923`;
             
             setTimeout(() => {
                 window.open(gaodeUrl, '_blank');
