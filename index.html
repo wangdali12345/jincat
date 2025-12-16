@@ -3,6 +3,10 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="apple-touch-fullscreen" content="yes">
     <title>杭州自家小猫咪-李先生 - 宠物社区平台</title>
     
     <!-- 地图API -->
@@ -64,7 +68,14 @@
 
         body {
             font-family: var(--font-family);
-            background: linear-gradient(135deg, #FFF8E1 0%, #FFE0B2 100%);
+            background: 
+                linear-gradient(135deg, rgba(255, 248, 225, 0.9) 0%, rgba(255, 224, 178, 0.9) 100%),
+                url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 800" opacity="0.15"><defs><pattern id="cats" x="0" y="0" width="150" height="150" patternUnits="userSpaceOnUse"><g transform="scale(0.25)"><path d="M20 10 Q20 5 25 5 T30 10 Q35 10 35 15 T40 20 L40 25 Q40 30 35 30 T30 25 Q25 25 20 25 T15 20 Q15 15 20 10 Z" fill="%23FFB6C1"/><circle cx="22" cy="12" r="2" fill="%23333"/><path d="M10 35 Q10 30 15 30 T20 35 Q25 35 25 30 T30 35" stroke="%23FFB6C1" stroke-width="2" fill="none"/><circle cx="30" cy="15" r="1.5" fill="%23333"/></g></pattern></defs><rect width="800" height="800" fill="url(%23cats)"/></svg>'),
+                url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 300" opacity="0.1"><g transform="translate(50,50)"><path d="M20 15 Q20 8 30 8 T40 15 Q45 15 45 20 T45 30 Q45 35 40 35 T35 30 Q30 30 25 30 T20 25 Q15 25 15 20 Q15 15 20 15 Z" fill="%23FFA07A"/><circle cx="25" cy="12" r="1.5" fill="%23333"/><path d="M35 25 Q35 20 40 20 T45 25 Q50 25 50 30 T50 40 Q50 45 45 45 T40 40 Q35 40 30 40 T35 35 Q30 35 30 40 Z" fill="%23C9E4DE"/><path d="M15 40 Q15 35 20 35 T25 40 Q30 40 30 45 T35 50 Q35 55 30 55 T25 50 Q20 50 15 50 T15 45 Q15 40 20 40 Z" fill="%23FFD700" stroke="%23333" stroke-width="1"/></g></svg>');
+            background-size: cover, 300px 300px, 400px 400px;
+            background-position: center center, 0 0;
+            background-repeat: no-repeat, repeat;
+            background-attachment: fixed;
             color: var(--apple-black);
             line-height: 1.47059;
             font-weight: 400;
@@ -565,6 +576,16 @@
 
             .nav-content {
                 padding: 0 var(--spacing-sm);
+                flex-wrap: nowrap;
+                overflow: hidden;
+            }
+
+            .nav-content > div:first-child {
+                flex-shrink: 1;
+                min-width: 0;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
             }
 
             .modal-content {
@@ -618,6 +639,16 @@
                 padding: 6px 12px;
             }
 
+            /* 手机端导航标题优化 */
+            .nav-content > div:first-child {
+                flex-shrink: 0;
+                min-width: 0;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                max-width: 200px;
+            }
+
             /* 手机端表单优化 */
             .input, textarea {
                 min-height: 44px;
@@ -660,6 +691,71 @@
                 width: 45px;
                 height: 45px;
                 font-size: 20px;
+            }
+        }
+
+        /* Safari兼容性优化 */
+        @supports (-webkit-touch-callout: none) {
+            /* Safari特定样式 */
+            .nav {
+                -webkit-backdrop-filter: saturate(180%) blur(20px);
+                backdrop-filter: saturate(180%) blur(20px);
+            }
+            
+            .modal-content {
+                -webkit-transform: translateZ(0);
+                transform: translateZ(0);
+            }
+            
+            .card {
+                -webkit-transform: translateZ(0);
+                transform: translateZ(0);
+            }
+        }
+
+        /* Safari浏览器特定优化 */
+        .safari-browser {
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            text-rendering: optimizeLegibility;
+        }
+        
+        .safari-browser .nav {
+            -webkit-transform: translateZ(0);
+            transform: translateZ(0);
+        }
+        
+        .safari-browser .modal-content {
+            -webkit-transform: translateZ(0);
+            transform: translateZ(0);
+            -webkit-box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
+        
+        .safari-browser .card {
+            -webkit-transform: translateZ(0);
+            transform: translateZ(0);
+            -webkit-box-shadow: var(--shadow-light);
+            box-shadow: var(--shadow-light);
+        }
+        
+        .safari-browser .mobile-quick-nav {
+            -webkit-transform: translateZ(0);
+            transform: translateZ(0);
+            -webkit-backdrop-filter: blur(10px);
+            backdrop-filter: blur(10px);
+        }
+
+        /* iOS Safari优化 */
+        @supports (-webkit-appearance: none) {
+            body {
+                -webkit-overflow-scrolling: touch;
+                overflow-scrolling: touch;
+            }
+            
+            .modal-overlay {
+                -webkit-overflow-scrolling: touch;
+                overflow-scrolling: touch;
             }
         }
 
@@ -1347,7 +1443,7 @@
                         🐱
                         <div style="position: absolute; top: -3px; right: -8px; font-size: 10px; opacity: 0.7;">🐾</div>
                     </div>
-                    <div style="font-weight: 700; font-size: 20px; color: var(--cat-primary); text-shadow: 0 1px 2px rgba(255, 107, 157, 0.2);">金猫之家</div>
+                    <div style="font-weight: 700; font-size: 20px; color: #8B4513; text-shadow: 0 1px 2px rgba(255, 107, 157, 0.3); font-family: 'Georgia', 'Times New Roman', serif; letter-spacing: 2px; text-transform: uppercase; background: linear-gradient(45deg, #8B4513, #A0522D); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">金猫之家</div>
                 </div>
                 
                 <div class="nav-menu" id="navMenu">
@@ -2083,6 +2179,28 @@
             <div class="card" style="margin-bottom: var(--spacing-lg);">
                 <div style="padding: var(--spacing-md);">
                     <h3 style="margin-bottom: var(--spacing-md);">🛠️ 用户服务</h3>
+                    ${appData.isAdmin && appData.loginSessions ? `
+                        <div style="margin-bottom: var(--spacing-md); padding: var(--spacing-sm); background: var(--apple-gray-light); border-radius: var(--border-radius-sm);">
+                            <div style="font-weight: 600; color: var(--apple-blue); margin-bottom: var(--spacing-xs);">🔐 当前登录会话</div>
+                            <div style="font-size: 14px; color: var(--apple-gray-dark);">
+                                ${appData.loginSessions.map((session, index) => `
+                                    <div style="display: flex; justify-content: space-between; align-items: center; padding: 4px 0; border-bottom: 1px solid var(--apple-border);">
+                                        <div>
+                                            <span style="font-weight: 600;">${session.username}</span>
+                                            <span style="color: var(--apple-gray-medium); font-size: 12px;">• ${session.loginTime}</span>
+                                            <span style="color: var(--apple-gray-medium); font-size: 12px;">• ${session.userAgent.substring(0, 20)}...</span>
+                                        </div>
+                                        ${appData.loginSessions.length > 1 ? `
+                                            <button class="btn btn-secondary btn-small" onclick="removeLoginSession(${index})" style="padding: 2px 6px; font-size: 11px;">退出</button>
+                                        ` : ''}
+                                    </div>
+                                `).join('')}
+                                <div style="text-align: center; color: var(--apple-gray-medium); font-size: 12px; margin-top: var(--spacing-xs);">
+                                    已登录 ${appData.loginSessions.length}/${appData.maxLoginSessions} 个设备
+                                </div>
+                            </div>
+                        </div>
+                    ` : ''}
                     <div class="menu-item" onclick="showAddressManager(event)" onmousedown="showAddressManager(event)" style="cursor: pointer; user-select: none;">
                         <span class="menu-icon">📍</span>
                         <span class="menu-text">地址管理</span>
@@ -2347,6 +2465,10 @@
             userProfile: null, // 普通用户资料
             isLoggedIn: false,
             isAdmin: false,
+            
+            // 登录会话管理
+            loginSessions: [], // 存储所有登录会话
+            maxLoginSessions: 3, // 最大登录会话数
             map: null, // 地图实例
             hospitalMarkers: [], // 医院标记数组
             
@@ -3356,6 +3478,28 @@
 
             // 检查管理员账号
             if (username === ADMIN_CREDENTIALS.username && password === ADMIN_CREDENTIALS.password) {
+                // 检查登录会话数量
+                if (appData.loginSessions && appData.loginSessions.length >= appData.maxLoginSessions) {
+                    showToast(`最多只能${appData.maxLoginSessions}个客户端同时登录管理员`, 'error');
+                    return;
+                }
+                
+                // 创建新的登录会话
+                const sessionId = Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+                const sessionInfo = {
+                    sessionId: sessionId,
+                    username: username,
+                    loginTime: new Date().toLocaleString(),
+                    userAgent: navigator.userAgent.substring(0, 50) // 截取前50个字符
+                };
+                
+                // 添加到会话列表
+                if (!appData.loginSessions) {
+                    appData.loginSessions = [];
+                }
+                appData.loginSessions.push(sessionInfo);
+                
+                // 设置当前用户状态
                 appData.currentUser = '管理员';
                 appData.isLoggedIn = true;
                 appData.isAdmin = true;
@@ -3398,14 +3542,61 @@
             }
         }
 
-        function logout() {
-            appData.currentUser = null;
-            appData.isLoggedIn = false;
-            appData.isAdmin = false;
+        function handleLogout() {
+            // 查找并移除当前会话
+            if (appData.loginSessions && appData.loginSessions.length > 0) {
+                // 简单移除最后一个会话（当前会话）
+                appData.loginSessions.pop();
+                
+                // 如果没有会话了，完全退出
+                if (appData.loginSessions.length === 0) {
+                    appData.currentUser = null;
+                    appData.isLoggedIn = false;
+                    appData.isAdmin = false;
+                    
+                    showToast('已完全退出登录', 'info');
+                } else {
+                    showToast(`已退出当前会话，还有 ${appData.loginSessions.length} 个活跃会话`, 'info');
+                }
+            } else {
+                appData.currentUser = null;
+                appData.isLoggedIn = false;
+                appData.isAdmin = false;
+                
+                showToast('已退出登录', 'info');
+            }
             
             updateLoginButton();
             disableAdminFeatures();
-            showToast('已退出登录', 'info');
+            saveToLocalStorage();
+        }
+
+        function removeLoginSession(sessionIndex) {
+            if (confirm('确定要退出这个登录会话吗？')) {
+                appData.loginSessions.splice(sessionIndex, 1);
+                
+                // 如果没有会话了，完全退出
+                if (appData.loginSessions.length === 0) {
+                    appData.currentUser = null;
+                    appData.isLoggedIn = false;
+                    appData.isAdmin = false;
+                }
+                
+                saveToLocalStorage();
+                updateLoginButton();
+                showToast('会话已退出', 'success');
+                
+                // 重新渲染个人中心以显示更新后的会话
+                if (document.getElementById('profile').classList.contains('active')) {
+                    setTimeout(() => {
+                        showPage('profile', null);
+                    }, 100);
+                }
+            }
+        }
+
+        function logout() {
+            handleLogout();
         }
 
         function updateLoginButton() {
@@ -3875,6 +4066,11 @@
 
                 appData.cats.unshift(cat);
                 renderCats();
+                // 强制刷新页面内容
+                setTimeout(() => {
+                    renderCats();
+                    saveToLocalStorage();
+                }, 100);
                 closeAddCatModal();
                 showToast('猫咪添加成功！', 'success');
             }
@@ -5336,6 +5532,30 @@
         document.addEventListener('DOMContentLoaded', function() {
             console.log('🚀 金猫之家加载完成');
             
+            // Safari兼容性检查和优化
+            if (typeof safari !== 'undefined' || /constructor/i.test(window.HTMLElement) || (function (p) { return p.toString() === "[object SafariRemoteNotification]"; })(!window['safari'] || window.safari && window.safari.pushNotification)) {
+                console.log('检测到Safari浏览器，启用兼容性优化');
+                
+                // Safari特定优化
+                document.body.classList.add('safari-browser');
+                
+                // 禁用Safari的双击缩放
+                let lastTouchEnd = 0;
+                document.addEventListener('touchend', function (event) {
+                    const now = (new Date()).getTime();
+                    if (now - lastTouchEnd <= 300) {
+                        event.preventDefault();
+                    }
+                    lastTouchEnd = now;
+                }, false);
+                
+                // 强制硬件加速
+                document.querySelectorAll('.card, .modal-content').forEach(el => {
+                    el.style.webkitTransform = 'translateZ(0)';
+                    el.style.transform = 'translateZ(0)';
+                });
+            }
+            
             try {
                 // 初始化复制粘贴功能
                 setTimeout(() => {
@@ -5730,6 +5950,11 @@
 
             appData.products.push(product);
             renderProducts();
+            // 强制刷新页面内容
+            setTimeout(() => {
+                renderProducts();
+                saveToLocalStorage();
+            }, 100);
             closeShopManager();
             showToast('商品添加成功！', 'success');
         }
@@ -6624,6 +6849,11 @@
             // 添加到现有医院列表
             appData.hospitals.unshift(hospital);
             renderRecommendedHospitals();
+            // 强制刷新页面内容
+            setTimeout(() => {
+                renderRecommendedHospitals();
+                saveToLocalStorage();
+            }, 100);
             closeHospitalManager();
             const cityName = getCityByLocation(lat, lng);
             showToast(`医院添加成功！将在${cityName}附近显示给用户`, 'success');
