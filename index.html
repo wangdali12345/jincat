@@ -3313,11 +3313,7 @@
             return pageNames[pageId] || pageId;
         }
 
-        // 测试函数 - 验证JavaScript是否正常工作
-        function testJavaScript() {
-            console.log('✅ JavaScript测试成功');
-            alert('JavaScript正常工作！');
-        }
+
 
         // Toast通知函数
         function showToast(message, type = 'info') {
@@ -5681,8 +5677,8 @@
         document.addEventListener('DOMContentLoaded', function() {
             console.log('🚀 金猫之家加载完成');
             
-            // 立即测试JavaScript
-            testJavaScript();
+            // 简单测试
+            console.log('✅ JavaScript加载测试');
             
             // Safari兼容性检查和优化
             if (typeof safari !== 'undefined' || /constructor/i.test(window.HTMLElement) || (function (p) { return p.toString() === "[object SafariRemoteNotification]"; })(!window['safari'] || window.safari && window.safari.pushNotification)) {
@@ -5875,113 +5871,32 @@
             }
         });
 
-            // 错误处理
-            window.addEventListener('error', function(e) {
-                console.error('全局错误:', e.error);
-            });
-
-            // 添加测试函数
-            window.testPageSwitching = function() {
-                console.log('🧪 开始测试页面切换...');
-                const pages = ['home', 'cats', 'hospital', 'logistics', 'forum', 'shop', 'profile'];
-                let currentIndex = 0;
-                
-                function switchToNextPage() {
-                    if (currentIndex < pages.length) {
-                        const pageId = pages[currentIndex];
-                        console.log(`🧪 测试切换到: ${pageId}`);
-                        showPage(pageId, null);
-                        
-                        currentIndex++;
-                        setTimeout(switchToNextPage, 1500);
-                    } else {
-                        console.log('🧪 页面切换测试完成');
-                        showToast('页面切换测试完成！', 'success');
-                    }
-                }
-                
-                switchToNextPage();
-            };
-
-            // 强制显示所有页面内容（用于调试）
-            window.forceShowAllPages = function() {
-                console.log('🔧 强制显示所有页面内容...');
-                document.querySelectorAll('.page').forEach(page => {
-                    page.style.display = 'block';
-                    page.style.visibility = 'visible';
-                    page.style.opacity = '1';
-                    page.style.position = 'static';
-                    page.style.height = 'auto';
-                    console.log('✅ 强制显示页面:', page.id);
-                });
-            };
-
-            // 检查页面内容
-            window.checkPageContent = function(pageId) {
-                const page = document.getElementById(pageId);
-                if (page) {
-                    console.log(`📄 检查页面 ${pageId}:`);
-                    console.log('- display:', page.style.display);
-                    console.log('- visibility:', page.style.visibility);
-                    console.log('- opacity:', page.style.opacity);
-                    console.log('- 内容长度:', page.innerHTML.length);
-                    console.log('- 子元素数量:', page.children.length);
-                    
-                    // 显示页面内容的前100个字符
-                    const contentPreview = page.innerHTML.substring(0, 100);
-                    console.log('- 内容预览:', contentPreview);
-                } else {
-                    console.error(`❌ 页面 ${pageId} 不存在`);
-                }
-            };
-
-            // 添加窗口大小变化监听
-            window.addEventListener('resize', function() {
-                console.log('🖥️ 窗口大小变化:', window.innerWidth, 'x', window.innerHeight);
-                
-                // 重新应用移动端导航样式
-                if (window.innerWidth <= 768) {
-                    const mobileNav = document.querySelector('.mobile-quick-nav');
-                    if (mobileNav) {
-                        mobileNav.style.display = 'flex';
-                        console.log('📱 移动端导航已显示');
-                    }
-                } else {
-                    const mobileNav = document.querySelector('.mobile-quick-nav');
-                    if (mobileNav) {
-                        mobileNav.style.display = 'none';
-                        console.log('🖥️ 桌面端隐藏移动端导航');
-                    }
-                }
-
-                // 强制重新应用样式
-                setTimeout(() => {
-                    const mobileNav = document.querySelector('.mobile-quick-nav');
-                    if (mobileNav && window.innerWidth <= 768) {
-                        mobileNav.style.cssText = `
-                            display: flex !important;
-                            visibility: visible !important;
-                            opacity: 1 !important;
-                            position: fixed !important;
-                            bottom: 0 !important;
-                            left: 0 !important;
-                            right: 0 !important;
-                            z-index: 9999 !important;
-                            background: white !important;
-                            border-top: 1px solid var(--apple-border) !important;
-                            box-shadow: 0 -2px 10px rgba(0,0,0,0.1) !important;
-                            justify-content: space-around !important;
-                            padding: 8px 0 !important;
-                        `;
-                    }
-                }, 100);
-            });
-
-        // 移动端导航切换
-        document.querySelector('.mobile-nav-toggle')?.addEventListener('click', function() {
-            const navMenu = document.querySelector('.nav-menu');
-            navMenu.style.display = navMenu.style.display === 'flex' ? 'none' : 'flex';
+        // 错误处理
+        window.addEventListener('error', function(e) {
+            console.error('全局错误:', e.error);
         });
+
+        // 确保移动端导航在页面加载后正确显示
+        setTimeout(() => {
+            const mobileNav = document.querySelector('.mobile-quick-nav');
+            if (mobileNav && window.innerWidth <= 768) {
+                mobileNav.style.cssText = `
+                    display: flex !important;
+                    visibility: visible !important;
+                    opacity: 1 !important;
+                    position: fixed !important;
+                    bottom: 0 !important;
+                    left: 0 !important;
+                    right: 0 !important;
+                    z-index: 9999 !important;
+                    background: white !important;
+                    border-top: 1px solid var(--apple-border) !important;
+                    box-shadow: 0 -2px 10px rgba(0,0,0,0.1) !important;
+                    justify-content: space-around !important;
+                    padding: 8px 0 !important;
+                `;
+            }
+        }, 100);
 
         // 个人中心相关功能
         function showAddressManager(event) {
