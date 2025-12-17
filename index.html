@@ -517,8 +517,8 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 4px;
-            padding: var(--spacing-xs);
+            gap: 2px;
+            padding: 2px;
             text-decoration: none;
             color: var(--apple-gray-medium);
             font-size: 12px;
@@ -576,7 +576,7 @@
             /* 移动端显示导航 */
             .mobile-quick-nav {
                 display: flex !important;
-                padding: 4px 0; /* 手机端底部导航高度减半 (spacing-xs: 8px → 4px) */
+                padding: 2px 0; /* 进一步减小底部导航高度 */
             }
 
             .grid-3 {
@@ -617,7 +617,7 @@
 
             /* 移动端浮动按钮调整 */
             .fab {
-                bottom: 110px; /* 避免遮挡底部导航，进一步增加间距 */
+                bottom: 75px; /* 往上移动，更靠近页面中心 */
                 right: 20px;
             }
 
