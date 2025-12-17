@@ -2328,20 +2328,20 @@
 
     <!-- 私信模态框 -->
     <div id="messageModal" class="modal-overlay">
-        <div class="modal-content" style="transform: translateY(-33px); margin-top: -33px;">
+        <div class="modal-content">
             <div class="modal-header">
                 <h3>发送私信给管理员</h3>
                 <button class="btn btn-secondary" onclick="closeMessageModal()">×</button>
             </div>
             <div class="modal-body">
-                <div class="form-group">
-                    <label>消息内容</label>
-                    <textarea class="input" id="messageContent" rows="6" placeholder="请输入您想对管理员说的话..."></textarea>
-                </div>
-                <div style="background: var(--apple-gray-light); padding: var(--spacing-sm); border-radius: var(--border-radius-sm); text-align: center; margin-top: var(--spacing-sm);">
+                <div style="background: var(--apple-gray-light); padding: var(--spacing-sm); border-radius: var(--border-radius-sm); text-align: center; margin-bottom: var(--spacing-md); transform: translateY(-33px);">
                     <div style="font-size: 18px; margin-bottom: 4px;">📧</div>
                     <div style="font-weight: 600; color: var(--apple-black); margin-bottom: 4px;">联系邮箱</div>
                     <div style="color: var(--apple-blue); text-decoration: none; cursor: pointer;" onclick="window.location.href='mailto:contact@example.com'">contact@example.com</div>
+                </div>
+                <div class="form-group">
+                    <label>消息内容</label>
+                    <textarea class="input" id="messageContent" rows="6" placeholder="请输入您想对管理员说的话..."></textarea>
                 </div>
             </div>
             <div class="modal-footer">
