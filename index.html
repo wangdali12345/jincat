@@ -540,6 +540,26 @@
 
         /* 响应式 */
         @media (max-width: 768px) {
+            .nav {
+                height: 30px; /* 手机端导航栏高度减少一半 */
+            }
+            
+            .nav-content {
+                height: 30px; /* 手机端导航内容高度减少一半 */
+            }
+            
+            .page {
+                margin-top: 30px; /* 手机端页面顶部margin相应调整 */
+            }
+            
+            .toast {
+                top: 50px; /* 手机端toast通知位置调整 */
+            }
+            
+            .fab {
+                bottom: 65px; /* 手机端浮动按钮位置调整 */
+            }
+            
             .nav-menu {
                 display: none;
             }
@@ -646,7 +666,7 @@
                 white-space: nowrap;
                 overflow: hidden;
                 text-overflow: ellipsis;
-                max-width: 100px;
+                max-width: 200px;
             }
 
             /* 手机端表单优化 */
