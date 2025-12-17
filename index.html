@@ -2184,19 +2184,29 @@
                             <div style="font-weight: 600; color: var(--apple-blue); margin-bottom: var(--spacing-xs);">🔐 当前登录会话</div>
                             <div style="font-size: 14px; color: var(--apple-gray-dark);">
                                 ${appData.loginSessions.map((session, index) => `
-                                    <div style="display: flex; justify-content: space-between; align-items: center; padding: 4px 0; border-bottom: 1px solid var(--apple-border);">
-                                        <div>
-                                            <span style="font-weight: 600;">${session.username}</span>
-                                            <span style="color: var(--apple-gray-medium); font-size: 12px;">• ${session.loginTime}</span>
-                                            <span style="color: var(--apple-gray-medium); font-size: 12px;">• ${session.userAgent.substring(0, 20)}...</span>
+                                    <div style="display: flex; justify-content: space-between; align-items: center; padding: 6px 0; border-bottom: 1px solid var(--apple-border);">
+                                        <div style="flex: 1;">
+                                            <div style="font-weight: 600; color: var(--apple-black);">${session.username}</div>
+                                            <div style="color: var(--apple-gray-medium); font-size: 11px; margin-top: 2px;">
+                                                🕒 ${session.loginTime}
+                                            </div>
+                                            <div style="color: var(--apple-gray-medium); font-size: 11px;">
+                                                📱 ${session.deviceType || getDeviceType(session.userAgent)} • ${session.browser || getBrowserInfo(session.userAgent)}
+                                            </div>
                                         </div>
                                         ${appData.loginSessions.length > 1 ? `
-                                            <button class="btn btn-secondary btn-small" onclick="removeLoginSession(${index})" style="padding: 2px 6px; font-size: 11px;">退出</button>
-                                        ` : ''}
+                                            <button class="btn btn-secondary btn-small" onclick="removeLoginSession(${index})" style="padding: 4px 8px; font-size: 11px; margin-left: 8px;">退出</button>
+                                        ` : '<span style="color: var(--apple-green); font-size: 11px; margin-left: 8px;">当前设备</span>'}
                                     </div>
                                 `).join('')}
                                 <div style="text-align: center; color: var(--apple-gray-medium); font-size: 12px; margin-top: var(--spacing-xs);">
                                     已登录 ${appData.loginSessions.length}/${appData.maxLoginSessions} 个设备
+                                    ${appData.loginSessions.length > 1 ? `
+                                        <br>
+                                        <button class="btn btn-secondary btn-small" onclick="logoutOtherDevices()" style="margin-top: 4px; padding: 4px 8px; font-size: 10px; background: var(--apple-orange); color: white; border: 1px solid var(--apple-orange);">
+                                            退出其他设备
+                                        </button>
+                                    ` : ''}
                                 </div>
                             </div>
                         </div>
@@ -2510,6 +2520,64 @@
                 
                 saveToLocalStorage();
             }
+            
+            // 验证和管理登录会话
+            validateLoginSessions();
+        }
+
+        // 验证和管理登录会话
+        function validateLoginSessions() {
+            if (!appData.loginSessions) {
+                appData.loginSessions = [];
+                return;
+            }
+            
+            // 过滤掉过期的会话（超过24小时的会话）
+            const now = Date.now();
+            const oneDayMs = 24 * 60 * 60 * 1000;
+            
+            const validSessions = appData.loginSessions.filter(session => {
+                const sessionTime = new Date(session.loginTime).getTime();
+                return (now - sessionTime) < oneDayMs;
+            });
+            
+            // 如果会话数量变化，更新并保存
+            if (validSessions.length !== appData.loginSessions.length) {
+                appData.loginSessions = validSessions;
+                
+                // 如果没有有效会话，重置管理员状态
+                if (appData.loginSessions.length === 0) {
+                    appData.currentUser = null;
+                    appData.isLoggedIn = false;
+                    appData.isAdmin = false;
+                }
+                
+                saveToLocalStorage();
+                console.log('🔄 会话验证完成，清理了过期会话');
+            }
+        }
+
+        // 获取设备类型
+        function getDeviceType(userAgent) {
+            const ua = userAgent.toLowerCase();
+            if (ua.includes('mobile') || ua.includes('android') || ua.includes('iphone') || ua.includes('ipad')) {
+                if (ua.includes('tablet') || ua.includes('ipad')) {
+                    return '平板';
+                }
+                return '手机';
+            }
+            return '电脑';
+        }
+
+        // 获取浏览器信息
+        function getBrowserInfo(userAgent) {
+            const ua = userAgent.toLowerCase();
+            if (ua.includes('chrome')) return 'Chrome';
+            if (ua.includes('firefox')) return 'Firefox';
+            if (ua.includes('safari')) return 'Safari';
+            if (ua.includes('edge')) return 'Edge';
+            if (ua.includes('opera')) return 'Opera';
+            return '其他浏览器';
         }
 
         // 初始化默认医院排行榜
@@ -3480,7 +3548,9 @@
             if (username === ADMIN_CREDENTIALS.username && password === ADMIN_CREDENTIALS.password) {
                 // 检查登录会话数量
                 if (appData.loginSessions && appData.loginSessions.length >= appData.maxLoginSessions) {
-                    showToast(`最多只能${appData.maxLoginSessions}个客户端同时登录管理员`, 'error');
+                    const currentCount = appData.loginSessions.length;
+                    const maxCount = appData.maxLoginSessions;
+                    showToast(`登录失败！当前已有 ${currentCount} 个设备登录，最多允许 ${maxCount} 个设备。请先在其他设备退出登录。`, 'error');
                     return;
                 }
                 
@@ -3490,7 +3560,11 @@
                     sessionId: sessionId,
                     username: username,
                     loginTime: new Date().toLocaleString(),
-                    userAgent: navigator.userAgent.substring(0, 50) // 截取前50个字符
+                    loginTimeMs: Date.now(), // 时间戳，用于过期检查
+                    userAgent: navigator.userAgent,
+                    deviceType: getDeviceType(navigator.userAgent),
+                    browser: getBrowserInfo(navigator.userAgent),
+                    platform: navigator.platform || '未知平台'
                 };
                 
                 // 添加到会话列表
@@ -3503,6 +3577,9 @@
                 appData.currentUser = '管理员';
                 appData.isLoggedIn = true;
                 appData.isAdmin = true;
+                
+                // 保存登录会话到本地存储
+                saveToLocalStorage();
                 
                 // 关闭登录模态框
                 const loginModal = document.getElementById('loginModal');
@@ -3526,7 +3603,9 @@
                 updateProfileMenu();
                 console.log('个人中心菜单更新完成');
                 
-                showToast('管理员登录成功！', 'success');
+                const deviceCount = appData.loginSessions.length;
+                const maxDevices = appData.maxLoginSessions;
+                showToast(`管理员登录成功！当前已登录 ${deviceCount}/${maxDevices} 个设备`, 'success');
                 console.log('管理员登录成功，所有功能已启用', appData);
                 
                 // 延迟重新渲染页面，确保状态更新
@@ -3566,6 +3645,9 @@
                 showToast('已退出登录', 'info');
             }
             
+            // 保存会话状态到本地存储
+            saveToLocalStorage();
+            
             updateLoginButton();
             disableAdminFeatures();
             saveToLocalStorage();
@@ -3591,6 +3673,22 @@
                     setTimeout(() => {
                         showPage('profile', null);
                     }, 100);
+                }
+            }
+        }
+
+        // 退出其他设备的登录会话
+        function logoutOtherDevices() {
+            if (confirm('确定要退出其他所有设备的登录吗？此操作不可撤销。')) {
+                if (appData.loginSessions && appData.loginSessions.length > 1) {
+                    const originalCount = appData.loginSessions.length;
+                    // 保留最后一个会话（当前会话）
+                    const currentSession = appData.loginSessions[appData.loginSessions.length - 1];
+                    appData.loginSessions = [currentSession];
+                    
+                    saveToLocalStorage();
+                    updateProfileMenu(); // 更新个人中心显示
+                    showToast(`已成功退出 ${originalCount - 1} 个其他设备`, 'success');
                 }
             }
         }
