@@ -3221,9 +3221,9 @@
                 console.log('🔄 切换到页面:', pageId);
                 
                 // 阻止事件冒泡
-                if (event) {
-                    event.stopPropagation();
-                    event.preventDefault();
+                if (window.event) {
+                    window.event.stopPropagation();
+                    window.event.preventDefault();
                 }
                 
                 // 1. 隐藏所有页面 - 强制设置样式
@@ -3311,6 +3311,12 @@
                 'profile': '个人中心'
             };
             return pageNames[pageId] || pageId;
+        }
+
+        // 测试函数 - 验证JavaScript是否正常工作
+        function testJavaScript() {
+            console.log('✅ JavaScript测试成功');
+            alert('JavaScript正常工作！');
         }
 
         // Toast通知函数
@@ -5674,6 +5680,9 @@
         // 初始化
         document.addEventListener('DOMContentLoaded', function() {
             console.log('🚀 金猫之家加载完成');
+            
+            // 立即测试JavaScript
+            testJavaScript();
             
             // Safari兼容性检查和优化
             if (typeof safari !== 'undefined' || /constructor/i.test(window.HTMLElement) || (function (p) { return p.toString() === "[object SafariRemoteNotification]"; })(!window['safari'] || window.safari && window.safari.pushNotification)) {
