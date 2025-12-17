@@ -94,15 +94,15 @@
 
         /* 导航栏 */
         .nav {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(20px);
-            border-bottom: 1px solid var(--apple-border);
+            background: transparent;
+            backdrop-filter: none;
+            border-bottom: none;
             position: fixed;
             top: 0;
             left: 0;
             right: 0;
             z-index: 1001;
-            box-shadow: var(--shadow-light);
+            box-shadow: none;
         }
 
         .nav-content {
@@ -771,12 +771,10 @@
         @supports (-webkit-appearance: none) {
             body {
                 -webkit-overflow-scrolling: touch;
-                overflow-scrolling: touch;
             }
             
             .modal-overlay {
                 -webkit-overflow-scrolling: touch;
-                overflow-scrolling: touch;
             }
         }
 
@@ -2172,6 +2170,11 @@
                         <span class="menu-arrow">→</span>
                     </div>
                     <div id="adminMenuItems" style="display: none;">
+                        <div class="menu-item" onclick="showAdminManager()" id="superAdminMenu" style="display: none;">
+                            <span class="menu-icon">👑</span>
+                            <span class="menu-text">主理人管理</span>
+                            <span class="menu-arrow">→</span>
+                        </div>
                         <div class="menu-item" onclick="showBackupManager()">
                             <span class="menu-icon">💾</span>
                             <span class="menu-text">备份管理</span>
@@ -2351,7 +2354,7 @@
     <div id="loginModal" class="modal-overlay" onclick="if(event.target === this) closeLoginModal()">
         <div class="modal-content">
             <div class="modal-header">
-                <h3 id="loginTitle">管理员登录</h3>
+                <h3 id="loginTitle">主理人/管理员登录</h3>
                 <button class="btn btn-secondary" onclick="closeLoginModal()">×</button>
             </div>
             <div class="modal-body">
@@ -2373,6 +2376,51 @@
             <div class="modal-footer">
                 <button class="btn btn-secondary" onclick="closeLoginModal()">取消</button>
                 <button class="btn btn-primary" onclick="handleLogin()">管理员登录</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 主理人管理模态框 -->
+    <div id="adminManagerModal" class="modal-overlay">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>主理人管理</h3>
+                <button class="modal-close-btn" onclick="closeAdminManager()">×</button>
+            </div>
+            <div class="modal-body">
+                <div style="background: var(--apple-gray-light); padding: var(--spacing-sm); border-radius: var(--border-radius-sm); margin-bottom: var(--spacing-md);">
+                    <p style="color: var(--apple-gray-dark); font-size: 14px; margin: 0;">
+                        <strong>主理人功能</strong>：可以添加/删除管理员账号，设置管理员人数上限（当前：${SUPER_ADMIN_CREDENTIALS.maxAdmins}人）。
+                    </p>
+                </div>
+                
+                <div class="form-group">
+                    <label>添加管理员账号</label>
+                    <input type="text" class="input" id="newAdminUsername" placeholder="请输入管理员账号...">
+                </div>
+                
+                <div class="form-group">
+                    <label>管理员密码</label>
+                    <input type="text" class="input" id="newAdminPassword" placeholder="请输入管理员密码...">
+                </div>
+                
+                <div class="form-group">
+                    <label>管理员人数限制</label>
+                    <input type="number" class="input" id="maxAdmins" min="1" max="50" value="${SUPER_ADMIN_CREDENTIALS.maxAdmins}">
+                </div>
+                
+                <div style="margin-bottom: var(--spacing-md);">
+                    <h4 style="margin-bottom: var(--spacing-sm);">📋 当前管理员列表</h4>
+                    <div id="adminListContainer" style="max-height: 200px; overflow-y: auto;">
+                        <div style="text-align: center; color: var(--apple-gray-medium); padding: 20px;">
+                            暂无管理员账号
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeAdminManager()">取消</button>
+                <button class="btn btn-primary" onclick="addAdmin()">添加管理员</button>
             </div>
         </div>
     </div>
@@ -2486,6 +2534,9 @@
 
         // 本地存储初始化
         function initializeLocalStorage() {
+            // 加载管理员列表
+            loadAdminList();
+            
             const storedData = localStorage.getItem('petCommunityData');
             if (storedData) {
                 const data = JSON.parse(storedData);
@@ -3154,6 +3205,16 @@
             password: 'abc123'
         };
 
+        // 主理人账号信息
+        const SUPER_ADMIN_CREDENTIALS = {
+            username: 'qaz123',
+            password: 'qaz123',
+            maxAdmins: 10 // 最大管理员人数
+        };
+
+        // 管理员列表（由主理人管理）
+        let adminList = [];
+
         // 页面切换函数 - 核心功能
         function showPage(pageId, element) {
             try {
@@ -3536,82 +3597,77 @@
                 return;
             }
 
+            // 检查主理人账号
+            if (username === SUPER_ADMIN_CREDENTIALS.username && password === SUPER_ADMIN_CREDENTIALS.password) {
+                // 主理人登录
+                const sessionInfo = {
+                    id: Date.now(),
+                    deviceId: 'super-admin-device',
+                    deviceInfo: '主理人设备',
+                    loginTime: new Date().getTime(),
+                    isSuperAdmin: true
+                };
+                
+                if (!appData.loginSessions) appData.loginSessions = [];
+                appData.loginSessions.push(sessionInfo);
+                
+                // 设置当前用户状态
+                appData.currentUser = '主理人';
+                appData.isLoggedIn = true;
+                appData.isAdmin = true;
+                appData.isSuperAdmin = true;
+                
+                // 保存登录会话到本地存储
+                saveToLocalStorage();
+                
+                showToast('主理人登录成功！所有管理功能已启用', 'success');
+                closeLoginModal();
+                updateProfileMenu();
+                checkAdminStatus();
+                return;
+            }
+            
             // 检查管理员账号
             if (username === ADMIN_CREDENTIALS.username && password === ADMIN_CREDENTIALS.password) {
-                // 检查登录会话数量
-                if (appData.loginSessions && appData.loginSessions.length >= appData.maxLoginSessions) {
-                    const currentCount = appData.loginSessions.length;
-                    const maxCount = appData.maxLoginSessions;
-                    showToast(`登录失败！当前已有 ${currentCount} 个设备登录，最多允许 ${maxCount} 个设备。请先在其他设备退出登录。`, 'error');
+                // 检查是否在管理员列表中
+                const adminExists = adminList.length === 0 || adminList.some(admin => admin.username === username);
+                
+                if (!adminExists) {
+                    showToast('您未被授权为管理员，请联系主理人添加', 'error');
                     return;
                 }
                 
-                // 创建新的登录会话
-                const sessionId = Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+                // 普通管理员登录
                 const sessionInfo = {
-                    sessionId: sessionId,
-                    username: username,
-                    loginTime: new Date().toLocaleString(),
-                    loginTimeMs: Date.now(), // 时间戳，用于过期检查
-                    userAgent: navigator.userAgent,
-                    deviceType: getDeviceType(navigator.userAgent),
-                    browser: getBrowserInfo(navigator.userAgent),
-                    platform: navigator.platform || '未知平台'
+                    id: Date.now(),
+                    deviceId: `admin-device-${Date.now()}`,
+                    deviceInfo: '管理员设备',
+                    loginTime: new Date().getTime(),
+                    isSuperAdmin: false
                 };
                 
-                // 添加到会话列表
-                if (!appData.loginSessions) {
-                    appData.loginSessions = [];
-                }
+                if (!appData.loginSessions) appData.loginSessions = [];
                 appData.loginSessions.push(sessionInfo);
                 
                 // 设置当前用户状态
                 appData.currentUser = '管理员';
                 appData.isLoggedIn = true;
                 appData.isAdmin = true;
+                appData.isSuperAdmin = false;
                 
                 // 保存登录会话到本地存储
                 saveToLocalStorage();
                 
-                // 关闭登录模态框
-                const loginModal = document.getElementById('loginModal');
-                if (loginModal) {
-                    loginModal.classList.remove('active');
-                    loginModal.style.display = 'none';
-                }
-                
-                // 清空输入框
-                document.getElementById('username').value = '';
-                document.getElementById('password').value = '';
-                
-                // 更新界面状态 - 顺序很重要
-                console.log('开始更新管理员状态...');
-                updateLoginButton();
-                console.log('Login按钮更新完成');
-                
-                enableAdminFeatures();
-                console.log('管理员功能启用完成');
-                
+                showToast('管理员登录成功！所有功能已启用', 'success');
+                closeLoginModal();
                 updateProfileMenu();
-                console.log('个人中心菜单更新完成');
-                
-                const deviceCount = appData.loginSessions.length;
-                const maxDevices = appData.maxLoginSessions;
-                showToast(`管理员登录成功！当前已登录 ${deviceCount}/${maxDevices} 个设备`, 'success');
-                console.log('管理员登录成功，所有功能已启用', appData);
-                
-                // 延迟重新渲染页面，确保状态更新
-                setTimeout(() => {
-                    renderCats();
-                    renderPosts();
-                    console.log('页面重新渲染完成');
-                }, 100);
+                checkAdminStatus();
+                return;
             } else {
                 showToast('账号或密码错误，只有管理员可以登录', 'error');
                 // 清空密码输入框
                 document.getElementById('password').value = '';
             }
-        }
 
         function handleLogout() {
             // 查找并移除当前会话
@@ -3669,19 +3725,16 @@
             }
         }
 
-        // 退出其他设备的登录会话
+        // 退出登录功能
         function logoutOtherDevices() {
-            if (confirm('确定要退出其他所有设备的登录吗？此操作不可撤销。')) {
-                if (appData.loginSessions && appData.loginSessions.length > 1) {
-                    const originalCount = appData.loginSessions.length;
-                    // 保留最后一个会话（当前会话）
-                    const currentSession = appData.loginSessions[appData.loginSessions.length - 1];
-                    appData.loginSessions = [currentSession];
-                    
-                    saveToLocalStorage();
-                    updateProfileMenu(); // 更新个人中心显示
-                    showToast(`已成功退出 ${originalCount - 1} 个其他设备`, 'success');
-                }
+            if (confirm('确定要退出管理员登录吗？')) {
+                const currentSession = appData.loginSessions[appData.loginSessions.length - 1];
+                const originalCount = appData.loginSessions.length;
+                appData.loginSessions = [currentSession];
+                
+                saveToLocalStorage();
+                updateProfileMenu(); // 更新个人中心显示
+                showToast(`已成功退出 ${originalCount - 1} 个其他设备`, 'success');
             }
         }
 
@@ -5982,7 +6035,13 @@
             
             if (appData.isAdmin) {
                 if (adminMenuItems) adminMenuItems.style.display = 'block';
-                if (userName) userName.textContent = '管理员';
+                if (userName) userName.textContent = appData.isSuperAdmin ? '主理人' : '管理员';
+                
+                // 显示主理人菜单（仅主理人可见）
+                const superAdminMenu = document.getElementById('superAdminMenu');
+                if (superAdminMenu) {
+                    superAdminMenu.style.display = appData.isSuperAdmin ? 'block' : 'none';
+                }
                 
                 // 渲染登录会话信息
                 if (loginSessionsContainer && appData.loginSessions && appData.loginSessions.length > 0) {
@@ -6007,13 +6066,7 @@
                                     </div>
                                 `).join('')}
                                 <div style="text-align: center; color: var(--apple-gray-medium); font-size: 12px; margin-top: var(--spacing-xs);">
-                                    已登录 ${appData.loginSessions.length}/${appData.maxLoginSessions} 个设备
-                                    ${appData.loginSessions.length > 1 ? `
-                                        <br>
-                                        <button class="btn btn-secondary btn-small" onclick="logoutOtherDevices()" style="margin-top: 4px; padding: 4px 8px; font-size: 10px; background: var(--apple-orange); color: white; border: 1px solid var(--apple-orange);">
-                                            退出其他设备
-                                        </button>
-                                    ` : ''}
+                                    管理员权限已启用
                                 </div>
                             </div>
                         </div>
@@ -6987,6 +7040,140 @@
             closeHospitalManager();
             const cityName = getCityByLocation(lat, lng);
             showToast(`医院添加成功！将在${cityName}附近显示给用户`, 'success');
+        }
+
+        // ========== 主理人管理功能 ==========
+        
+        // 初始化管理员列表（从localStorage加载）
+        function loadAdminList() {
+            const saved = localStorage.getItem('adminList');
+            if (saved) {
+                adminList = JSON.parse(saved);
+            } else {
+                // 默认添加abc123管理员
+                adminList = [{ username: 'abc123', password: 'abc123', addedBy: '主理人', addedTime: new Date().toLocaleString() }];
+                saveAdminList();
+            }
+        }
+
+        // 保存管理员列表到localStorage
+        function saveAdminList() {
+            localStorage.setItem('adminList', JSON.stringify(adminList));
+        }
+
+        // 打开主理人管理
+        function showAdminManager() {
+            if (!appData.isSuperAdmin) {
+                showToast('只有主理人才能访问此功能', 'error');
+                return;
+            }
+            
+            const modal = document.getElementById('adminManagerModal');
+            modal.classList.add('active');
+            
+            // 更新管理员人数限制显示
+            document.getElementById('maxAdmins').value = SUPER_ADMIN_CREDENTIALS.maxAdmins;
+            
+            // 显示当前管理员列表
+            renderAdminList();
+        }
+
+        // 关闭主理人管理
+        function closeAdminManager() {
+            const modal = document.getElementById('adminManagerModal');
+            modal.classList.remove('active');
+        }
+
+        // 渲染管理员列表
+        function renderAdminList() {
+            const container = document.getElementById('adminListContainer');
+            
+            if (adminList.length === 0) {
+                container.innerHTML = '<div style="text-align: center; color: var(--apple-gray-medium); padding: 20px;">暂无管理员账号</div>';
+                return;
+            }
+            
+            container.innerHTML = adminList.map((admin, index) => `
+                <div style="display: flex; justify-content: space-between; align-items: center; padding: var(--spacing-sm); border-bottom: 1px solid var(--apple-border); background: var(--apple-white); border-radius: var(--border-radius-sm); margin-bottom: var(--spacing-xs);">
+                    <div>
+                        <div style="font-weight: 600; color: var(--apple-black);">账号：${admin.username}</div>
+                        <div style="font-size: 12px; color: var(--apple-gray-medium);">
+                            添加者：${admin.addedBy} | 添加时间：${admin.addedTime}
+                        </div>
+                    </div>
+                    <button class="btn btn-secondary btn-small" onclick="removeAdmin(${index})" style="padding: 4px 8px; font-size: 11px; background: var(--apple-red); color: white; border: 1px solid var(--apple-red);">
+                        删除
+                    </button>
+                </div>
+            `).join('');
+        }
+
+        // 添加管理员
+        function addAdmin() {
+            if (!appData.isSuperAdmin) {
+                showToast('只有主理人才能添加管理员', 'error');
+                return;
+            }
+            
+            const username = document.getElementById('newAdminUsername').value.trim();
+            const password = document.getElementById('newAdminPassword').value.trim();
+            const maxAdmins = parseInt(document.getElementById('maxAdmins').value);
+            
+            if (!username || !password) {
+                showToast('请输入管理员账号和密码', 'error');
+                return;
+            }
+            
+            // 检查是否已存在
+            if (adminList.some(admin => admin.username === username)) {
+                showToast('该管理员账号已存在', 'error');
+                return;
+            }
+            
+            // 检查人数限制
+            if (adminList.length >= maxAdmins) {
+                showToast(`管理员人数已达上限（${maxAdmins}人）`, 'error');
+                return;
+            }
+            
+            // 添加新管理员
+            adminList.push({
+                username: username,
+                password: password,
+                addedBy: '主理人',
+                addedTime: new Date().toLocaleString()
+            });
+            
+            // 更新限制
+            SUPER_ADMIN_CREDENTIALS.maxAdmins = maxAdmins;
+            
+            // 保存
+            saveAdminList();
+            
+            // 更新界面
+            renderAdminList();
+            
+            // 清空输入框
+            document.getElementById('newAdminUsername').value = '';
+            document.getElementById('newAdminPassword').value = '';
+            
+            showToast(`管理员 ${username} 添加成功！当前管理员数：${adminList.length}/${maxAdmins}`, 'success');
+        }
+
+        // 删除管理员
+        function removeAdmin(index) {
+            if (!appData.isSuperAdmin) {
+                showToast('只有主理人才能删除管理员', 'error');
+                return;
+            }
+            
+            const admin = adminList[index];
+            if (confirm(`确定要删除管理员 ${admin.username} 吗？`)) {
+                adminList.splice(index, 1);
+                saveAdminList();
+                renderAdminList();
+                showToast(`管理员 ${admin.username} 已删除，当前管理员数：${adminList.length}`, 'success');
+            }
         }
     </script>
 </body>
