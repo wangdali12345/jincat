@@ -2179,38 +2179,9 @@
             <div class="card" style="margin-bottom: var(--spacing-lg);">
                 <div style="padding: var(--spacing-md);">
                     <h3 style="margin-bottom: var(--spacing-md);">🛠️ 用户服务</h3>
-                    ${appData.isAdmin && appData.loginSessions ? `
-                        <div style="margin-bottom: var(--spacing-md); padding: var(--spacing-sm); background: var(--apple-gray-light); border-radius: var(--border-radius-sm);">
-                            <div style="font-weight: 600; color: var(--apple-blue); margin-bottom: var(--spacing-xs);">🔐 当前登录会话</div>
-                            <div style="font-size: 14px; color: var(--apple-gray-dark);">
-                                ${appData.loginSessions.map((session, index) => `
-                                    <div style="display: flex; justify-content: space-between; align-items: center; padding: 6px 0; border-bottom: 1px solid var(--apple-border);">
-                                        <div style="flex: 1;">
-                                            <div style="font-weight: 600; color: var(--apple-black);">${session.username}</div>
-                                            <div style="color: var(--apple-gray-medium); font-size: 11px; margin-top: 2px;">
-                                                🕒 ${session.loginTime}
-                                            </div>
-                                            <div style="color: var(--apple-gray-medium); font-size: 11px;">
-                                                📱 ${session.deviceType || getDeviceType(session.userAgent)} • ${session.browser || getBrowserInfo(session.userAgent)}
-                                            </div>
-                                        </div>
-                                        ${appData.loginSessions.length > 1 ? `
-                                            <button class="btn btn-secondary btn-small" onclick="removeLoginSession(${index})" style="padding: 4px 8px; font-size: 11px; margin-left: 8px;">退出</button>
-                                        ` : '<span style="color: var(--apple-green); font-size: 11px; margin-left: 8px;">当前设备</span>'}
-                                    </div>
-                                `).join('')}
-                                <div style="text-align: center; color: var(--apple-gray-medium); font-size: 12px; margin-top: var(--spacing-xs);">
-                                    已登录 ${appData.loginSessions.length}/${appData.maxLoginSessions} 个设备
-                                    ${appData.loginSessions.length > 1 ? `
-                                        <br>
-                                        <button class="btn btn-secondary btn-small" onclick="logoutOtherDevices()" style="margin-top: 4px; padding: 4px 8px; font-size: 10px; background: var(--apple-orange); color: white; border: 1px solid var(--apple-orange);">
-                                            退出其他设备
-                                        </button>
-                                    ` : ''}
-                                </div>
-                            </div>
-                        </div>
-                    ` : ''}
+                    <div id="loginSessionsContainer">
+                        <!-- 登录会话信息将通过JavaScript动态生成 -->
+                    </div>
                     <div class="menu-item" onclick="showAddressManager(event)" onmousedown="showAddressManager(event)" style="cursor: pointer; user-select: none;">
                         <span class="menu-icon">📍</span>
                         <span class="menu-text">地址管理</span>
@@ -5986,13 +5957,53 @@
         function updateProfileMenu() {
             const adminMenuItems = document.getElementById('adminMenuItems');
             const userName = document.getElementById('userName');
+            const loginSessionsContainer = document.getElementById('loginSessionsContainer');
             
             if (appData.isAdmin) {
                 if (adminMenuItems) adminMenuItems.style.display = 'block';
                 if (userName) userName.textContent = '管理员';
+                
+                // 渲染登录会话信息
+                if (loginSessionsContainer && appData.loginSessions && appData.loginSessions.length > 0) {
+                    loginSessionsContainer.innerHTML = `
+                        <div style="margin-bottom: var(--spacing-md); padding: var(--spacing-sm); background: var(--apple-gray-light); border-radius: var(--border-radius-sm);">
+                            <div style="font-weight: 600; color: var(--apple-blue); margin-bottom: var(--spacing-xs);">🔐 当前登录会话</div>
+                            <div style="font-size: 14px; color: var(--apple-gray-dark);">
+                                ${appData.loginSessions.map((session, index) => `
+                                    <div style="display: flex; justify-content: space-between; align-items: center; padding: 6px 0; border-bottom: 1px solid var(--apple-border);">
+                                        <div style="flex: 1;">
+                                            <div style="font-weight: 600; color: var(--apple-black);">${session.username}</div>
+                                            <div style="color: var(--apple-gray-medium); font-size: 11px; margin-top: 2px;">
+                                                🕒 ${session.loginTime}
+                                            </div>
+                                            <div style="color: var(--apple-gray-medium); font-size: 11px;">
+                                                📱 ${session.deviceType || getDeviceType(session.userAgent)} • ${session.browser || getBrowserInfo(session.userAgent)}
+                                            </div>
+                                        </div>
+                                        ${appData.loginSessions.length > 1 ? `
+                                            <button class="btn btn-secondary btn-small" onclick="removeLoginSession(${index})" style="padding: 4px 8px; font-size: 11px; margin-left: 8px;">退出</button>
+                                        ` : '<span style="color: var(--apple-green); font-size: 11px; margin-left: 8px;">当前设备</span>'}
+                                    </div>
+                                `).join('')}
+                                <div style="text-align: center; color: var(--apple-gray-medium); font-size: 12px; margin-top: var(--spacing-xs);">
+                                    已登录 ${appData.loginSessions.length}/${appData.maxLoginSessions} 个设备
+                                    ${appData.loginSessions.length > 1 ? `
+                                        <br>
+                                        <button class="btn btn-secondary btn-small" onclick="logoutOtherDevices()" style="margin-top: 4px; padding: 4px 8px; font-size: 10px; background: var(--apple-orange); color: white; border: 1px solid var(--apple-orange);">
+                                            退出其他设备
+                                        </button>
+                                    ` : ''}
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                } else if (loginSessionsContainer) {
+                    loginSessionsContainer.innerHTML = '';
+                }
             } else {
                 if (adminMenuItems) adminMenuItems.style.display = 'none';
                 if (userName) userName.textContent = '游客用户';
+                if (loginSessionsContainer) loginSessionsContainer.innerHTML = '';
             }
         }
 
