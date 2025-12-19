@@ -5561,46 +5561,11 @@
 
 
                 if (mobileNav) {
-                    mobileNav.style.display = 'flex';
-                    mobileNav.style.visibility = 'visible';
-                    mobileNav.style.opacity = '1';
-                    mobileNav.style.position = 'fixed';
-                    mobileNav.style.bottom = '0';
-                    mobileNav.style.left = '0';
-                    mobileNav.style.right = '0';
-                    mobileNav.style.zIndex = '9999';
-                    console.log('✅ 移动端导航强制显示');
-                }
-            }
-            
-            // 强制更新导航状态
-            document.querySelectorAll('.nav-link').forEach(link => {
-                link.classList.remove('active');
-            });
-            
-            document.querySelectorAll('.mobile-quick-nav-item').forEach(item => {
-                item.classList.remove('active');
-            });
-            
-            // 激活首页导航
-            const homeNavLink = document.querySelector('[data-page="home"]');
-            if (homeNavLink) {
-                homeNavLink.classList.add('active');
-            }
-            
-            const homeMobileLink = document.querySelector('.mobile-quick-nav-item[data-page="home"]');
-            if (homeMobileLink) {
-                homeMobileLink.classList.add('active');
-            }
-        }
 
-        // 专门修复移动端导航的函数
+        // 修复移动端导航
         function fixMobileNavigation() {
-            console.log('📱 修复移动端导航...');
-            
             const mobileNav = document.querySelector('.mobile-quick-nav');
             if (mobileNav) {
-                // 应用完整的样式
                 mobileNav.style.cssText = `
                     display: flex !important;
                     visibility: visible !important;
@@ -5619,9 +5584,6 @@
                     width: 100% !important;
                     height: auto !important;
                 `;
-                console.log('✅ 移动端导航样式完全应用');
-            } else {
-                console.error('❌ 找不到移动端导航元素');
             }
         }
 
@@ -5741,7 +5703,6 @@
                     if (window.innerWidth <= 768) {
                         const mobileNav = document.querySelector('.mobile-quick-nav');
                         if (mobileNav) {
-                            console.log('🔧 强制显示移动端导航');
                             mobileNav.style.display = 'flex';
                             mobileNav.style.visibility = 'visible';
                             mobileNav.style.opacity = '1';
@@ -5750,9 +5711,6 @@
                             mobileNav.style.left = '0';
                             mobileNav.style.right = '0';
                             mobileNav.style.zIndex = '9999';
-                            console.log('✅ 移动端导航样式强制应用');
-                        } else {
-                            console.error('❌ 找不到移动端导航元素');
                         }
                     }
                 }, 200);
@@ -5774,7 +5732,6 @@
                             border-top: 1px solid var(--apple-border) !important;
                             box-shadow: 0 -2px 10px rgba(0,0,0,0.1) !important;
                         `;
-                        console.log('🔧 移动端导航最终强制应用');
                     }
                 }, 500);
                 
@@ -5786,7 +5743,6 @@
                 }, 500);
                 
             } catch (error) {
-                console.error('❌ 初始化错误:', error);
                 showToast('页面加载完成', 'success');
             }
         });
