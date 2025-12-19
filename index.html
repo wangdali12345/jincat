@@ -2246,10 +2246,7 @@
     <!-- Toast通知容器 -->
     <div id="toast" class="toast"></div>
     
-    <!-- 调试按钮 -->
-    <div style="position: fixed; top: 10px; right: 10px; z-index: 10000; background: red; color: white; padding: 10px; border-radius: 5px; cursor: pointer;" onclick="testPageSwitch()">
-        测试页面切换
-    </div>
+
 
     <!-- 移动端快捷导航 -->
     <nav class="mobile-quick-nav">
@@ -2539,38 +2536,46 @@
 
         // 本地存储初始化
         function initializeLocalStorage() {
-            // 加载管理员列表
-            loadAdminList();
-            
-            const storedData = localStorage.getItem('petCommunityData');
-            if (storedData) {
+            try {
+                // 加载管理员列表
+                loadAdminList();
+                
+                const storedData = localStorage.getItem('petCommunityData');
+                if (storedData) {
                 const data = JSON.parse(storedData);
                 Object.assign(appData, data);
-                console.log('📦 从本地存储加载数据:', data);
-                
-                // 确保用户推荐医院数组存在
-                if (!appData.userRecommendedHospitals) {
-                    appData.userRecommendedHospitals = [];
-                }
-                
-                // 确保医院排行榜数组存在
-                if (!appData.hospitalRanking) {
-                    appData.hospitalRanking = [];
-                }
+                    
+                    // 确保用户推荐医院数组存在
+                    if (!appData.userRecommendedHospitals) {
+                        appData.userRecommendedHospitals = [];
+                    }
+                    
+                    // 确保医院排行榜数组存在
+                    if (!appData.hospitalRanking) {
+                        appData.hospitalRanking = [];
+                    }
             } else {
-                console.log('🆕 使用默认数据初始化');
-                // 初始化必要的数据结构
+                    // 初始化必要的数据结构
+                    appData.userRecommendedHospitals = [];
+                    appData.hospitalRanking = [];
+                    
+                    // 初始化默认排行榜数据
+                    initDefaultHospitalRanking();
+                    
+                    saveToLocalStorage();
+                }
+                
+                // 验证和管理登录会话
+                validateLoginSessions();
+            } catch (error) {
+    
+                // 重置为默认数据
                 appData.userRecommendedHospitals = [];
                 appData.hospitalRanking = [];
-                
-                // 初始化默认排行榜数据
-                initDefaultHospitalRanking();
-                
+                appData.loginSessions = [];
                 saveToLocalStorage();
+                showToast('数据初始化完成，使用默认配置', 'info');
             }
-            
-            // 验证和管理登录会话
-            validateLoginSessions();
         }
 
         // 验证和管理登录会话
@@ -2585,7 +2590,15 @@
             const oneDayMs = 24 * 60 * 60 * 1000;
             
             const validSessions = appData.loginSessions.filter(session => {
-                const sessionTime = new Date(session.loginTime).getTime();
+                let sessionTime;
+                // 修复时间解析bug
+                if (typeof session.loginTime === 'number') {
+                    sessionTime = session.loginTime;
+                } else if (typeof session.loginTime === 'string') {
+                    sessionTime = new Date(session.loginTime).getTime();
+                } else {
+                    sessionTime = now; // 如果格式错误，认为已过期
+                }
                 return (now - sessionTime) < oneDayMs;
             });
             
@@ -2601,7 +2614,6 @@
                 }
                 
                 saveToLocalStorage();
-                console.log('🔄 会话验证完成，清理了过期会话');
             }
         }
 
@@ -3200,8 +3212,12 @@
 
         // 保存到本地存储
         function saveToLocalStorage() {
-            localStorage.setItem('petCommunityData', JSON.stringify(appData));
-            console.log('💾 数据已保存到本地存储');
+            try {
+                localStorage.setItem('petCommunityData', JSON.stringify(appData));
+            } catch (error) {
+    
+                showToast('数据保存失败，请检查浏览器存储空间', 'error');
+            }
         }
 
         // 管理员账号信息
@@ -3220,89 +3236,46 @@
         // 管理员列表（由主理人管理）
         let adminList = [];
 
-        // 页面切换函数 - 核心功能
+        // 页面切换函数
         function showPage(pageId, element) {
             try {
-                console.log('🔄 切换到页面:', pageId);
-                console.log('🔍 检查页面元素:', document.getElementById(pageId));
-                console.log('🔍 所有页面元素:', document.querySelectorAll('.page'));
-                
-                // 阻止事件冒泡
-                if (window.event) {
-                    window.event.stopPropagation();
-                    window.event.preventDefault();
-                }
-                
-                // 1. 隐藏所有页面 - 强制设置样式
+                // 隐藏所有页面
                 document.querySelectorAll('.page').forEach(page => {
                     page.classList.remove('active');
                     page.style.display = 'none';
-                    page.style.visibility = 'hidden';
-                    page.style.opacity = '0';
                 });
                 
-                // 2. 显示目标页面 - 强制设置样式
+                // 显示目标页面
                 const targetPage = document.getElementById(pageId);
                 if (targetPage) {
                     targetPage.classList.add('active');
                     targetPage.style.display = 'block';
-                    targetPage.style.visibility = 'visible';
-                    targetPage.style.opacity = '1';
-                    targetPage.style.zIndex = '1';
-                    console.log('✅ 页面显示成功:', pageId);
                 } else {
-                    console.error('❌ 页面不存在:', pageId);
-                    showToast('页面不存在: ' + pageId, 'error');
+                    showToast('页面不存在', 'error');
                     return;
                 }
                 
-                // 3. 更新导航状态
-                document.querySelectorAll('.nav-link').forEach(link => {
+                // 更新导航状态
+                document.querySelectorAll('.nav-link, .mobile-quick-nav-item').forEach(link => {
                     link.classList.remove('active');
                 });
                 
-                document.querySelectorAll('.mobile-quick-nav-item').forEach(item => {
-                    item.classList.remove('active');
-                });
+                // 激活对应导航
+                const navLink = document.querySelector(`[data-page="${pageId}"]`);
+                if (navLink) navLink.classList.add('active');
                 
-                if (element && element.classList) {
-                    element.classList.add('active');
-                } else {
-                    // 如果没有传入element，尝试通过data-page找到对应导航
-                    const navLink = document.querySelector(`[data-page="${pageId}"]`);
-                    if (navLink) {
-                        navLink.classList.add('active');
-                    }
-                    
-                    // 同时更新移动端导航
-                    const mobileNavLink = document.querySelector(`.mobile-quick-nav-item[data-page="${pageId}"]`);
-                    if (mobileNavLink) {
-                        mobileNavLink.classList.add('active');
-                    }
+                // 特殊页面初始化
+                if (pageId === 'cats') {
+                    renderCats();
+                } else if (pageId === 'shop') {
+                    renderProducts();
+                } else if (pageId === 'hospital') {
+                    renderHospitals();
+                } else if (pageId === 'forum') {
+                    renderForumPosts();
                 }
-                
-                // 4. 滚动到顶部
-                window.scrollTo(0, 0);
-                
-                // 5. 检查并启用管理员功能（针对每个页面）
-                if (appData.isAdmin) {
-                    console.log('页面切换时检查管理员状态，启用相关功能...');
-                    setTimeout(() => {
-                        enableAdminFeatures();
-                    }, 100);
-                }
-                
-                // 6. 延迟显示成功提示，避免干扰导航
-                setTimeout(() => {
-                    if (pageId !== 'home') { // 首页不显示提示
-                        console.log('✅ 页面切换完成:', pageId);
-                        showToast('已切换到:' + getPageName(pageId), 'success');
-                    }
-                }, 300);
-                
             } catch (error) {
-                console.error('❌ 页面切换错误:', error);
-                showToast('页面切换失败: ' + error.message, 'error');
+                showToast('页面切换失败', 'error');
             }
         }
 
@@ -3322,22 +3295,7 @@
 
 
 
-        // 测试页面切换函数
-        function testPageSwitch() {
-            alert('测试按钮被点击了！JavaScript正常工作');
-            console.log('测试按钮点击');
-            
-            // 尝试切换到猫咪管理页面
-            showPage('cats', null);
-            
-            // 检查页面元素
-            const catsPage = document.getElementById('cats');
-            const homePage = document.getElementById('home');
-            
-            console.log('猫咪管理页面:', catsPage);
-            console.log('首页:', homePage);
-            console.log('所有页面:', document.querySelectorAll('.page'));
-        }
+
 
         // Toast通知函数
         function showToast(message, type = 'info') {
@@ -3352,10 +3310,7 @@
             }, 3000);
         }
 
-        // 添加猫咪
-        function addCat() {
-            showToast('添加猫咪功能开发中...', 'info');
-        }
+
 
         // 搜索附近医院
         function searchNearbyHospitals() {
@@ -3810,8 +3765,6 @@
 
         function enableAdminFeatures() {
             // 管理员可以修改的元素添加编辑功能
-            console.log('管理员功能已启用');
-            console.log('当前状态:', appData);
             
             // 强制设置管理员状态
             appData.isAdmin = true;
@@ -3823,32 +3776,27 @@
             const catUserHint = document.getElementById('catUserHint');
             if (catManagementButtons) {
                 catManagementButtons.style.display = 'block';
-                console.log('猫咪管理按钮已显示');
             }
             if (catUserHint) {
                 catUserHint.style.display = 'none';
-                console.log('普通用户提示已隐藏');
             }
             
             // 启用商城管理功能
             const shopManageBtn = document.getElementById('shopManageBtn');
             if (shopManageBtn) {
                 shopManageBtn.style.display = 'block';
-                console.log('商城管理按钮已显示');
             }
             
             // 启用医院管理功能
             const hospitalManageBtn = document.getElementById('hospitalManageBtn');
             if (hospitalManageBtn) {
                 hospitalManageBtn.style.display = 'block';
-                console.log('医院管理按钮已显示');
             }
             
             // 启用医院排行榜编辑功能
             const editRankingBtn = document.getElementById('editRankingBtn');
             if (editRankingBtn) {
                 editRankingBtn.style.display = 'block';
-                console.log('医院排行榜编辑按钮已显示');
             }
             
             // 启用论坛管理功能
@@ -3936,10 +3884,7 @@
             updateProfileMenu();
         }
 
-        function showAdminPanel() {
-            // 显示管理员面板
-            showToast('管理员面板开发中...', 'info');
-        }
+
 
         // 物流相关功能
         function focusTrackingInput() {
@@ -4146,6 +4091,13 @@
         function handleCatPhotoUpload(event) {
             const file = event.target.files[0];
             if (file && file.type.startsWith('image/')) {
+                // 添加文件大小检查（限制5MB）
+                if (file.size > 5 * 1024 * 1024) {
+                    showToast('图片文件过大，请选择小于5MB的图片', 'error');
+                    event.target.value = ''; // 清空文件选择
+                    return;
+                }
+                
                 const reader = new FileReader();
                 reader.onload = function(e) {
                     const photoUrl = e.target.result;
@@ -4829,7 +4781,7 @@
 
         // 分享帖子
         function sharePost(postId) {
-            showToast('分享功能开发中...', 'info');
+ showToast('分享功能即将推出', 'info');
         }
 
         // 获取当前位置
@@ -5607,31 +5559,7 @@
             });
         });
 
-        // 强制初始化页面显示
-        function forceInitializePages() {
-            console.log('🔧 强制初始化页面显示...');
-            
-            // 强制隐藏所有页面
-            document.querySelectorAll('.page').forEach(page => {
-                page.classList.remove('active');
-                page.style.display = 'none';
-                page.style.visibility = 'hidden';
-                page.style.opacity = '0';
-            });
-            
-            // 强制显示首页
-            const homePage = document.getElementById('home');
-            if (homePage) {
-                homePage.classList.add('active');
-                homePage.style.display = 'block';
-                homePage.style.visibility = 'visible';
-                homePage.style.opacity = '1';
-                console.log('✅ 首页强制激活');
-            }
-            
-            // 强制显示移动端导航（如果是移动设备）
-            if (window.innerWidth <= 768) {
-                const mobileNav = document.querySelector('.mobile-quick-nav');
+
                 if (mobileNav) {
                     mobileNav.style.display = 'flex';
                     mobileNav.style.visibility = 'visible';
@@ -5699,14 +5627,9 @@
 
         // 初始化
         document.addEventListener('DOMContentLoaded', function() {
-            console.log('🚀 金猫之家加载完成');
-            
-            // 简单测试
-            console.log('✅ JavaScript加载测试');
-            
             // Safari兼容性检查和优化
             if (typeof safari !== 'undefined' || /constructor/i.test(window.HTMLElement) || (function (p) { return p.toString() === "[object SafariRemoteNotification]"; })(!window['safari'] || window.safari && window.safari.pushNotification)) {
-                console.log('检测到Safari浏览器，启用兼容性优化');
+
                 
                 // Safari特定优化
                 document.body.classList.add('safari-browser');
@@ -5743,13 +5666,7 @@
                     renderHospitalRanking();
                 }, 600);
                 
-                // 立即执行强制初始化
-                forceInitializePages();
-                
-                // 延迟再次执行确保初始化成功
-                setTimeout(() => {
-                    forceInitializePages();
-                }, 100);
+
                 
                 // 如果是移动设备，额外修复导航
                 if (window.innerWidth <= 768) {
@@ -5793,12 +5710,9 @@
                 
                 // 如果已登录管理员，启用所有功能
                 if (appData.isAdmin) {
-                    console.log('检测到管理员状态，正在启用所有功能...');
                     setTimeout(() => {
                         enableAdminFeatures();
                     }, 500);
-                } else {
-                    console.log('当前未以管理员身份登录');
                 }
                 
                 // 专门为登录按钮添加事件监听器（备用方案）
@@ -5815,21 +5729,11 @@
                         console.log('Login button clicked via addEventListener');
                         toggleLogin();
                     });
-                    
-                    console.log('✅ 登录按钮事件监听器已添加');
                 }
-                
-                // 检查所有onclick功能
-                document.querySelectorAll('[onclick]').forEach(element => {
-                    console.log('✅ 检查onclick元素:', element);
-                });
                 
                 // 检查高德地图API加载状态
                 if (typeof AMap !== 'undefined') {
-                    console.log('✅ 高德地图API加载成功');
                     showToast('高德地图已就绪', 'success');
-                } else {
-                    console.log('⚠️ 高德地图API未加载，将使用备用地图');
                 }
                 
                 // 强制检查移动端导航显示
@@ -5874,19 +5778,11 @@
                     }
                 }, 500);
                 
-                // 再次强制初始化页面
-                setTimeout(() => {
-                    forceInitializePages();
-                    console.log('🔧 最终页面初始化完成');
-                }, 300);
+
 
                 // 显示欢迎消息
                 setTimeout(() => {
                     showToast('🎉 欢迎来到金猫之家！', 'success');
-                    console.log('💡 调试命令：');
-                    console.log('- testPageSwitching() : 测试页面切换');
-                    console.log('- forceShowAllPages() : 强制显示所有页面');
-                    console.log('- checkPageContent("页面ID") : 检查指定页面内容');
                 }, 500);
                 
             } catch (error) {
@@ -5923,32 +5819,11 @@
         }, 100);
 
         // 个人中心相关功能
-        function showAddressManager(event) {
-            if (event) event.preventDefault();
-            showToast('地址管理功能开发中...', 'info');
-            // 这里可以添加地址管理模态框
-        }
 
-        function showOrderManager(event) {
-            if (event) event.preventDefault();
-            showToast('订单管理功能开发中...', 'info');
-            // 这里可以添加订单管理模态框
-        }
-
-        function showSettings(event) {
-            if (event) event.preventDefault();
-            showToast('设置功能开发中...', 'info');
-            // 这里可以添加设置模态框
-        }
 
         function showAbout(event) {
             if (event) event.preventDefault();
-            showToast('金猫之家 v1.0 - 杭州自家小猫咪-李先生的宠物社区平台', 'info');
-        }
-
-        function showVersion(event) {
-            if (event) event.preventDefault();
-            showToast('版本：1.0.0 | 更新时间：2024年', 'info');
+            showToast('金猫之家 - 杭州自家小猫咪-李先生的宠物社区平台', 'info');
         }
 
         function checkAdminStatus(event) {
